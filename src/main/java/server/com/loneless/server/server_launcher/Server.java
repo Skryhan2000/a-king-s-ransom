@@ -1,5 +1,7 @@
 package com.loneless.server.server_launcher;
 
+import com.loneless.server.view.ClientWorkingThread;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,23 +33,22 @@ class Server extends Thread {
 
     ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public ArrayBlockingQueue<String> serverList = new ArrayBlockingQueue<String>(10);// список всех нитей
+    private ArrayBlockingQueue<ClientWorkingThread> serverList = new ArrayBlockingQueue<>(10);// список всех нитей
 
     public int applyConnection() {
 
         while (isOpen) {
-//            try {
-//
-//                ClientWorkingThread clientWorkingThread = new ClientWorkingThread(socket.accept(), serverList);// придумать выход не через IOException при команде exit
-//                serverList.add(clientWorkingThread);
-//                //              quantity++;
-//                System.out.println("Количество людей на сервере "+(++quantity));
-////                    qwantityLabel.setText((String.valueOf(quantity)));
-//                executorService.submit(clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
-//            } catch(IOException e){
-//                e.printStackTrace();
-//                break;
-//            }
+            try {
+
+                ClientWorkingThread clientWorkingThread = new ClientWorkingThread(socket.accept(), serverList);// придумать выход не через IOException при команде exit
+                serverList.add(clientWorkingThread);
+                //              quantity++;
+                System.out.println("Количество людей на сервере "+(++quantity));
+                executorService.submit( clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
+            } catch(IOException e){
+                e.printStackTrace();
+                break;
+            }
 
 
         }
