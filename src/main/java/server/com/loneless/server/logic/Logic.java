@@ -30,4 +30,24 @@ private static final Logic instance=new Logic();
         }
         return false;
     }
+    public UserData recieveUserData(UserPrivateData userPrivateData){
+        try {
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM Users WHERE username = '" + userPrivateData.getLogin() + "' AND password ='"+
+                    userPrivateData.getPassword()+"';";
+            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+            UserData userData=new UserData();
+            if( resultSet.next()){
+                userData.setId(resultSet.getInt("id"));
+                userData.setLogin(resultSet.getString("userlogin"));
+                userData.setType(resultSet.getString("type"));
+                return userData;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
