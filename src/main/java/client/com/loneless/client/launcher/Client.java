@@ -66,13 +66,13 @@ class Client extends Thread {
     public void run(){
 
         try {
-//            OutStream.getInstanse().setSocket(socket);
-//            InStream.getInstanse().setSocket(socket);
+//            OutStream.getInstance().setSocket(socket);
+//            InStream.getInstance().setSocket(socket);
             outObject = new ObjectOutputStream(socket.getOutputStream());
             inObject=new ObjectInputStream(socket.getInputStream());
 
-//            outObject = OutStream.getInstanse().getOutObject();
-//            inObject=InStream.getInstanse().getInObject();
+//            outObject = OutStream.getInstance().getOutObject();
+//            inObject=InStream.getInstance().getInObject();
 //            int flag=(int)inObject.readObject();
 //            SequenceControl sequenceControl=new  SequenceControl();
 //            sequenceControl.begin(flag);

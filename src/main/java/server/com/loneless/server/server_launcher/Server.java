@@ -1,10 +1,10 @@
 package com.loneless.server.server_launcher;
 
 import com.loneless.server.view.ClientWorkingThread;
+import com.loneless.server.view.PrimaryStage;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -16,15 +16,19 @@ class Server extends Thread {
     private static int quantity =0;
     Server(int port) {
         try {
-            System.out.println("Начало работы");
             socket = new ServerSocket(port);
             setOpen(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void consoleStart() {
-        new ConsoleCommand().start();
+
+    public static int getQuantity() {
+        return quantity;
+    }
+
+    public static void setQuantity(int quantity) {
+        Server.quantity = quantity;
     }
 
     public void setOpen(boolean open) {
@@ -64,31 +68,6 @@ class Server extends Thread {
             e.printStackTrace();
         }
     }
-    public class ConsoleCommand extends Thread {
-        @Override
-        public void run() {
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            String command;
-
-            try {
-                while (true) {
-                    command=input.readLine(); // ждем сообщения с с консоли
-                    if (command.equals("exit")) {
-                        setClose(); // харакири
-                        input.close();
-
-                        System.out.println(command +" выполнена");
-
-                        System.exit(1);
-                        break;
-                    }
-                    System.out.println("Команда "+command+" не распознана"); // пишем сообщение с сервера на консоль
-
-                }
-            } catch (IOException e) {
-                setClose();
-            }
-        }
-    }
-
 }
+
+
