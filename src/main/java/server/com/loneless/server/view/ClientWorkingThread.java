@@ -30,7 +30,7 @@ public class ClientWorkingThread implements Runnable{
     @Override
     public void run() {
         Transmission transmission;
-        Object response;
+        Object response = null;
         int flag=-1;
         try {
             outObject.writeObject(flag);
@@ -52,8 +52,8 @@ public class ClientWorkingThread implements Runnable{
 
                     }
                 }
+                outObject.writeObject(response);
                 outObject.reset();
-
             }
 
         }  catch ( ClassNotFoundException e) {

@@ -1,4 +1,4 @@
-package com.loneless.server.busness_logic;
+package com.loneless.server.logic;
 
 public class LogicException {
     private StringBuilder exceptionMessage=new StringBuilder();

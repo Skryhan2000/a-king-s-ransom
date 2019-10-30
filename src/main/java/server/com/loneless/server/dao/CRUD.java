@@ -7,4 +7,5 @@ public interface CRUD {
     UserData read(UserData user);
     boolean update(UserData user);
     boolean delete(UserData user);
+    Object receiveAll();
 }

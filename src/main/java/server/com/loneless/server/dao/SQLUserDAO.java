@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 public class SQLUserDAO implements CRUD{
@@ -114,10 +116,10 @@ public class SQLUserDAO implements CRUD{
         }
         return false;
     }
-
-    public ConcurrentSkipListSet<UserData> recieveAllUsers(){
+    @Override
+    public Map<Integer,UserData> receiveAll(){
         try {
-            ConcurrentSkipListSet<UserData> data=new ConcurrentSkipListSet<>();
+            ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users;";
@@ -129,7 +131,7 @@ public class SQLUserDAO implements CRUD{
             userData.setId(resultSet.getInt("id"));
             userData.setLogin(resultSet.getString("userlogin"));
             userData.setType(resultSet.getString("type"));
-            data.add(userData);
+            data.put(userData.getId(),userData);
         }
         return data;
     } catch (SQLException e) {
