@@ -1,5 +1,6 @@
 package com.loneless.server.dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,6 +23,7 @@ public class DataBaseConnection {
 
     private DataBaseConnection() {
         try {
+
             Properties properties = new Properties();
             properties.setProperty("user","root");
             properties.setProperty("password", "con2Egor");
@@ -29,7 +31,8 @@ public class DataBaseConnection {
             properties.setProperty("characterEncoding","UTF-8");
             String url = "jdbc:mysql://localhost/a-king-s-ransom?serverTimezone=Europe/Moscow&useSSL=false&useUnicode=true&characterEncoding=UTF-8";
             connection = DriverManager.getConnection(url, properties);//(url, username, password);
-        } catch (SQLException e) {
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }

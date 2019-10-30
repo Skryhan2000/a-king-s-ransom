@@ -1,5 +1,6 @@
 package com.loneless.server.dao;
 
+import com.loneless.server.entity.transmission.Transmission;
 import com.loneless.server.entity.user.UserData;
 import com.loneless.server.entity.user.UserPrivateData;
 
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class SQLUserDAO implements CRUD{
     @Override
@@ -111,5 +113,28 @@ public class SQLUserDAO implements CRUD{
             e.printStackTrace();
         }
         return false;
+    }
+
+    public ConcurrentSkipListSet<UserData> recieveAllUsers(){
+        try {
+            ConcurrentSkipListSet<UserData> data=new ConcurrentSkipListSet<>();
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM Users;";
+            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+            UserData userData;
+        while ( resultSet.next()){
+            userData=new UserData();
+            userData.setId(resultSet.getInt("id"));
+            userData.setLogin(resultSet.getString("userlogin"));
+            userData.setType(resultSet.getString("type"));
+            data.add(userData);
+        }
+        return data;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+        return null;
     }
 }

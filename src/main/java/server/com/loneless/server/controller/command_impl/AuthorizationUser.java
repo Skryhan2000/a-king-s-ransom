@@ -2,11 +2,11 @@ package com.loneless.server.controller.command_impl;
 
 import com.loneless.server.controller.Command;
 import com.loneless.server.entity.user.UserData;
-import com.loneless.server.entity.user.UserPrivateData;
+import com.loneless.server.logic.Logic;
 
-public class WrongRequest implements Command {
+public class AuthorizationUser implements Command {
     @Override
     public Object execute(Object request) {
-        return false;
+        return Logic.getInstance().isUserExist((UserData) request);
     }
 }

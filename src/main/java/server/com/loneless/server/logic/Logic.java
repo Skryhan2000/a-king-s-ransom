@@ -14,18 +14,22 @@ private static final Logic instance=new Logic();
         return instance;
     }
 
-    public boolean isUserExist(UserPrivateData userPrivateData){
-        return DAOFactory.getInstance().getUserDAO().isUserExist(userPrivateData);
+    public boolean isUserExist(UserData userData){
+        return DAOFactory.getInstance().getUserDAO().isUserExist(userData);
     }
-    public UserData recieveUserData(UserData userData){
+
+    public UserData receiveUserData(UserData userData){
         return DAOFactory.getInstance().getUserDAO().read(userData);
     }
+
     public boolean updateUserData(UserData userData){
         return DAOFactory.getInstance().getUserDAO().update(userData);
     }
+
     public boolean createUser(UserData userData){
         return DAOFactory.getInstance().getUserDAO().create(userData);
     }
+
     public boolean deleteUser(UserData userData){
         return DAOFactory.getInstance().getUserDAO().delete(userData);
     }
