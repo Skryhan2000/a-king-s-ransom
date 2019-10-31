@@ -1,10 +1,10 @@
-package com.loneliness.server.logic;
+package com.loneliness.client.service;
 
 import com.loneliness.entity.user.UserData;
 import com.loneliness.server.dao.DAOFactory;
 
 
-public class UserServiceImpl implements Service{
+public class UserServiceImpl implements Service {
     @Override
     public Object receiveAllElem(Object obj) {
         return DAOFactory.getInstance().getUserDAO().receiveAll();

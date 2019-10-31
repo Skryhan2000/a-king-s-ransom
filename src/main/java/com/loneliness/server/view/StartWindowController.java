@@ -12,25 +12,12 @@ public class StartWindowController {
     @FXML private TextArea console=new TextArea();
     @FXML private static int quantity=0;
     @FXML static synchronized public void updateQuantity(int val){
-
         quantity+=val;
         quantityLabel.setText(Integer.toString(quantity));
         System.out.println(quantity);
 
     }
-    @FXML void OnkeyPressed(KeyEvent kEvent) {
-        console.setOnKeyTyped(event -> {
-            switch (event.getCode()){
-                case ENTER:
-                    switch (console.getText()){
-                        case "exit":
-                            CommandProvider.getCommandProvider().getCommand("SHUT_DOWN").execute(null);
-                            break;
-                    }
-                    break;
-            }
-        });
-    }
+
 
 
 }

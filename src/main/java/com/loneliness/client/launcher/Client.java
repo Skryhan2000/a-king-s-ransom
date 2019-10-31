@@ -76,8 +76,6 @@ public class Client extends Thread {
             inObject=new ObjectInputStream(socket.getInputStream());
             Window window=new Window();
             window.begin();
-//            SequenceControl sequenceControl=new  SequenceControl();
-//            sequenceControl.begin(flag);
 
         } catch (IOException  e) {
             e.printStackTrace();

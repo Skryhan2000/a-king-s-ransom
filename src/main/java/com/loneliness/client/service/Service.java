@@ -1,4 +1,4 @@
-package com.loneliness.server.logic;
+package com.loneliness.client.service;
 
 public interface Service {
     Object create(Object obj);

@@ -7,6 +7,8 @@ public class UserData extends UserPrivateData implements Serializable {
     private static final long serialVersionUID=1L;
     private String type;
     private int id;
+    private String secretAnswer;
+    private String secretQuestion;
 
     public UserData() {
     }
@@ -47,6 +49,22 @@ public class UserData extends UserPrivateData implements Serializable {
     }
 
 
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
+    }
+
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,12 +72,14 @@ public class UserData extends UserPrivateData implements Serializable {
         if (!super.equals(o)) return false;
         UserData userData = (UserData) o;
         return id == userData.id &&
-                Objects.equals(type, userData.type);
+                type.equals(userData.type) &&
+                secretAnswer.equals(userData.secretAnswer) &&
+                secretQuestion.equals(userData.secretQuestion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), type, id);
+        return Objects.hash(super.hashCode(), type, id, secretAnswer, secretQuestion);
     }
 
     @Override
@@ -67,6 +87,8 @@ public class UserData extends UserPrivateData implements Serializable {
         return "UserData{" +
                 "type='" + type + '\'' +
                 ", id=" + id +
+                ", secretAnswer='" + secretAnswer + '\'' +
+                ", secretQuestion='" + secretQuestion + '\'' +
                 '}';
     }
 }

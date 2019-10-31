@@ -32,9 +32,8 @@ public class ClientWorkingThread implements Runnable{
     public void run() {
         Transmission transmission;
         Object response = null;
-        int flag=-1;
+ //       int flag=-1;
         try {
-            outObject.writeObject(flag);
             while (true) {
                 transmission=(Transmission) inObject.readObject();
                 response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).

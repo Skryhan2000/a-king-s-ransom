@@ -14,8 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SQLUserDAO implements CRUD{
     @Override
     public boolean create(UserData user) {
-        String sql = "INSERT Users (login , password , type ) "+
-                "VALUES ('"+user.getLogin()+"','"+user.getPassword()+"','"+user.getType()+"');";
+        String sql = "INSERT Users (login , password , type, secret_answer, secret_question) "+
+                "VALUES ('"+user.getLogin()+"','"+user.getPassword()+"','"+user.getType()+"','"+user.getSecretAnswer()+
+                "','"+user.getSecretQuestion()+"');";
         try {
             PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -31,15 +32,17 @@ public class SQLUserDAO implements CRUD{
         try {
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT * FROM Users WHERE username = '" + user.getLogin() + "' AND password ='"+
-                    user.getPassword()+"';";
+            String sql = "SELECT * FROM Users WHERE id = '" + user.getId() + "';";
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData=new UserData();
             if( resultSet.next()){
                 userData.setId(resultSet.getInt("id"));
-                userData.setLogin(resultSet.getString("userlogin"));
+                userData.setLogin(resultSet.getString("login"));
                 userData.setType(resultSet.getString("type"));
+                userData.setSecretAnswer(resultSet.getString("secret_answer"));
+                userData.setSecretQuestion(resultSet.getString("secret_question"));
+
                 return userData;
             }
         } catch (SQLException e) {
@@ -57,13 +60,15 @@ public class SQLUserDAO implements CRUD{
 
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
 
-            String sql = "SELECT * FROM User WHERE ID = '" + user.getId() + "';";
+            String sql = "SELECT * FROM User WHERE id = '" + user.getId() + "';";
             resultSet = statement.executeQuery(sql);
             if (!resultSet.next()) {
                 sql = "UPDATE users SET " +
-                        "username='" + user.getLogin() + "'," +
+                        "login='" + user.getLogin() + "'," +
                         "password='" + user.getPassword() + "'," +
                         "type='" + user.getType() + "'," +
+                        "secret_answer='" + user.getSecretAnswer() + "'," +
+                        "secret_question='" + user.getSecretQuestion() + "'," +
                         "WHERE ID='" + user.getId() + "';";
                 try {
                     return statement.executeUpdate(sql) == 1;
@@ -85,11 +90,8 @@ public class SQLUserDAO implements CRUD{
     @Override
     public boolean delete(UserData user) {
         try {
-            String sql="DELETE FROM Users WHERE login = '"+user.getLogin()+"';";
-            ResultSet resultSet=null;
-            Statement statement = null;
-            PreparedStatement preparedStatement = null;
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            String sql="DELETE FROM Users WHERE id = '"+user.getId()+"';";
+            Statement statement = DataBaseConnection.getInstance().getConnection().createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
             }
@@ -101,19 +103,22 @@ public class SQLUserDAO implements CRUD{
         return false;
     }
 
-    public boolean isUserExist(UserData userData){
+    public String receiveUserType(UserData userData){
         ResultSet resultSet;
         Statement statement;
         try {
-            String sql = "SELECT * FROM Users WHERE username = '" + userData.getLogin() + "' AND password ='"+
+            String sql = "SELECT * FROM Users WHERE login = '" + userData.getLogin() + "' AND password ='"+
                     userData.getPassword()+"';";
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
-            return resultSet.next();
+            if( resultSet.next()){
+                String str=resultSet.getString("type");
+                return str;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "noType";
     }
     @Override
     public Map<Integer,UserData> receiveAll(){
@@ -128,8 +133,11 @@ public class SQLUserDAO implements CRUD{
         while ( resultSet.next()){
             userData=new UserData();
             userData.setId(resultSet.getInt("id"));
-            userData.setLogin(resultSet.getString("userlogin"));
+            userData.setLogin(resultSet.getString("login"));
+            userData.setPassword(resultSet.getString("password"));
             userData.setType(resultSet.getString("type"));
+            userData.setSecretAnswer(resultSet.getString("secret_answer"));
+            userData.setSecretAnswer(resultSet.getString("secret_question"));
             data.put(userData.getId(),userData);
         }
         return data;

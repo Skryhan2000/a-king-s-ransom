@@ -13,5 +13,6 @@ public class PathManager {
     public String getStartWindow() {
         return "/StartWindow.fxml";
     }
+
 }
 

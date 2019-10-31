@@ -13,4 +13,16 @@ public class PathManager {
     public String getAuthorisationFormController() {
         return "/AuthorisationForm.fxml";
     }
+    public String getClientStartWindow(){
+        return "";
+    }
+    public String getAdminStartWindow(){
+        return "";
+    }
+    public String getManagerStartWindow(){
+        return "";
+    }
+    public String getForgetYourPasswordCase(){
+        return "/ForgetPasswordCase.fxml";
+    }
 }

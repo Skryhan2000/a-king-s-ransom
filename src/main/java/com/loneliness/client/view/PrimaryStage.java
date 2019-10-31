@@ -40,4 +40,8 @@ public class PrimaryStage {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public Scene getScene() {
+        return scene;
+    }
 }

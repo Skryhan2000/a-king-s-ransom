@@ -30,14 +30,14 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordField" layoutX="170.0" layoutY="87.0" prefHeight="30.0" prefWidth="231.0" promptText="Пароль" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0">
+            <PasswordField fx:id="passwordField" layoutX="170.0" layoutY="87.0" onMouseClicked="#onKeyTyped" prefHeight="30.0" prefWidth="231.0" promptText="Пароль" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0">
                <font>
                   <Font size="14.0" />
                </font>
             </PasswordField>
-            <Hyperlink layoutX="249.0" layoutY="171.0" prefHeight="18.0" prefWidth="102.0" text="Забыли пароль?" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" />
+            <Hyperlink layoutX="249.0" layoutY="171.0" onMouseClicked="#showForgetPasswordCase" prefHeight="18.0" prefWidth="102.0" text="Забыли пароль?" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" />
             <Hyperlink layoutX="262.0" layoutY="202.0" prefHeight="23.0" prefWidth="79.0" text="Регистрация" AnchorPane.leftAnchor="260.0" AnchorPane.rightAnchor="260.0" />
-            <Button fx:id="enterButtton" layoutX="170.0" layoutY="135.0" mnemonicParsing="false" onAction="#authorize" prefHeight="26.0" prefWidth="232.0" text="Войти" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" />
+            <Button fx:id="enterButton" layoutX="170.0" layoutY="135.0" mnemonicParsing="false" onAction="#authorize" prefHeight="26.0" prefWidth="232.0" text="Войти" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="170.0" />
          </children>
       </AnchorPane>
    </center>
