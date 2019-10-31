@@ -32,7 +32,13 @@ public class SQLUserDAO implements CRUD{
         try {
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT * FROM Users WHERE id = '" + user.getId() + "';";
+            String sql;
+            if(user.getId()!=0) {
+                sql = "SELECT * FROM Users WHERE id = '" + user.getId() + "';";
+            }
+            else {
+                sql= "SELECT * FROM Users WHERE login = '" + user.getLogin() + "';";
+            }
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData=new UserData();
@@ -60,16 +66,16 @@ public class SQLUserDAO implements CRUD{
 
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
 
-            String sql = "SELECT * FROM User WHERE id = '" + user.getId() + "';";
+            String sql = "SELECT * FROM Users WHERE id = " + user.getId() + ";";
             resultSet = statement.executeQuery(sql);
-            if (!resultSet.next()) {
+            if (resultSet.next()) {
                 sql = "UPDATE users SET " +
                         "login='" + user.getLogin() + "'," +
                         "password='" + user.getPassword() + "'," +
                         "type='" + user.getType() + "'," +
                         "secret_answer='" + user.getSecretAnswer() + "'," +
-                        "secret_question='" + user.getSecretQuestion() + "'," +
-                        "WHERE ID='" + user.getId() + "';";
+                        "secret_question='" + user.getSecretQuestion() + "' " +
+                        "WHERE ID=" + user.getId() + ";";
                 try {
                     return statement.executeUpdate(sql) == 1;
 
@@ -112,8 +118,7 @@ public class SQLUserDAO implements CRUD{
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             if( resultSet.next()){
-                String str=resultSet.getString("type");
-                return str;
+                return resultSet.getString("type");
             }
         } catch (SQLException e) {
             e.printStackTrace();

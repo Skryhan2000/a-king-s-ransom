@@ -23,7 +23,7 @@ public class AuthorisationFormController {
     @FXML private TextField loginField;
     @FXML private PasswordField passwordField;
 
-    @FXML private void authorize() {
+    @FXML private void authorize() throws ClassNotFoundException {
         UserData userData = new UserData();
         userData.setLogin(loginField.getText());
         userData.setPassword(passwordField.getText());
@@ -42,12 +42,13 @@ public class AuthorisationFormController {
                             getInstance().getClientStartWindow())));
                     break;
                 case "noType":
-                    WorkWithAlert.getInstance().showErrorAlert("Ошибка авторизации",
-                            "Нет такого пользователя", "Неверный логин и/или пароль",dialogStage);
+                    WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                            "Нет такого пользователя", "Неверный логин и/или пароль",
+                            dialogStage,"ERROR");
                     break;
                 default:
-                    WorkWithAlert.getInstance().showErrorAlert("Ошибка авторизации",
-                            "Неизвестная ошибка", "авторизуйтесь позже",dialogStage);
+                    WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                            "Неизвестная ошибка", "авторизуйтесь позже",dialogStage,"ERROR");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,15 +59,22 @@ public class AuthorisationFormController {
     @FXML private void onKeyTyped(){
         PrimaryStage.getInstance().getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                authorize();
+                try {
+                    authorize();
+                } catch (ClassNotFoundException e) {
+                    WorkWithAlert.getInstance().showAlert("Ошибка подключения",
+                            "Неизвестная ошибка",
+                            "Попробуйте повторить действие позже",dialogStage,"ERROR");
+                }
+
             }
         });
     }
     public boolean init()  {
         if (Client.getInObject()==null||Client.getOutObject()==null) {
-            WorkWithAlert.getInstance().showErrorAlert("Ошибка подключения",
+            WorkWithAlert.getInstance().showAlert("Ошибка подключения",
                     "Подключение к серверу отсутствует",
-                    "Нажмите ок для переподключения",dialogStage);
+                    "Нажмите ок для переподключения",dialogStage,"ERROR");
             return Client.reconnect();
         }
         return true;

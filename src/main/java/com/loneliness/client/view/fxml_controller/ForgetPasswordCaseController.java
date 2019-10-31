@@ -1,13 +1,20 @@
 package com.loneliness.client.view.fxml_controller;
 
+import com.loneliness.client.controller.CommandProvider;
+import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class ForgetPasswordCaseController {
+    @FXML private RadioButton receiveQuestion=new RadioButton();
     @FXML private TextField loginField =new TextField();
+    @FXML private Label questionLabel=new Label();
     @FXML private TextField answerField =new TextField();
     @FXML private TextField passwordField=new TextField();
     private Stage dialogStage;
@@ -22,38 +29,66 @@ public class ForgetPasswordCaseController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
         this.userData=new UserData();
-        if(userData.getLogin()!=null&&userData.getLogin().length()!=0){
-            loginField.setText(userData.getLogin());
-        }
     }
     public void setData(String login){
         userData.setLogin(login);
+        loginField.setText(login);
     }
 
-    public void CancelChanging(){
+    @FXML public void CancelChanging(){
         okClicked = false;
         dialogStage.close();
 
     }
     @FXML
-    private void handleOk() {
+    private void handleOk() throws IOException, ClassNotFoundException {
         if (isInputValid()) {
             if(userData.getSecretQuestion()!=null&&userData.getSecretQuestion().length()!=0) {
                 if(userData.getSecretQuestion().equals(answerField.getText())) {
                     userData.setLogin(loginField.getText());
                     userData.setPassword(passwordField.getText());
-                    okClicked = true;
-                    dialogStage.close();
+                    userData.setPassword(passwordField.getText());
+                    if((Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_USER").
+                            execute(userData)){
+                        WorkWithAlert.getInstance().showAlert("Изменение пароля","",
+                                "Изменение пароля успешно",dialogStage,"INFORMATION");
+                        okClicked = true;
+                        dialogStage.close();
+                    }
+                    else {
+                        WorkWithAlert.getInstance().showAlert("Изменение пароля", "Измененить пароль неудалось",
+                                "Непредвиденная ошибка", dialogStage, "ERROR");
+                    }
+                }
+                else {
+                    WorkWithAlert.getInstance().showAlert("Изменение пароля", "Ошибка валидации",
+                            "Неверный ответ", dialogStage, "ERROR");
                 }
             }
             else {
-                if(userData.getLogin()==null||userData.getLogin().length()==0){
-                    userData.setLogin(loginField.getText());
-
-                }
+                WorkWithAlert.getInstance().showAlert("Изменение пароля", "Неверная последовательность действий",
+                        "Сначала получите секретный вопрос", dialogStage, "ERROR");
             }
         }
     }
+
+    @FXML private void receiveUserData() throws IOException, ClassNotFoundException {
+        if(receiveQuestion.isSelected()){
+            receiveQuestion.setSelected(true);
+        }
+        if(loginField.getText()!=null&&loginField.getText().length()!=0) {
+            userData.setLogin(loginField.getText());
+            userData = (UserData) CommandProvider.getCommandProvider().getCommand("RECEIVE_USER_DATA").execute(userData);
+            questionLabel.setText(userData.getSecretQuestion());
+        }
+        else {
+            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                    "Исправьте недопустимые поля","Не допустимый логин",dialogStage,"ERROR");
+            receiveQuestion.setSelected(false);
+        }
+    }
+
+
     private boolean isInputValid() {
         String errorMessage = "";
 
@@ -71,8 +106,8 @@ public class ForgetPasswordCaseController {
             return true;
         } else {
             // Показываем сообщение об ошибке.
-            WorkWithAlert.getInstance().showErrorAlert(" WorkWithAlert.getInstance().showErrorAlert",
-                    "Исправьте недопустимые поля",errorMessage,dialogStage);
+            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                    "Исправьте недопустимые поля",errorMessage,dialogStage,"ERROR");
             return false;
         }
     }
