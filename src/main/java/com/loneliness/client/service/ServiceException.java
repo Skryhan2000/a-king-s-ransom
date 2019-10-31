@@ -1,15 +1,15 @@
 package com.loneliness.client.service;
 
-public class LogicException {
+public class ServiceException extends Throwable {
     private StringBuilder exceptionMessage=new StringBuilder();
     private StringBuilder exception=new StringBuilder();
 
-    public LogicException(String exceptionMessage,String exception){
+    public ServiceException(String exceptionMessage,String exception){
         this.exceptionMessage.append(exceptionMessage);
         this.exception.append(exception);
     }
 
-    public LogicException(StringBuilder exception) {
+    public ServiceException(StringBuilder exception) {
         this.exception = exception;
     }
 

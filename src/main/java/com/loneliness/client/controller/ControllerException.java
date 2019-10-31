@@ -1,6 +1,6 @@
 package com.loneliness.client.controller;
 
-public class ControllerException {
+public class ControllerException extends Throwable{
 
         private StringBuilder exceptionMessage=new StringBuilder();
         private StringBuilder exception=new StringBuilder();

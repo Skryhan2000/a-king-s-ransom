@@ -2,6 +2,7 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.PathManager;
 import com.loneliness.client.controller.CommandProvider;
+import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.launcher.Client;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.entity.user.UserData;
@@ -50,6 +51,9 @@ public class AuthorisationFormController {
                     WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
                             "Неизвестная ошибка", "авторизуйтесь позже",dialogStage,"ERROR");
             }
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                    e.getExceptionMessage().toString(), "авторизуйтесь позже",dialogStage,"ERROR");
         } catch (IOException e) {
             e.printStackTrace();
         }

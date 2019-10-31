@@ -1,6 +1,6 @@
 package com.loneliness.client.dao;
 
-public class DAOException {
+public class DAOException extends Throwable{
 
     private StringBuilder exceptionMessage=new StringBuilder();
     private StringBuilder exception=new StringBuilder();
