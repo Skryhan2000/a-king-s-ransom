@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loneliness.server.view.StartWindowController">
+   <top>
+      <Pane prefHeight="100.0" prefWidth="600.0" style="-fx-background-color: #2E3348;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="177.0" prefHeight="47.0" prefWidth="247.0" text="a-king-s-ransom" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Label>
+            <Label layoutX="406.0" layoutY="50.0" text="Общее кол-во подключений" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="quantityLabel" layoutX="534.0" layoutY="71.0" text="0" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </top>
+   <center>
+      <TextArea fx:id="console" prefHeight="200.0" prefWidth="200.0" promptText="ПОЛЕ ВВОДА" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </TextArea>
+   </center>
+</BorderPane>
