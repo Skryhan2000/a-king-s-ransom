@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loneliness.client.view.fxml_controller.AdminStartWindowController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -16,10 +17,10 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <TableView layoutX="-12.0" layoutY="-19.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="usersTable" layoutX="-12.0" layoutY="-19.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn maxWidth="70.0" minWidth="62.0" prefWidth="62.0" text="Логин" />
-                                        <TableColumn maxWidth="113.0" minWidth="100.0" prefWidth="113.0" resizable="false" text="Права доступа" />
+                                        <TableColumn fx:id="loginColumn" maxWidth="70.0" minWidth="62.0" prefWidth="62.0" text="Логин" />
+                                        <TableColumn fx:id="typeColumn" maxWidth="113.0" minWidth="100.0" prefWidth="113.0" resizable="false" text="Права доступа" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -41,14 +42,14 @@
                                        <children>
                                           <Label alignment="CENTER" contentDisplay="CENTER" text="Логин" textAlignment="JUSTIFY" />
                                           <Label text="Пароль" GridPane.rowIndex="1" />
-                                          <Label text="Секретный пароль" GridPane.rowIndex="2" />
+                                          <Label text="Секретный вопрос" GridPane.rowIndex="2" />
                                           <Label text="Секретный ответ" GridPane.rowIndex="3" />
                                           <Label text="Права достура" GridPane.rowIndex="4" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Text fx:id="login" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
+                                          <Text fx:id="password" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Text fx:id="question" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Text fx:id="answer" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Text fx:id="type" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -85,7 +86,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
             <Button mnemonicParsing="false" text="Получить предыдущие 20" />
-            <Button mnemonicParsing="false" text="Обновить" />
+            <Button mnemonicParsing="false" onAction="#update" text="Обновить" />
           <Button mnemonicParsing="false" text="Получить следующие 20" />
         </buttons>
          <BorderPane.margin>

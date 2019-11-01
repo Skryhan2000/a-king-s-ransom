@@ -1,5 +1,8 @@
 package com.loneliness.entity.user;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,12 +10,15 @@ public class UserPrivateData implements Serializable {
     private String login;
     private String password;
     private static final long serialVersionUID=0L;
+    private transient StringProperty loginProperty;
+
     public UserPrivateData() {
     }
 
     public UserPrivateData(String login, String password) {
         this.login = login;
         this.password = password;
+        loginProperty=new SimpleStringProperty(login);
     }
 
     public String getLogin() {
@@ -21,6 +27,7 @@ public class UserPrivateData implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+        loginProperty=new SimpleStringProperty(login);
     }
 
     public String getPassword() {
@@ -29,6 +36,17 @@ public class UserPrivateData implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLoginProperty() {
+        return loginProperty.get();
+    }
+
+    public StringProperty loginPropertyProperty() {
+        if(loginProperty==null){
+            loginProperty=new SimpleStringProperty(login);
+        }
+        return loginProperty;
     }
 
     @Override

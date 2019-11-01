@@ -75,12 +75,12 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public ConcurrentHashMap receiveAll() throws DAOException {
+    public ConcurrentHashMap<Integer,UserData> receiveAll() throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_ALL_USERS");
             Client.getOutObject().writeObject(transmission);
-            return (ConcurrentHashMap) Client.getInObject().readObject();
+            return (ConcurrentHashMap<Integer, UserData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }

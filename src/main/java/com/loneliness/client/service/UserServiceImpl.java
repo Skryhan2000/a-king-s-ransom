@@ -5,11 +5,12 @@ import com.loneliness.entity.user.UserData;
 import com.loneliness.client.dao.DAOFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class UserServiceImpl implements Service {
     @Override
-    public Object receiveAllElem(Object obj) throws ServiceException {
+    public ConcurrentHashMap<Integer,UserData> receiveAllElem(Object obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().receiveAll();
         } catch (DAOException e) {

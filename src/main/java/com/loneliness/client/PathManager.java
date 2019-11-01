@@ -17,7 +17,7 @@ public class PathManager {
         return "";
     }
     public String getAdminStartWindow(){
-        return "";
+        return "/AdminStartWindow.fxml";
     }
     public String getManagerStartWindow(){
         return "";

@@ -1,5 +1,8 @@
 package com.loneliness.entity.user;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +12,7 @@ public class UserData extends UserPrivateData implements Serializable {
     private int id;
     private String secretAnswer;
     private String secretQuestion;
+    private transient StringProperty typeProperty;
 
     public UserData() {
     }
@@ -20,12 +24,14 @@ public class UserData extends UserPrivateData implements Serializable {
     public UserData(String type, int id) {
         this.type = type;
         this.id = id;
+        typeProperty =new SimpleStringProperty(type);
     }
 
     public UserData(String login, String password, String type, int id) {
         super(login, password);
         this.type = type;
         this.id = id;
+        typeProperty =new SimpleStringProperty(type);
     }
 
     public static long getSerialVersionUID() {
@@ -38,6 +44,7 @@ public class UserData extends UserPrivateData implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+        typeProperty =new SimpleStringProperty(type);
     }
 
     public int getId() {
@@ -47,7 +54,6 @@ public class UserData extends UserPrivateData implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getSecretAnswer() {
         return secretAnswer;
@@ -63,6 +69,17 @@ public class UserData extends UserPrivateData implements Serializable {
 
     public void setSecretQuestion(String secretQuestion) {
         this.secretQuestion = secretQuestion;
+    }
+
+    public String getTypeProperty() {
+        return typeProperty.get();
+    }
+
+    public StringProperty typePropertyProperty() {
+        if(typeProperty==null){
+            typeProperty =new SimpleStringProperty(type);
+        }
+        return typeProperty;
     }
 
     @Override

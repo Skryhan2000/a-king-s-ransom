@@ -142,7 +142,7 @@ public class SQLUserDAO implements CRUD{
             userData.setPassword(resultSet.getString("password"));
             userData.setType(resultSet.getString("type"));
             userData.setSecretAnswer(resultSet.getString("secret_answer"));
-            userData.setSecretAnswer(resultSet.getString("secret_question"));
+            userData.setSecretQuestion(resultSet.getString("secret_question"));
             data.put(userData.getId(),userData);
         }
         return data;
