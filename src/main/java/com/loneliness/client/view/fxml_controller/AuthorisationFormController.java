@@ -18,67 +18,77 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class AuthorisationFormController {
-    @FXML private Stage dialogStage;
-    @FXML private Button enterButton;
-    @FXML private TextField loginField;
-    @FXML private PasswordField passwordField;
+public class AuthorisationFormController  implements Controller {
+    @FXML
+    private Stage dialogStage;
+    @FXML
+    private Button enterButton;
+    @FXML
+    private TextField loginField;
+    @FXML
+    private PasswordField passwordField;
 
-    @FXML private void authorize() throws ClassNotFoundException {
-        UserData userData = new UserData();
-        userData.setLogin(loginField.getText());
-        userData.setPassword(passwordField.getText());
-        try {
-            switch ((String) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData)) {
-                case "admin":
-                    PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
-                            getInstance().getAdminStartWindow())));
-                    break;
-                case "manager":
-                    PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
-                            getInstance().getManagerStartWindow())));
-                    break;
-                case "client":
-                    PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
-                            getInstance().getClientStartWindow())));
-                    break;
-                case "noType":
-                    WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
-                            "Нет такого пользователя", "Неверный логин и/или пароль",
-                            dialogStage,"ERROR");
-                    break;
-                default:
-                    WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
-                            "Неизвестная ошибка", "авторизуйтесь позже",dialogStage,"ERROR");
+    @FXML
+    public void finishWork()  {
+        if (isInputValid()) {
+            UserData userData = new UserData();
+            userData.setLogin(loginField.getText());
+            userData.setPassword(passwordField.getText());
+            try {
+                switch ((String) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData)) {
+                    case "admin":
+                        PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
+                                getInstance().getAdminStartWindow())));
+                        break;
+                    case "manager":
+                        PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
+                                getInstance().getManagerStartWindow())));
+                        break;
+                    case "client":
+                        PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
+                                getInstance().getClientStartWindow())));
+                        break;
+                    case "noType":
+                        WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                                "Нет такого пользователя", "Неверный логин и/или пароль",
+                                dialogStage, "ERROR");
+                        break;
+                    case "validate_this_user":
+                        WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                                "Ваши права еще не подтверждены", "авторизуйтесь позже",
+                                dialogStage, "ERROR");
+                        break;
+                    default:
+                        WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                                "Неизвестная ошибка", "авторизуйтесь позже", dialogStage, "ERROR");
+                }
+            } catch (ControllerException e) {
+                WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                        e.getExceptionMessage().toString(), "авторизуйтесь позже", dialogStage, "ERROR");
+            } catch (IOException e) {
+                WorkWithAlert.getInstance().showAlert("Ошибка регистрации",
+                        "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        dialogStage, "ERROR");
             }
-        } catch (ControllerException e) {
-            WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
-                    e.getExceptionMessage().toString(), "авторизуйтесь позже",dialogStage,"ERROR");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }
 
-    @FXML private void onKeyTyped(){
+    @FXML
+    private void onKeyTyped() {
         PrimaryStage.getInstance().getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    authorize();
-                } catch (ClassNotFoundException e) {
-                    WorkWithAlert.getInstance().showAlert("Ошибка подключения",
-                            "Неизвестная ошибка",
-                            "Попробуйте повторить действие позже",dialogStage,"ERROR");
-                }
+                    finishWork();
 
             }
         });
     }
-    public boolean init()  {
-        if (Client.getInObject()==null||Client.getOutObject()==null) {
+
+    public boolean init() {
+        if (Client.getInObject() == null || Client.getOutObject() == null) {
             WorkWithAlert.getInstance().showAlert("Ошибка подключения",
                     "Подключение к серверу отсутствует",
-                    "Нажмите ок для переподключения",dialogStage,"ERROR");
+                    "Нажмите ок для переподключения", dialogStage, "ERROR");
             return Client.reconnect();
         }
         return true;
@@ -87,12 +97,46 @@ public class AuthorisationFormController {
 
     public boolean showForgetPasswordCase() throws IOException {
         Stage dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                getForgetYourPasswordCase(),"Востановления пароля");
-        ForgetPasswordCaseController controller=WorkWithFXMLLoader.getInstance().getLoader().getController();
+                getForgetYourPasswordCase(), "Востановления пароля");
+        ForgetPasswordCaseController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
         controller.setDialogStage(dialogStage);
         controller.setData(loginField.getText());
         dialogStage.showAndWait();
         return controller.isOkClicked();
     }
 
+    @FXML
+    public void showRegistrationForm() {
+        try {
+            PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
+                    getInstance().getRegistrationForm())));
+        } catch (IOException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
+                    "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                    dialogStage, "ERROR");
+        }
+    }
+
+    @Override
+    public boolean isInputValid() {
+        String errorMessage = "";
+
+        if (loginField.getText() == null || loginField.getText().length() == 0) {
+            errorMessage += "Не допустимый логин!\n";
+        } else if (passwordField.getText() == null || passwordField.getText().length() == 0) {
+            errorMessage += "Не допустимый пароль!\n";
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Показываем сообщение об ошибке.
+            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                    "Исправьте недопустимые поля", errorMessage, dialogStage, "ERROR");
+            return false;
+        }
+    }
+
+    @Override
+    public void goBack() {    }
 }

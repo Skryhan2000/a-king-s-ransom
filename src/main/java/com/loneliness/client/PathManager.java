@@ -25,4 +25,7 @@ public class PathManager {
     public String getForgetYourPasswordCase(){
         return "/ForgetPasswordCase.fxml";
     }
+    public String getRegistrationForm(){
+        return "/RegistrationForm.fxml";
+    }
 }

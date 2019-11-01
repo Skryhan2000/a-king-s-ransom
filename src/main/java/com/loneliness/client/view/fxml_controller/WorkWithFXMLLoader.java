@@ -33,6 +33,7 @@ public class WorkWithFXMLLoader {
     public FXMLLoader getLoader() {
         return loader;
     }
+
     public void setLoader(String resource){
         loader.setLocation(getClass().getResource(resource));
     }

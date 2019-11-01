@@ -2,7 +2,6 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
-import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ForgetPasswordCaseController {
+public class ForgetPasswordCaseController implements Controller{
     @FXML private RadioButton receiveQuestion=new RadioButton();
     @FXML private TextField loginField =new TextField();
     @FXML private Label questionLabel=new Label();
@@ -35,14 +34,14 @@ public class ForgetPasswordCaseController {
         userData.setLogin(login);
         loginField.setText(login);
     }
-
-    @FXML public void CancelChanging(){
+    @Override
+    @FXML public void goBack(){
         okClicked = false;
         dialogStage.close();
 
     }
     @FXML
-    private void handleOk() throws IOException, ClassNotFoundException {
+    public void finishWork()  {
         try {
 
 
@@ -100,7 +99,7 @@ public class ForgetPasswordCaseController {
     }
 
 
-    private boolean isInputValid() {
+    public boolean isInputValid() {
         String errorMessage = "";
 
         if (loginField.getText() == null || loginField.getText().length() == 0) {
