@@ -29,9 +29,12 @@ public class ChangeUserDataController implements Handler {
     private RadioMenuItem manager;
     @FXML
     private RadioMenuItem noType;
-    private String type;
     @FXML
     private ToggleGroup typeGroup = new ToggleGroup();
+
+    private String type;
+
+    private UserData userData;
 
     private boolean okClicked = false;
 
@@ -77,11 +80,9 @@ public class ChangeUserDataController implements Handler {
         } else if (type == null || type.length() == 0) {
             errorMessage += "Не допустимые права доступа!\n";
         }
-
         if (errorMessage.length() == 0) {
             return true;
-        } else {
-            // Показываем сообщение об ошибке.
+        } else { // Показываем сообщение об ошибке.
             WorkWithAlert.getInstance().showAlert("Неверный ввод",
                     "Исправьте недопустимые поля", errorMessage, dialogStage, "ERROR");
             return false;
@@ -98,14 +99,11 @@ public class ChangeUserDataController implements Handler {
     public void finishWork() {
         try {
             if (isInputValid()) {
-
-                UserData userData = new UserData();
                 userData.setLogin(loginField.getText());
                 userData.setPassword(passwordField.getText());
                 userData.setType(getType());
                 userData.setSecretQuestion(questionField.getText());
                 userData.setSecretAnswer(answerField.getText());
-
                 if (action.equals("update")) {
 
                     if ((Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_USER").execute(userData)) {
@@ -136,31 +134,29 @@ public class ChangeUserDataController implements Handler {
     }
 
     public void setData(UserData userData) {
+        this.userData=userData;
         loginField.setText(userData.getLogin());
         passwordField.setText(userData.getPassword());
-        type = userData.getType();
         questionField.setText(userData.getSecretQuestion());
         answerField.setText(userData.getSecretAnswer());
-        setSelectedType();
+        if(userData.getType()!=null)
+        setSelectedType(userData.getType());
+        else type="";
     }
 
     @FXML
     private void setType() {
         if (admin.isSelected()) {
-//            admin.setSelected(true);
             type = "admin";
         } else if (client.isSelected()) {
-//            client.setSelected(true);
             type = "client";
         } else if (manager.isSelected()) {
-//            manager.setSelected(true);
             type = "manager";
         } else if (noType.isSelected()) {
-//            noType.setSelected(true);
             type = "noType";
         }
     }
-    private void setSelectedType(){
+    private void setSelectedType(String type){
         switch (type){
             case "admin":
                 admin.setSelected(true);

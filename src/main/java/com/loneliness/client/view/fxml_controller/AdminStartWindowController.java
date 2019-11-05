@@ -102,6 +102,7 @@ return false;
             dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
                     getChangeUSerData(), "Добавления пользователя");
             ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setData(new UserData());
             controller.setDialogStage(dialogStage, "create");
             dialogStage.showAndWait();
             return controller.isOkClicked();
