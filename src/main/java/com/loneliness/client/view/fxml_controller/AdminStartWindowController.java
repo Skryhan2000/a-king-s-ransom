@@ -47,7 +47,20 @@ public class AdminStartWindowController implements CRUD_Controller{
         return usersData;
     }
 
-
+    @FXML private void addTwentyNode(){
+        indexOfCurrentValue[0]+=20;
+        indexOfCurrentValue[1]+=20;
+        update();
+    }
+    @FXML private void removeTwentyNode(){
+        indexOfCurrentValue[0]-=20;
+        indexOfCurrentValue[1]-=20;
+        if(indexOfCurrentValue[0]<0){
+            indexOfCurrentValue[0]=0;
+            indexOfCurrentValue[1]=20;
+        }
+        update();
+    }
 
     public  ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer, UserData> map) {
       usersData.addAll(map.values());
@@ -74,9 +87,11 @@ public class AdminStartWindowController implements CRUD_Controller{
         try {
             usersData.clear();
             Transmission transmission = new Transmission();
+            transmission.setFirstIndex(indexOfCurrentValue[0]);
+            transmission.setLastIndex(indexOfCurrentValue[1]);
             transmission.setCommand("RECEIVE_ALL_USERS");
             setAndGetUsersData((ConcurrentHashMap<Integer, UserData>) CommandProvider.
-                    getCommandProvider().getCommand("RECEIVE_ALL_USERS")
+                    getCommandProvider().getCommand("RECEIVE_ALL_USERS_IN_LIMIT")
                     .execute(transmission));
             usersTable.refresh();
             usersTable.setItems(usersData);

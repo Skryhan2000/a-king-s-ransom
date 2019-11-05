@@ -9,4 +9,5 @@ public interface Service {
     Object delete(Object obj) throws  ServiceException;
     Object authorization(Object obj) throws  ServiceException;
     Object receiveAllElem(Object obj) throws  ServiceException;
+    Object receiveAllElemInLimit(Object obj) throws  ServiceException;
 }

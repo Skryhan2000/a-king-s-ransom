@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Transmission implements Serializable {
     private static final long serialVersionUID=2L;
+    private int firstIndex;
+    private int lastIndex;
     private String command;
     private UserData userData;
     private ConcurrentHashMap<Integer, UserData> dataConcurrentHashMap;
@@ -52,5 +54,21 @@ public class Transmission implements Serializable {
 
     public void setUserData(UserData userData) {
         this.userData = userData;
+    }
+
+    public int getFirstIndex() {
+        return firstIndex;
+    }
+
+    public void setFirstIndex(int firstIndex) {
+        this.firstIndex = firstIndex;
+    }
+
+    public int getLastIndex() {
+        return lastIndex;
+    }
+
+    public void setLastIndex(int lastIndex) {
+        this.lastIndex = lastIndex;
     }
 }

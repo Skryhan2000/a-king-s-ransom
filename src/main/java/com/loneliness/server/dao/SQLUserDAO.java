@@ -2,6 +2,7 @@ package com.loneliness.server.dao;
 
 
 
+import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
 import java.sql.PreparedStatement;
@@ -131,7 +132,7 @@ public class SQLUserDAO implements CRUD{
             ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT * FROM Users;";
+            String sql = "SELECT * FROM Users LIMIT ;";
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData;
@@ -149,6 +150,32 @@ public class SQLUserDAO implements CRUD{
     } catch (SQLException e) {
         e.printStackTrace();
     }
+        return null;
+    }
+    @Override
+    public Map<Integer,UserData> receiveAllInLimit(Transmission transmission) {
+        try {
+            ConcurrentHashMap<Integer, UserData> data = new ConcurrentHashMap<>();
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM Users LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
+            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+            UserData userData;
+            while (resultSet.next()) {
+                userData = new UserData();
+                userData.setId(resultSet.getInt("id"));
+                userData.setLogin(resultSet.getString("login"));
+                userData.setPassword(resultSet.getString("password"));
+                userData.setType(resultSet.getString("type"));
+                userData.setSecretAnswer(resultSet.getString("secret_answer"));
+                userData.setSecretQuestion(resultSet.getString("secret_question"));
+                data.put(userData.getId(), userData);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
     public Map<Integer,UserData> findAllByLoginAndType(UserData userDataToFind){

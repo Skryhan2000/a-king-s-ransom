@@ -1,6 +1,7 @@
 package com.loneliness.server.dao;
 
 
+import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
 public interface CRUD {
@@ -9,4 +10,5 @@ public interface CRUD {
     boolean update(UserData user);
     boolean delete(UserData user);
     Object receiveAll();
+    Object receiveAllInLimit(Transmission transmission);
 }

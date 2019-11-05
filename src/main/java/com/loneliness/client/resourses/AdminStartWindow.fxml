@@ -85,12 +85,12 @@
    <top>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button mnemonicParsing="false" text="Получить предыдущие 20" />
+            <Button mnemonicParsing="false" onAction="#removeTwentyNode" text="Получить предыдущие 20" />
             <Button mnemonicParsing="false" onAction="#update" text="Обновить" />
-          <Button mnemonicParsing="false" text="Получить следующие 20" />
+          <Button mnemonicParsing="false" onAction="#addTwentyNode" text="Получить следующие 20" />
         </buttons>
          <BorderPane.margin>
-            <Insets right="20.0" />
+            <Insets left="20.0" right="20.0" />
          </BorderPane.margin>
       </ButtonBar>
    </top>

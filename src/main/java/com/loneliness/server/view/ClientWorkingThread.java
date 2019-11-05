@@ -17,7 +17,7 @@ public class ClientWorkingThread implements Runnable{
     private ObjectOutputStream outObject;
     private ObjectInputStream inObject;
     private Socket userSocket;
-    public ClientWorkingThread(Socket userSocket, ArrayBlockingQueue serverList) {
+    public ClientWorkingThread(Socket userSocket, ArrayBlockingQueue<ClientWorkingThread> serverList) {
         this.userSocket = userSocket;
         try {
             this.serverList=serverList;
@@ -32,12 +32,14 @@ public class ClientWorkingThread implements Runnable{
     public void run() {
         Transmission transmission;
         Object response = null;
- //       int flag=-1;
         try {
             while (true) {
                 transmission=(Transmission) inObject.readObject();
-                response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                if(transmission.getUserData()!=null) {
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getUserData());
+                } else { response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                        execute(transmission);}
                 outObject.writeObject(response);
                 outObject.reset();
             }

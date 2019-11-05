@@ -6,5 +6,6 @@ public interface Service {
     Object update(Object obj);
     Object delete(Object obj);
     Object authorization(Object obj);
-    Object receiveAllElem(Object obj);
+    Object receiveAllElem();
+    Object receiveAllElemInLimit(Object obj);
 }

@@ -1,6 +1,7 @@
 package com.loneliness.client.service;
 
 import com.loneliness.client.dao.DAOException;
+import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.client.dao.DAOFactory;
 
@@ -12,6 +13,15 @@ public class UserServiceImpl implements Service {
     public ConcurrentHashMap<Integer,UserData> receiveAllElem(Object obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().receiveAll();
+        } catch (DAOException e) {
+            throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
+        }
+    }
+
+    @Override
+    public Object receiveAllElemInLimit(Object obj) throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getUserDAO().receiveAllInInterval((Transmission) obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
