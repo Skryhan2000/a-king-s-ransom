@@ -85,4 +85,15 @@ public class ServerUserRequest implements CRUD {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
+    public ConcurrentHashMap<Integer,UserData> findByLoginAndType(UserData userData) throws DAOException {
+        Transmission transmission=new Transmission();
+        transmission.setUserData(userData);
+        transmission.setCommand("FIND_USERS_BY_LOGIN_AND_TYPE");
+        try {
+            Client.getOutObject().writeObject(transmission);
+            return (ConcurrentHashMap<Integer, UserData>) Client.getInObject().readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+        }
+    }
 }

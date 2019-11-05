@@ -10,6 +10,10 @@ public class UserServiceImpl implements Service{
         return DAOFactory.getInstance().getUserDAO().receiveAll();
     }
 
+    public Object findAllByLoginAndType(Object obj) {
+        return DAOFactory.getInstance().getUserDAO().findAllByLoginAndType((UserData)obj);
+    }
+
     @Override
     public Object authorization(Object obj) {
         return DAOFactory.getInstance().getUserDAO().receiveUserType((UserData)obj);
@@ -34,4 +38,6 @@ public class UserServiceImpl implements Service{
     public Object delete(Object obj) {
         return DAOFactory.getInstance().getUserDAO().delete((UserData)obj);
     }
+
+
 }

@@ -29,4 +29,5 @@ public class PathManager {
         return "/RegistrationForm.fxml";
     }
     public String getChangeUSerData(){return "/ChangeUserData.fxml";}
+    public String getSearchUserData(){return "/SearchWindow.fxml";}
 }

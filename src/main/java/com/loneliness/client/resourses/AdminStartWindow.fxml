@@ -71,7 +71,7 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button mnemonicParsing="false" text="Поиск" />
+            <Button mnemonicParsing="false" onAction="#searchHandler" text="Поиск" />
             <Button mnemonicParsing="false" onAction="#addHandler" text="Добавить" />
             <Button mnemonicParsing="false" onAction="#deleteHandler" text="Удалить" />
             <Button mnemonicParsing="false" onAction="#changeHandler" text="Редактировать" />

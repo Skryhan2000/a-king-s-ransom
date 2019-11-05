@@ -43,7 +43,13 @@ public class AdminStartWindowController implements CRUD_Controller{
 
     private ObservableList<UserData> usersData = FXCollections.observableArrayList();
 
-    public ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer,UserData> map) {
+    public  ObservableList<UserData> getUsersData() {
+        return usersData;
+    }
+
+
+
+    public  ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer, UserData> map) {
       usersData.addAll(map.values());
       return usersData;
     }
@@ -93,8 +99,21 @@ return false;
                 (observableValue, userData1, newUserData) -> fillText(newUserData)));
         update();
     }
-    @FXML private void searchHandler(){}
-
+    @FXML
+    private  boolean  searchHandler(){
+        Stage dialogStage = null;
+        try {
+            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getSearchUserData(), "Поиск пользователя");
+            SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setDialogStage(dialogStage,usersTable,usersData);
+            dialogStage.showAndWait();
+            return controller.isOkClicked();
+        } catch (ViewException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     @Override
     public boolean addHandler() {
         Stage dialogStage = null;
@@ -166,7 +185,7 @@ return false;
     public boolean goBack(){
         try {
             PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
-                    getInstance().getRegistrationForm())));
+                    getInstance().getAuthorisationFormController())));
         } catch (IOException e) {
             WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
                     "Нарушение целостности программы", "Попробуйте повторить действие позже",

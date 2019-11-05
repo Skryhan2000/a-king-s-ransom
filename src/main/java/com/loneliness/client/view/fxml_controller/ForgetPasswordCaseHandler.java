@@ -38,7 +38,6 @@ public class ForgetPasswordCaseHandler implements Handler {
     @FXML public void goBack(){
         okClicked = false;
         dialogStage.close();
-
     }
     @FXML
     public void finishWork()  {

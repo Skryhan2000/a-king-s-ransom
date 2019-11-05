@@ -151,4 +151,43 @@ public class SQLUserDAO implements CRUD{
     }
         return null;
     }
+    public Map<Integer,UserData> findAllByLoginAndType(UserData userDataToFind){
+        try {
+            ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM Users ";
+            boolean whereIsNotUsed=true;
+            if(userDataToFind.getLogin()!=null){
+                sql+="WHERE login = '" + userDataToFind.getLogin() + "' ";
+                whereIsNotUsed=false;
+            }else if(userDataToFind.getType()!=null){
+                if(whereIsNotUsed) {
+                    sql+="WHERE type = '" + userDataToFind.getType() + "' ";
+                }
+                else {
+                    sql += "AND type = '" + userDataToFind.getType() + "' ";
+                }
+
+            }
+            sql+=";";
+            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+            UserData userData;
+            while ( resultSet.next()){
+                userData=new UserData();
+                userData.setId(resultSet.getInt("id"));
+                userData.setLogin(resultSet.getString("login"));
+                userData.setPassword(resultSet.getString("password"));
+                userData.setType(resultSet.getString("type"));
+                userData.setSecretAnswer(resultSet.getString("secret_answer"));
+                userData.setSecretQuestion(resultSet.getString("secret_question"));
+                data.put(userData.getId(),userData);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -4,7 +4,6 @@ import com.loneliness.client.dao.DAOException;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.client.dao.DAOFactory;
 
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -59,6 +58,13 @@ public class UserServiceImpl implements Service {
     public Object delete(Object obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().delete((UserData)obj);
+        } catch (DAOException e) {
+            throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
+        }
+    }
+    public Object findByLoginAndType(Object obj) throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getUserDAO().findByLoginAndType((UserData) obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }

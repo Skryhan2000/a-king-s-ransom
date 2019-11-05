@@ -16,6 +16,7 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_USERS,new ReceiveAllUsers());
         repository.put(CommandName.RECEIVE_USER_DATA,new ReceiveUserData());
         repository.put(CommandName.UPDATE_USER,new UpdateUser());
+        repository.put(CommandName.FIND_USERS_BY_LOGIN_AND_TYPE,new FindUsersByLoginAndType());
     }
 
     public Map<CommandName, Command> getRepository() {

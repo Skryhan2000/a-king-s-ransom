@@ -21,6 +21,7 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_USER,new ReceiveUser());
         repository.put(CommandName.UPDATE_USER,new UpdateUser());
         repository.put(CommandName.SHUT_DOWN,new ShutDown());
+        repository.put(CommandName.FIND_USERS_BY_LOGIN_AND_TYPE,new FindAllByLoginAndType());
     }
 
 
