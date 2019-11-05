@@ -1,6 +1,7 @@
 package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.view.PrimaryStage;
+import com.loneliness.client.view.ViewException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,16 +19,21 @@ public class WorkWithFXMLLoader {
         return instance;
     }
 
-    public Stage createStage(String resource,String title) throws IOException {
-        loader.setLocation(getClass().getResource(resource));
-        BorderPane page = loader.load();
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle(title);
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(PrimaryStage.getInstance().getPrimaryStage());
-        Scene scene = new Scene(page);
-        dialogStage.setScene(scene);
-        return dialogStage;
+    public Stage createStage(String resource,String title) throws ViewException {
+        try {
+            loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(resource));
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(title);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(PrimaryStage.getInstance().getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            return dialogStage;
+        } catch (IOException e) {
+            throw new ViewException("Нарушена целостность программы",e.getMessage());
+        }
     }
 
     public FXMLLoader getLoader() {

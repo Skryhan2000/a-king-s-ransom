@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class RegistrationController implements Controller {
+public class RegistrationHandler implements Handler {
     @FXML
     private TextField loginField = new TextField();
     @FXML

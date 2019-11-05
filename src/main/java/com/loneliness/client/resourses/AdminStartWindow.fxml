@@ -72,10 +72,10 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
             <Button mnemonicParsing="false" text="Поиск" />
-            <Button mnemonicParsing="false" text="Добавить" />
-            <Button mnemonicParsing="false" text="Удалить" />
-            <Button mnemonicParsing="false" text="Редактировать" />
-          <Button mnemonicParsing="false" text="Вернуться" />
+            <Button mnemonicParsing="false" onAction="#addHandler" text="Добавить" />
+            <Button mnemonicParsing="false" onAction="#deleteHandler" text="Удалить" />
+            <Button mnemonicParsing="false" onAction="#changeHandler" text="Редактировать" />
+          <Button mnemonicParsing="false" onAction="#goBack" text="Вернуться" />
         </buttons>
          <BorderPane.margin>
             <Insets right="10.0" />

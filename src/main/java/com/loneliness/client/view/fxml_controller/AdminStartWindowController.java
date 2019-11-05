@@ -1,20 +1,26 @@
 package com.loneliness.client.view.fxml_controller;
 
+import com.loneliness.client.PathManager;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
+import com.loneliness.client.view.PrimaryStage;
+import com.loneliness.client.view.ViewException;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class AdminStartWindowController {
+public class AdminStartWindowController implements CRUD_Controller{
     private int[] indexOfCurrentValue={0,20};
     @FXML
     private TableView<UserData> usersTable;
@@ -32,6 +38,8 @@ public class AdminStartWindowController {
     private Text answer;
     @FXML
     private Text type;
+    @FXML
+    private Stage dialogStage;
 
     private ObservableList<UserData> usersData = FXCollections.observableArrayList();
 
@@ -55,7 +63,8 @@ public class AdminStartWindowController {
             type.setText(userData.getType());
         }
     }
-    @FXML private void update() {
+    @Override
+    public boolean update() {
         try {
             usersData.clear();
             Transmission transmission = new Transmission();
@@ -65,11 +74,13 @@ public class AdminStartWindowController {
                     .execute(transmission));
             usersTable.refresh();
             usersTable.setItems(usersData);
-
+            return true;
         } catch (ControllerException e) {
-            e.printStackTrace();
+            WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                    "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
         }
-
+return false;
     }
 
     @FXML private void initialize(){
@@ -81,5 +92,71 @@ public class AdminStartWindowController {
         usersTable.getSelectionModel().selectedItemProperty().addListener((
                 (observableValue, userData1, newUserData) -> fillText(newUserData)));
         update();
+    }
+    @FXML private void searchHandler(){}
+
+    @Override
+    public boolean addHandler() {
+        Stage dialogStage = null;
+        try {
+            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getChangeUSerData(), "Добавления пользователя");
+            ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setDialogStage(dialogStage, "create");
+            dialogStage.showAndWait();
+            return controller.isOkClicked();
+        } catch (ViewException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
+    public boolean deleteHandler(){
+        return false;
+    }
+    @Override
+    public boolean changeHandler(){
+        UserData userData=new UserData();
+        userData=getSelectedModel(userData);
+        if(userData!=null) {
+            Stage dialogStage = null;
+            try {
+                dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                        getChangeUSerData(), "Добавления пользователя");
+                ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                controller.setDialogStage(dialogStage, "update");
+                controller.setData(userData);
+                dialogStage.showAndWait();
+                return controller.isOkClicked();
+            } catch (ViewException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    @Override
+    public boolean goBack(){
+        try {
+            PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
+                    getInstance().getRegistrationForm())));
+        } catch (IOException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
+        }
+        return false;
+    }
+
+    private UserData getSelectedModel(UserData selectedUser){
+       selectedUser=usersTable.getSelectionModel().getSelectedItem();
+        if(selectedUser==null){
+            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
+                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
+                    this.dialogStage, "ERROR");
+            return selectedUser;
+        }
+        else{
+            return selectedUser;
+        }
     }
 }

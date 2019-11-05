@@ -5,6 +5,7 @@ import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.launcher.Client;
 import com.loneliness.client.view.PrimaryStage;
+import com.loneliness.client.view.ViewException;
 import com.loneliness.entity.user.UserData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class AuthorisationFormController  implements Controller {
+public class AuthorisationFormController implements Handler {
     @FXML
     private Stage dialogStage;
     @FXML
@@ -95,14 +96,22 @@ public class AuthorisationFormController  implements Controller {
     }
 
 
-    public boolean showForgetPasswordCase() throws IOException {
-        Stage dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                getForgetYourPasswordCase(), "Востановления пароля");
-        ForgetPasswordCaseController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-        controller.setDialogStage(dialogStage);
-        controller.setData(loginField.getText());
-        dialogStage.showAndWait();
-        return controller.isOkClicked();
+    public boolean showForgetPasswordCase()  {
+        Stage dialogStage = null;
+        try {
+            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getForgetYourPasswordCase(), "Востановления пароля");
+            ForgetPasswordCaseHandler controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setDialogStage(dialogStage);
+            controller.setData(loginField.getText());
+            dialogStage.showAndWait();
+            return controller.isOkClicked();
+        } catch (ViewException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка восстановления пароля",
+                    "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
+        }
+return false;
     }
 
     @FXML
@@ -138,5 +147,7 @@ public class AuthorisationFormController  implements Controller {
     }
 
     @Override
-    public void goBack() {    }
+    public void goBack() {
+
+    }
 }

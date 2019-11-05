@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ForgetPasswordCaseController implements Controller{
+public class ForgetPasswordCaseHandler implements Handler {
     @FXML private RadioButton receiveQuestion=new RadioButton();
     @FXML private TextField loginField =new TextField();
     @FXML private Label questionLabel=new Label();
@@ -43,8 +43,6 @@ public class ForgetPasswordCaseController implements Controller{
     @FXML
     public void finishWork()  {
         try {
-
-
             if (isInputValid()) {
                 if (userData.getSecretQuestion() != null && userData.getSecretQuestion().length() != 0) {
                     if (userData.getSecretQuestion().equals(answerField.getText())) {

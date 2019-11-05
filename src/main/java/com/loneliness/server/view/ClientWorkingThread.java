@@ -38,17 +38,6 @@ public class ClientWorkingThread implements Runnable{
                 transmission=(Transmission) inObject.readObject();
                 response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getUserData());
-//                    if(response.getClass()== ConcurrentSkipListSet.class){
-//
-//                    }
-//
-//                    else if(response.getClass()==boolean.class){
-//
-//                    }
-//
-//                    else if(response.getClass()== UserData.class){
-//
-//                    }
                 outObject.writeObject(response);
                 outObject.reset();
             }
