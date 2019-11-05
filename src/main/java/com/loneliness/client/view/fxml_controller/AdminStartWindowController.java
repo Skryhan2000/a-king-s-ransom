@@ -113,6 +113,33 @@ return false;
     }
     @Override
     public boolean deleteHandler(){
+        int selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            try {
+                UserData userData=new UserData();
+                userData.setId(usersData.get(selectedIndex).getId());
+                if((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
+                    usersTable.getItems().remove(selectedIndex);
+                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                            "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                }
+                else {
+                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                            "Ошибка", "Попробуйте повторить действие позже",
+                            this.dialogStage, "ERROR");
+                }
+            } catch (ControllerException e) {
+                WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                        "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        this.dialogStage, "ERROR");
+            }
+
+        } else {
+            // Ничего не выбрано.
+            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                    "Удаление невозможно", "Выберите пользователя для удаления",
+                    this.dialogStage, "ERROR");
+        }
         return false;
     }
     @Override
