@@ -139,8 +139,10 @@ public class ChangeUserDataController implements Handler {
         passwordField.setText(userData.getPassword());
         questionField.setText(userData.getSecretQuestion());
         answerField.setText(userData.getSecretAnswer());
-        if(userData.getType()!=null)
-        setSelectedType(userData.getType());
+        if(userData.getType()!=null) {
+            type=userData.getType();
+            setSelectedType(userData.getType());
+        }
         else type="";
     }
 

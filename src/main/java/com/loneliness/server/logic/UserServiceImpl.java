@@ -8,7 +8,6 @@ import com.loneliness.server.dao.DAOFactory;
 public class UserServiceImpl implements Service{
     @Override
     public Object receiveAllElem() {
-
         return DAOFactory.getInstance().getUserDAO().receiveAll();
     }
 
