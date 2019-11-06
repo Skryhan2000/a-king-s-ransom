@@ -10,11 +10,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerUserRequest implements CRUD {
     @Override
-    public boolean create(UserData user) throws DAOException {
+    public boolean create(Object user) throws DAOException {
         try {
+
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_USER");
-            transmission.setUserData(user);
+            transmission.setUserData((UserData)user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -23,11 +24,11 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public UserData read(UserData user) throws DAOException {
+    public Object read(Object user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_USER");
-            transmission.setUserData(user);
+            transmission.setUserData((UserData)user);
             Client.getOutObject().writeObject(transmission);
             return (UserData) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -36,11 +37,11 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public boolean update(UserData user) throws DAOException {
+    public boolean update(Object user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_USER");
-            transmission.setUserData(user);
+            transmission.setUserData((UserData)user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -49,11 +50,11 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public boolean delete(UserData user) throws DAOException {
+    public boolean delete(Object user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_USER");
-            transmission.setUserData(user);
+            transmission.setUserData((UserData)user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -86,9 +87,9 @@ public class ServerUserRequest implements CRUD {
         }
     }
     @Override
-    public ConcurrentHashMap<Integer,UserData> receiveAllInInterval(Transmission transmission) throws DAOException {
+    public ConcurrentHashMap<Integer,UserData> receiveAllInInterval(Object transmission) throws DAOException {
         try {
-            transmission.setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
+            ((Transmission)transmission).setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, UserData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {

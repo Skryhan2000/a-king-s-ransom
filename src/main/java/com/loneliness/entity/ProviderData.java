@@ -1,12 +1,14 @@
 package com.loneliness.entity;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Provider implements Serializable {
+public class ProviderData implements Serializable {
     private static final long serialVersionUID=2L;
     private int id;
     private String name;
@@ -15,11 +17,35 @@ public class Provider implements Serializable {
     private transient StringProperty locationString;
     private transient IntegerProperty ratingInteger;
 
+    public ProviderData() {
+    }
+
+    public ProviderData(int id, String name, int rating, String location) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.location = location;
+        locationString=new SimpleStringProperty(location);
+        ratingInteger=new SimpleIntegerProperty(rating);
+    }
+
+    public ProviderData(int id, String name, int rating, String location, StringProperty locationString, IntegerProperty ratingInteger) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.location = location;
+        this.locationString = locationString;
+        this.ratingInteger = ratingInteger;
+    }
+
     public int getRatingInteger() {
         return ratingInteger.get();
     }
 
     public IntegerProperty ratingIntegerProperty() {
+        if(ratingInteger==null){
+            ratingInteger=new SimpleIntegerProperty(rating);
+        }
         return ratingInteger;
     }
 
@@ -53,6 +79,7 @@ public class Provider implements Serializable {
 
     public void setRating(int rating) {
         this.rating = rating;
+        ratingInteger=new SimpleIntegerProperty(rating);
     }
 
     public String getLocation() {
@@ -61,6 +88,7 @@ public class Provider implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+        locationString=new SimpleStringProperty(location);
     }
 
     public String getLocationString() {
@@ -68,6 +96,9 @@ public class Provider implements Serializable {
     }
 
     public StringProperty locationStringProperty() {
+        if(locationString==null){
+            locationString=new SimpleStringProperty(location);
+        }
         return locationString;
     }
 
@@ -79,13 +110,13 @@ public class Provider implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Provider provider = (Provider) o;
-        return id == provider.id &&
-                rating == provider.rating &&
-                name.equals(provider.name) &&
-                location.equals(provider.location) &&
-                locationString.equals(provider.locationString) &&
-                ratingInteger.equals(provider.ratingInteger);
+        ProviderData providerData = (ProviderData) o;
+        return id == providerData.id &&
+                rating == providerData.rating &&
+                name.equals(providerData.name) &&
+                location.equals(providerData.location) &&
+                locationString.equals(providerData.locationString) &&
+                ratingInteger.equals(providerData.ratingInteger);
     }
 
     @Override

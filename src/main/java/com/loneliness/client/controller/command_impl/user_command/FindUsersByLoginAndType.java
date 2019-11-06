@@ -1,4 +1,4 @@
-package com.loneliness.client.controller.command_impl;
+package com.loneliness.client.controller.command_impl.user_command;
 
 import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;

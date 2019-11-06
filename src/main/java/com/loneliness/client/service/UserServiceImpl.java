@@ -27,7 +27,7 @@ public class UserServiceImpl implements Service {
         }
     }
 
-    @Override
+
     public Object authorization(Object obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().authorize((UserData)obj);

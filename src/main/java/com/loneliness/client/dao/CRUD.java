@@ -1,17 +1,10 @@
 package com.loneliness.client.dao;
 
-
-import com.loneliness.entity.transmission.Transmission;
-import com.loneliness.entity.user.UserData;
-
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-
 public interface CRUD {
-    boolean create(UserData user) throws IOException, ClassNotFoundException, DAOException;
-    UserData read(UserData user) throws IOException, ClassNotFoundException, DAOException;
-    boolean update(UserData user) throws IOException, ClassNotFoundException, DAOException;
-    boolean delete(UserData user) throws IOException, ClassNotFoundException, DAOException;
-    Object receiveAll() throws IOException, ClassNotFoundException, DAOException;
-    Object receiveAllInInterval(Transmission transmission) throws DAOException;
+    boolean create(Object user) throws  DAOException;
+    Object read(Object user) throws  DAOException;
+    boolean update(Object user) throws  DAOException;
+    boolean delete(Object user) throws  DAOException;
+    Object receiveAll() throws  DAOException;
+    Object receiveAllInInterval(Object transmission) throws DAOException;
 }

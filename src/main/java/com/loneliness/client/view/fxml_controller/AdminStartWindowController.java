@@ -5,6 +5,7 @@ import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.client.view.ViewException;
+import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import javafx.collections.FXCollections;
@@ -20,134 +21,226 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class AdminStartWindowController implements CRUD_Controller{
-    private int[] indexOfCurrentValue={0,20};
+public class AdminStartWindowController implements CRUD_Controller {
+    @FXML
+    private Stage dialogStage;
+    private int[] indexOfCurrentValue = {0, 20};
+    private String dataType;
+
     @FXML
     private TableView<UserData> usersTable;
     @FXML
-    private TableColumn<UserData,String> loginColumn;
+    private TableColumn<UserData, String> usersLoginColumn;
     @FXML
-    private TableColumn<UserData,String> typeColumn;
+    private TableColumn<UserData, String> usersTypeColumn;
     @FXML
-    private Text login;
+    private Text userLogin;
     @FXML
-    private Text password;
+    private Text userPassword;
     @FXML
-    private Text question;
+    private Text userQuestion;
     @FXML
-    private Text answer;
+    private Text userAnswer;
     @FXML
     private Text type;
-    @FXML
-    private Stage dialogStage;
-
-    private String dataType;
-
     private ObservableList<UserData> usersData = FXCollections.observableArrayList();
 
 
 
+    @FXML
+    private TableView<ProviderData> providerTable;
+    @FXML
+    private TableColumn<ProviderData, String> providerLocationColumn;
+    @FXML
+    private TableColumn<ProviderData, Integer> providerRatingColumn;
+
+    private ObservableList<ProviderData> providersData = FXCollections.observableArrayList();
+    @FXML
+    private Text providerName;
+    @FXML
+    private Text providerLocation;
+    @FXML
+    private Text providerRating;
 
 
-    public  ObservableList<UserData> getUsersData() {
+
+
+    @FXML
+    private void setDataTypeUsers() {
+        if (dataType != null) {
+            if (!dataType.equals("users")) {
+                dataType = "users";
+                indexOfCurrentValue[0] = 0;
+                indexOfCurrentValue[1] = 20;
+                initialize();
+            }
+        }
+    }
+
+    @FXML
+    private void setDataTypeProviders() {
+        if(dataType!=null) {
+            if (!dataType.equals("providers")) {
+                dataType = "providers";
+                indexOfCurrentValue[0] = 0;
+                indexOfCurrentValue[1] = 20;
+                initialize();
+            }
+        }
+    }
+
+    @FXML
+    private void setDataTypeProductInStock() {
+        if(dataType!=null) {
+            if (!dataType.equals("product_in_stock")) {
+                dataType = "product_in_stock";
+                indexOfCurrentValue[0] = 0;
+                indexOfCurrentValue[1] = 20;
+                initialize();
+            }
+        }
+    }
+
+    @FXML
+    private void setDataTypeOrders() {
+        if(dataType!=null) {
+            if (!dataType.equals("оrders")) {
+                dataType = "оrders";
+                indexOfCurrentValue[0] = 0;
+                indexOfCurrentValue[1] = 20;
+                initialize();
+            }
+        }
+    }
+
+    @FXML
+    private void addTwentyNode() {
+        indexOfCurrentValue[0] += 20;
+        indexOfCurrentValue[1] += 20;
+        update();
+    }
+
+    @FXML
+    private void removeTwentyNode() {
+        indexOfCurrentValue[0] -= 20;
+        indexOfCurrentValue[1] -= 20;
+        if (indexOfCurrentValue[0] < 0) {
+            indexOfCurrentValue[0] = 0;
+            indexOfCurrentValue[1] = 20;
+        }
+        update();
+    }
+
+    public ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer, UserData> map) {
+        usersData.addAll(map.values());
         return usersData;
     }
-    @FXML
-    private void setDataTypeUsers(){
-        dataType="users";
-    }
-    @FXML
-    private void setDataTypeProviders(){
-        dataType="providers";
-    }
-    @FXML
-    private void setDataTypeProductInStock(){
-        dataType="product_in_stock";
-    }
-    @FXML
-    private void setDataTypeOrders(){
-        dataType="оrders";
+    public ObservableList<ProviderData> setAndGetProvidersData(ConcurrentHashMap<Integer, ProviderData> map) {
+        providersData.addAll(map.values());
+        return providersData;
     }
 
-    @FXML private void addTwentyNode(){
-        indexOfCurrentValue[0]+=20;
-        indexOfCurrentValue[1]+=20;
-        update();
-    }
-    @FXML private void removeTwentyNode(){
-        indexOfCurrentValue[0]-=20;
-        indexOfCurrentValue[1]-=20;
-        if(indexOfCurrentValue[0]<0){
-            indexOfCurrentValue[0]=0;
-            indexOfCurrentValue[1]=20;
+    private void fillText(UserData userData) {
+        if (userData == null) {
+            userLogin.setText("");
+            userPassword.setText("");
+            userQuestion.setText("");
+            userAnswer.setText("");
+            type.setText("");
+        } else {
+            userLogin.setText(userData.getLogin());
+            userPassword.setText(userData.getPassword());
+            userQuestion.setText(userData.getSecretQuestion());
+            userAnswer.setText(userData.getSecretAnswer());
+            type.setText(userData.getType());
         }
-        update();
     }
-
-    public  ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer, UserData> map) {
-      usersData.addAll(map.values());
-      return usersData;
-    }
-    private void fillText(UserData userData){
-        switch (dataType) {
-            case "users":
-            if (userData == null) {
-                login.setText("");
-                password.setText("");
-                question.setText("");
-                answer.setText("");
-                type.setText("");
+        private void fillText(ProviderData providerData) {
+            if (providerData == null) {
+                providerName.setText("");
+                providerLocation.setText("");
+                providerRating.setText("");
             } else {
-                login.setText(userData.getLogin());
-                password.setText(userData.getPassword());
-                question.setText(userData.getSecretQuestion());
-                answer.setText(userData.getSecretAnswer());
-                type.setText(userData.getType());
+                providerName.setText(providerData.getName());
+                providerLocation.setText(providerData.getLocation());
+                providerRating.setText(String.valueOf(providerData.getRating()));
             }
-            break;
+
         }
-    }
+
+
     @Override
     public boolean update() {
         try {
+            Transmission transmission = new Transmission();
+            transmission.setFirstIndex(indexOfCurrentValue[0]);
+            transmission.setLastIndex(indexOfCurrentValue[1]);
+            if(dataType==null){
+                dataType="users";
+            }
             switch (dataType) {
                 case "users":
                     usersData.clear();
-                    Transmission transmission = new Transmission();
-                    transmission.setFirstIndex(indexOfCurrentValue[0]);
-                    transmission.setLastIndex(indexOfCurrentValue[1]);
-                    transmission.setCommand("RECEIVE_ALL_USERS");
+                    transmission.setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
                     setAndGetUsersData((ConcurrentHashMap<Integer, UserData>) CommandProvider.
                             getCommandProvider().getCommand("RECEIVE_ALL_USERS_IN_LIMIT")
                             .execute(transmission));
                     usersTable.refresh();
                     usersTable.setItems(usersData);
                     return true;
+                case "providers":
+                    providersData.clear();
+                    transmission.setCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT");
+                    setAndGetProvidersData((ConcurrentHashMap<Integer, ProviderData>)CommandProvider.
+                            getCommandProvider().getCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT")
+                            .execute(transmission));
+                    providerTable.refresh();
+                    providerTable.setItems(providersData);
+                    return true;
             }
+
         } catch (ControllerException e) {
             WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
                     "Неизвестная ошибка", "Попробуйте повторить действие позже",
                     this.dialogStage, "ERROR");
         }
-return false;
+        return false;
     }
 
-    @FXML private void initialize(){
+    @FXML
+    private void initialize() {
+        if(dataType==null){
+            dataType="users";
+        }
         switch (dataType) {
             case "users":
-            loginColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
-                    getValue().loginPropertyProperty());
-            typeColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
-                    getValue().typePropertyProperty());
-            fillText(null);
-            usersTable.getSelectionModel().selectedItemProperty().addListener((
-                    (observableValue, userData1, newUserData) -> fillText(newUserData)));
-            break;
+                usersTable.getSelectionModel().selectedItemProperty().addListener((
+                        (observableValue, userData, newUserData) -> fillText(newUserData)));
+
+                usersLoginColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
+                        getValue().loginPropertyProperty());
+                usersTypeColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
+                        getValue().typePropertyProperty());
+                UserData userData = null;
+                fillText(userData);
+                break;
+            case "providers":
+                providerTable.getSelectionModel().selectedItemProperty().addListener((
+                        (observableValue, providerData, newProviderData) -> fillText(newProviderData)));
+
+                providerLocationColumn.setCellValueFactory(providerDataStringCellDataFeatures ->
+                        providerDataStringCellDataFeatures.getValue().locationStringProperty());
+                providerRatingColumn.setCellValueFactory(providerDataIntegerCellDataFeatures ->
+                        providerDataIntegerCellDataFeatures.getValue().ratingIntegerProperty().asObject());
+                ProviderData providerData = null;
+                fillText(providerData);
+                break;
         }
         update();
     }
+
     @FXML
-    private  boolean  searchHandler(){
+    private boolean searchHandler() {
         Stage dialogStage = null;
         try {
             switch (dataType) {
@@ -164,6 +257,7 @@ return false;
         }
         return false;
     }
+
     @Override
     public boolean addHandler() {
         Stage dialogStage = null;
@@ -183,8 +277,9 @@ return false;
         }
         return false;
     }
+
     @Override
-    public boolean deleteHandler(){
+    public boolean deleteHandler() {
         int selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             try {
@@ -217,8 +312,9 @@ return false;
         }
         return false;
     }
+
     @Override
-    public boolean changeHandler(){
+    public boolean changeHandler() {
         switch (dataType) {
             case "users":
                 UserData userData = new UserData();
@@ -241,8 +337,9 @@ return false;
         }
         return false;
     }
+
     @Override
-    public boolean goBack(){
+    public boolean goBack() {
         try {
             PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                     getInstance().getAuthorisationFormController())));
@@ -254,15 +351,14 @@ return false;
         return false;
     }
 
-    private UserData getSelectedModel(UserData selectedUser){
-       selectedUser=usersTable.getSelectionModel().getSelectedItem();
-        if(selectedUser==null){
+    private UserData getSelectedModel(UserData selectedUser) {
+        selectedUser = usersTable.getSelectionModel().getSelectedItem();
+        if (selectedUser == null) {
             WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
                     "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
                     this.dialogStage, "ERROR");
             return selectedUser;
-        }
-        else{
+        } else {
             return selectedUser;
         }
     }

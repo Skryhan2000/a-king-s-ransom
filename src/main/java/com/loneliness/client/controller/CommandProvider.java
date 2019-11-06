@@ -1,6 +1,8 @@
 package com.loneliness.client.controller;
 
 import com.loneliness.client.controller.command_impl.*;
+import com.loneliness.client.controller.command_impl.provider_command.*;
+import com.loneliness.client.controller.command_impl.user_command.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,12 @@ public class CommandProvider {
         repository.put(CommandName.UPDATE_USER,new UpdateUser());
         repository.put(CommandName.FIND_USERS_BY_LOGIN_AND_TYPE,new FindUsersByLoginAndType());
         repository.put(CommandName.RECEIVE_ALL_USERS_IN_LIMIT,new ReceiveAllUsersInLimit());
+        repository.put(CommandName.CREATE_PROVIDER,new CreateProvider());
+        repository.put(CommandName.RECEIVE_ALL_PROVIDERS_IN_LIMIT,new ReceiveAllProvidersInLimit());
+        repository.put(CommandName.DELETE_PROVIDER,new DeleteProvider());
+        repository.put(CommandName.RECEIVE_ALL_PROVIDERS,new ReceiveAllProviders());
+        repository.put(CommandName.RECEIVE_PROVIDER_DATA,new ReceiveProviderData());
+        repository.put(CommandName.UPDATE_PROVIDER,new UpdateProvider());
     }
 
     public Map<CommandName, Command> getRepository() {

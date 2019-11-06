@@ -1,12 +1,13 @@
 package com.loneliness.entity;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Order implements Serializable {
+public class OrderData implements Serializable {
     private static final long serialVersionUID=3L;
     private int id;
     private int customerId;
@@ -16,6 +17,31 @@ public class Order implements Serializable {
     private String status;
     private transient StringProperty orderNameString;
     private transient StringProperty statusString;
+
+    public OrderData(int id, int customerId, String orderName, LocalDate dateOfReceiving, LocalDate dateOfCompletion, String status, StringProperty orderNameString, StringProperty statusString) {
+        this.id = id;
+        this.customerId = customerId;
+        this.orderName = orderName;
+        this.dateOfReceiving = dateOfReceiving;
+        this.dateOfCompletion = dateOfCompletion;
+        this.status = status;
+        this.orderNameString = orderNameString;
+        this.statusString = statusString;
+    }
+
+    public OrderData(int id, int customerId, String orderName, LocalDate dateOfReceiving, LocalDate dateOfCompletion, String status) {
+        this.id = id;
+        this.customerId = customerId;
+        this.orderName = orderName;
+        this.dateOfReceiving = dateOfReceiving;
+        this.dateOfCompletion = dateOfCompletion;
+        this.status = status;
+        orderNameString=new SimpleStringProperty(orderName);
+        statusString=new SimpleStringProperty(status);
+    }
+
+    public OrderData() {
+    }
 
     public int getId() {
         return id;
@@ -39,6 +65,7 @@ public class Order implements Serializable {
 
     public void setOrderName(String orderName) {
         this.orderName = orderName;
+        orderNameString=new SimpleStringProperty(orderName);
     }
 
     public LocalDate getDateOfReceiving() {
@@ -63,6 +90,7 @@ public class Order implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+        statusString=new SimpleStringProperty(status);
     }
 
     public String getOrderNameString() {
@@ -93,15 +121,15 @@ public class Order implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return id == order.id &&
-                customerId == order.customerId &&
-                orderName.equals(order.orderName) &&
-                dateOfReceiving.equals(order.dateOfReceiving) &&
-                dateOfCompletion.equals(order.dateOfCompletion) &&
-                status.equals(order.status) &&
-                orderNameString.equals(order.orderNameString) &&
-                statusString.equals(order.statusString);
+        OrderData orderData = (OrderData) o;
+        return id == orderData.id &&
+                customerId == orderData.customerId &&
+                orderName.equals(orderData.orderName) &&
+                dateOfReceiving.equals(orderData.dateOfReceiving) &&
+                dateOfCompletion.equals(orderData.dateOfCompletion) &&
+                status.equals(orderData.status) &&
+                orderNameString.equals(orderData.orderNameString) &&
+                statusString.equals(orderData.statusString);
     }
 
     @Override

@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Customer implements Serializable {
+public class CustomerData implements Serializable {
     private static final long serialVersionUID=4L;
     private int id;
     private String name;
@@ -18,7 +18,7 @@ public class Customer implements Serializable {
     private transient StringProperty nameString;
     private transient IntegerProperty numberOfOrdersInteger;
 
-    public Customer(int id, String name, int numberOfOrders, String location, String email, StringProperty nameString, IntegerProperty numberOfOrdersInteger) {
+    public CustomerData(int id, String name, int numberOfOrders, String location, String email, StringProperty nameString, IntegerProperty numberOfOrdersInteger) {
         this.id = id;
         this.name = name;
         this.numberOfOrders = numberOfOrders;
@@ -28,7 +28,10 @@ public class Customer implements Serializable {
         this.numberOfOrdersInteger = numberOfOrdersInteger;
     }
 
-    public Customer(int id, String name, int numberOfOrders, String location, String email) {
+    public CustomerData() {
+    }
+
+    public CustomerData(int id, String name, int numberOfOrders, String location, String email) {
         this.id = id;
         this.name = name;
         this.numberOfOrders = numberOfOrders;
@@ -56,6 +59,7 @@ public class Customer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        nameString=new SimpleStringProperty(name);
     }
 
     public int getNumberOfOrders() {
@@ -64,6 +68,7 @@ public class Customer implements Serializable {
 
     public void setNumberOfOrders(int numberOfOrders) {
         this.numberOfOrders = numberOfOrders;
+        numberOfOrdersInteger=new SimpleIntegerProperty(numberOfOrders);
     }
 
     public String getLocation() {
@@ -99,7 +104,6 @@ public class Customer implements Serializable {
     }
 
     public IntegerProperty numberOfOrdersIntegerProperty() {
-
         return numberOfOrdersInteger;
     }
 
@@ -111,14 +115,14 @@ public class Customer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return id == customer.id &&
-                numberOfOrders == customer.numberOfOrders &&
-                name.equals(customer.name) &&
-                location.equals(customer.location) &&
-                email.equals(customer.email) &&
-                nameString.equals(customer.nameString) &&
-                numberOfOrdersInteger.equals(customer.numberOfOrdersInteger);
+        CustomerData customerData = (CustomerData) o;
+        return id == customerData.id &&
+                numberOfOrders == customerData.numberOfOrders &&
+                name.equals(customerData.name) &&
+                location.equals(customerData.location) &&
+                email.equals(customerData.email) &&
+                nameString.equals(customerData.nameString) &&
+                numberOfOrdersInteger.equals(customerData.numberOfOrdersInteger);
     }
 
     @Override

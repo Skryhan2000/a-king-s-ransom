@@ -20,29 +20,28 @@ public class UserServiceImpl implements Service{
         return DAOFactory.getInstance().getUserDAO().findAllByLoginAndType((UserData)obj);
     }
 
-    @Override
     public Object authorization(Object obj) {
         return DAOFactory.getInstance().getUserDAO().receiveUserType((UserData)obj);
     }
 
     @Override
     public Object create(Object obj) {
-        return DAOFactory.getInstance().getUserDAO().create((UserData)obj);
+        return DAOFactory.getInstance().getUserDAO().create(obj);
     }
 
     @Override
     public Object receive(Object obj) {
-        return DAOFactory.getInstance().getUserDAO().read((UserData)obj);
+        return DAOFactory.getInstance().getUserDAO().read(obj);
     }
 
     @Override
     public Object update(Object obj) {
-        return DAOFactory.getInstance().getUserDAO().update((UserData)obj);
+        return DAOFactory.getInstance().getUserDAO().update(obj);
     }
 
     @Override
     public Object delete(Object obj) {
-        return DAOFactory.getInstance().getUserDAO().delete((UserData)obj);
+        return DAOFactory.getInstance().getUserDAO().delete(obj);
     }
 
 
