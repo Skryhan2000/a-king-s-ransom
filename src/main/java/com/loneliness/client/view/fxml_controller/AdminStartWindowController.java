@@ -41,10 +41,32 @@ public class AdminStartWindowController implements CRUD_Controller{
     @FXML
     private Stage dialogStage;
 
+    private String dataType;
+
     private ObservableList<UserData> usersData = FXCollections.observableArrayList();
+
+
+
+
 
     public  ObservableList<UserData> getUsersData() {
         return usersData;
+    }
+    @FXML
+    private void setDataTypeUsers(){
+        dataType="users";
+    }
+    @FXML
+    private void setDataTypeProviders(){
+        dataType="providers";
+    }
+    @FXML
+    private void setDataTypeProductInStock(){
+        dataType="product_in_stock";
+    }
+    @FXML
+    private void setDataTypeOrders(){
+        dataType="оrders";
     }
 
     @FXML private void addTwentyNode(){
@@ -67,35 +89,41 @@ public class AdminStartWindowController implements CRUD_Controller{
       return usersData;
     }
     private void fillText(UserData userData){
-        if(userData==null){
-            login.setText("");
-            password.setText("");
-            question.setText("");
-            answer.setText("");
-            type.setText("");
-        }
-        else {
-            login.setText(userData.getLogin());
-            password.setText(userData.getPassword());
-            question.setText(userData.getSecretQuestion());
-            answer.setText(userData.getSecretAnswer());
-            type.setText(userData.getType());
+        switch (dataType) {
+            case "users":
+            if (userData == null) {
+                login.setText("");
+                password.setText("");
+                question.setText("");
+                answer.setText("");
+                type.setText("");
+            } else {
+                login.setText(userData.getLogin());
+                password.setText(userData.getPassword());
+                question.setText(userData.getSecretQuestion());
+                answer.setText(userData.getSecretAnswer());
+                type.setText(userData.getType());
+            }
+            break;
         }
     }
     @Override
     public boolean update() {
         try {
-            usersData.clear();
-            Transmission transmission = new Transmission();
-            transmission.setFirstIndex(indexOfCurrentValue[0]);
-            transmission.setLastIndex(indexOfCurrentValue[1]);
-            transmission.setCommand("RECEIVE_ALL_USERS");
-            setAndGetUsersData((ConcurrentHashMap<Integer, UserData>) CommandProvider.
-                    getCommandProvider().getCommand("RECEIVE_ALL_USERS_IN_LIMIT")
-                    .execute(transmission));
-            usersTable.refresh();
-            usersTable.setItems(usersData);
-            return true;
+            switch (dataType) {
+                case "users":
+                    usersData.clear();
+                    Transmission transmission = new Transmission();
+                    transmission.setFirstIndex(indexOfCurrentValue[0]);
+                    transmission.setLastIndex(indexOfCurrentValue[1]);
+                    transmission.setCommand("RECEIVE_ALL_USERS");
+                    setAndGetUsersData((ConcurrentHashMap<Integer, UserData>) CommandProvider.
+                            getCommandProvider().getCommand("RECEIVE_ALL_USERS_IN_LIMIT")
+                            .execute(transmission));
+                    usersTable.refresh();
+                    usersTable.setItems(usersData);
+                    return true;
+            }
         } catch (ControllerException e) {
             WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
                     "Неизвестная ошибка", "Попробуйте повторить действие позже",
@@ -105,25 +133,32 @@ return false;
     }
 
     @FXML private void initialize(){
-        loginColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
-                getValue().loginPropertyProperty());
-        typeColumn.setCellValueFactory(userDataStringCellDataFeatures->userDataStringCellDataFeatures.
-                getValue().typePropertyProperty());
-        fillText(null);
-        usersTable.getSelectionModel().selectedItemProperty().addListener((
-                (observableValue, userData1, newUserData) -> fillText(newUserData)));
+        switch (dataType) {
+            case "users":
+            loginColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
+                    getValue().loginPropertyProperty());
+            typeColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
+                    getValue().typePropertyProperty());
+            fillText(null);
+            usersTable.getSelectionModel().selectedItemProperty().addListener((
+                    (observableValue, userData1, newUserData) -> fillText(newUserData)));
+            break;
+        }
         update();
     }
     @FXML
     private  boolean  searchHandler(){
         Stage dialogStage = null;
         try {
-            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                    getSearchUserData(), "Поиск пользователя");
-            SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-            controller.setDialogStage(dialogStage,usersTable,usersData);
-            dialogStage.showAndWait();
-            return controller.isOkClicked();
+            switch (dataType) {
+                case "users":
+                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                            getSearchUserData(), "Поиск пользователя");
+                    SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    controller.setDialogStage(dialogStage, usersTable, usersData);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
+            }
         } catch (ViewException e) {
             e.printStackTrace();
         }
@@ -133,13 +168,16 @@ return false;
     public boolean addHandler() {
         Stage dialogStage = null;
         try {
-            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                    getChangeUSerData(), "Добавления пользователя");
-            ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-            controller.setData(new UserData());
-            controller.setDialogStage(dialogStage, "create");
-            dialogStage.showAndWait();
-            return controller.isOkClicked();
+            switch (dataType) {
+                case "users":
+                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                            getChangeUSerData(), "Добавления пользователя");
+                    ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    controller.setData(new UserData());
+                    controller.setDialogStage(dialogStage, "create");
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
+            }
         } catch (ViewException e) {
             e.printStackTrace();
         }
@@ -150,17 +188,20 @@ return false;
         int selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             try {
-                UserData userData=new UserData();
-                userData.setId(usersData.get(selectedIndex).getId());
-                if((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
-                    usersTable.getItems().remove(selectedIndex);
-                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                            "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                }
-                else {
-                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                            "Ошибка", "Попробуйте повторить действие позже",
-                            this.dialogStage, "ERROR");
+                switch (dataType) {
+                    case "users":
+                        UserData userData = new UserData();
+                        userData.setId(usersData.get(selectedIndex).getId());
+                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
+                            usersTable.getItems().remove(selectedIndex);
+                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                                    "Ошибка", "Попробуйте повторить действие позже",
+                                    this.dialogStage, "ERROR");
+                        }
+                        break;
                 }
             } catch (ControllerException e) {
                 WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
@@ -178,21 +219,25 @@ return false;
     }
     @Override
     public boolean changeHandler(){
-        UserData userData=new UserData();
-        userData=getSelectedModel(userData);
-        if(userData!=null) {
-            Stage dialogStage = null;
-            try {
-                dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                        getChangeUSerData(), "Добавления пользователя");
-                ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-                controller.setDialogStage(dialogStage, "update");
-                controller.setData(userData);
-                dialogStage.showAndWait();
-                return controller.isOkClicked();
-            } catch (ViewException e) {
-                e.printStackTrace();
-            }
+        switch (dataType) {
+            case "users":
+                UserData userData = new UserData();
+                userData = getSelectedModel(userData);
+                if (userData != null) {
+                    Stage dialogStage = null;
+                    try {
+                        dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                                getChangeUSerData(), "Добавления пользователя");
+                        ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                        controller.setDialogStage(dialogStage, "update");
+                        controller.setData(userData);
+                        dialogStage.showAndWait();
+                        return controller.isOkClicked();
+                    } catch (ViewException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
         }
         return false;
     }
