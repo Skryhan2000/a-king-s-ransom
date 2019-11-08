@@ -273,11 +273,20 @@ public class AdminStartWindowController implements CRUD_Controller {
                 case "users":
                     dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
                             getChangeUSerData(), "Добавления данных");
-                    ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-                    controller.setData(new UserData());
-                    controller.setDialogStage(dialogStage, "create");
+                    ChangeUserDataController changeUserDataController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    changeUserDataController.setData(new UserData());
+                    changeUserDataController.setDialogStage(dialogStage, "create");
                     dialogStage.showAndWait();
-                    return controller.isOkClicked();
+                    return changeUserDataController.isOkClicked();
+                case "providers":
+                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                            getChangeProviderData(), "Добавления данных");
+                    ChangeProviderDataController changeProviderDataController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    changeProviderDataController.setData(new ProviderData());
+                    changeProviderDataController.setDialogStage(dialogStage, "create");
+                    dialogStage.showAndWait();
+                    return changeProviderDataController.isOkClicked();
+
             }
         } catch (ViewException e) {
             WorkWithAlert.getInstance().showAlert("Добавления данных",
@@ -289,11 +298,12 @@ public class AdminStartWindowController implements CRUD_Controller {
 
     @Override
     public boolean deleteHandler() {
-        int selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            try {
-                switch (dataType) {
-                    case "users":
+        int selectedIndex;
+        switch (dataType) {
+            case "users":
+                selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    try {
                         UserData userData = new UserData();
                         userData.setId(usersData.get(selectedIndex).getId());
                         if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
@@ -301,23 +311,51 @@ public class AdminStartWindowController implements CRUD_Controller {
                             WorkWithAlert.getInstance().showAlert("Удаление пользователя",
                                     "Успех", "Данные сохранены", dialogStage, "INFORMATION");
                         } else {
-                            WorkWithAlert.getInstance().showAlert("Поиск данных",
-                                    "Поиск невозможен", "Что то пошло не так",
+                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                                    "Удаление невозможен", "Что то пошло не так",
                                     this.dialogStage, "ERROR");
                         }
-                        break;
-                }
-            } catch (ControllerException e) {
-                WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                        "Неизвестная ошибка", "Попробуйте повторить действие позже",
-                        this.dialogStage, "ERROR");
-            }
+                    } catch (ControllerException e) {
+                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                                this.dialogStage, "ERROR");
+                    }
 
-        } else {
-            // Ничего не выбрано.
-            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                    "Удаление невозможно", "Выберите пользователя для удаления",
-                    this.dialogStage, "ERROR");
+                } else {
+                    // Ничего не выбрано.
+                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                            "Удаление невозможно", "Выберите пользователя для удаления",
+                            this.dialogStage, "ERROR");
+                }
+                break;
+            case "providers":
+                selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    try {
+                        ProviderData providerData=new ProviderData();
+                        providerData.setId(providersData.get(selectedIndex).getId());
+                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData)) {
+                           providerTable.getItems().remove(selectedIndex);
+                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                    "Удаление невозможен", "Что то пошло не так",
+                                    this.dialogStage, "ERROR");
+                        }
+                    } catch (ControllerException e) {
+                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                                this.dialogStage, "ERROR");
+                    }
+
+                } else {
+                    // Ничего не выбрано.
+                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                            "Удаление невозможно", "Выберите пользователя для удаления",
+                            this.dialogStage, "ERROR");
+                }
+                break;
         }
         return false;
     }
@@ -326,8 +364,7 @@ public class AdminStartWindowController implements CRUD_Controller {
     public boolean changeHandler() {
         switch (dataType) {
             case "users":
-                UserData userData = new UserData();
-                userData = getSelectedModel(userData);
+                UserData userData = getSelectedUserModel();
                 if (userData != null) {
                     Stage dialogStage = null;
                     try {
@@ -343,6 +380,21 @@ public class AdminStartWindowController implements CRUD_Controller {
                     }
                 }
                 return false;
+            case "providers":
+                ProviderData providerData=getSelectedProvidersModel();
+                if(providerData!=null){
+                    try {
+                        dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                                getChangeProviderData(), "Добавления данных");
+                        ChangeProviderDataController changeProviderDataController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                        changeProviderDataController.setData(providerData);
+                        changeProviderDataController.setDialogStage(dialogStage, "update");
+                        dialogStage.showAndWait();
+                        return changeProviderDataController.isOkClicked();
+                    } catch (ViewException e) {
+                        e.printStackTrace();
+                    }
+                }
         }
         return false;
     }
@@ -361,15 +413,26 @@ public class AdminStartWindowController implements CRUD_Controller {
         return false;
     }
 
-    private UserData getSelectedModel(UserData selectedUser) {
-        selectedUser = usersTable.getSelectionModel().getSelectedItem();
+    private UserData getSelectedUserModel() {
+        UserData selectedUser=usersTable.getSelectionModel().getSelectedItem();
         if (selectedUser == null) {
             WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
                     "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
                     this.dialogStage, "ERROR");
-            return selectedUser;
+            return null;
         } else {
             return selectedUser;
+        }
+    }
+    private ProviderData getSelectedProvidersModel() {
+        ProviderData selectedProvider=providerTable.getSelectionModel().getSelectedItem();
+        if (selectedProvider == null) {
+            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
+                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
+                    this.dialogStage, "ERROR");
+            return null;
+        } else {
+            return selectedProvider;
         }
     }
 }

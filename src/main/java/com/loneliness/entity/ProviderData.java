@@ -5,15 +5,22 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class ProviderData implements Serializable {
     private static final long serialVersionUID=2L;
     private int id;
-    private String name;
+    @NotNull (message = "Поставшик должен иметь имя ")private String name;
+    @Min(value = -1, message = "Минимальный рейтинг 0 ")
+    @Max(value = 10,message = "Максимальный рейтинг 10 ")
     private int rating;
+    @NotNull (message = "Поставшик должен указать местоположение ")
     private String location;
+    @NotNull(message = "Введите эл.почту ")
+    @Email(message = "Почта введена неверно ")
+    private String email;
     private transient StringProperty locationString;
     private transient IntegerProperty ratingInteger;
 
@@ -104,6 +111,14 @@ public class ProviderData implements Serializable {
 
     public void setLocationString(String locationString) {
         this.locationString.set(locationString);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

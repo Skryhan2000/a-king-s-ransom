@@ -11,7 +11,16 @@
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>com.loneliness.client.resources</directory>
+            </resource>
+            <resource>
+                <directory>com.loneliness.server.resources</directory>
+            </resource>
+        </resources>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -22,5 +31,20 @@
             </plugin>
         </plugins>
     </build>
+
+<dependencies>
+    <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>6.0.17.Final</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.el</artifactId>
+        <version>3.0.1-b09</version>
+    </dependency>
+</dependencies>
+
 
 </project>

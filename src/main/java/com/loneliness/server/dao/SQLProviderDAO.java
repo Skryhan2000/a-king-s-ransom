@@ -14,9 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SQLProviderDAO implements CRUD {
     @Override
     public boolean create(Object provider) {
-        String sql = "INSERT providers (ID , name , rating, location ) " +
+        String sql = "INSERT providers (ID , name , rating, location, email ) " +
                 "VALUES ('" + ((ProviderData) provider).getId() + "','" + ((ProviderData) provider).getName() + "','" +
-                (((ProviderData) provider).getRating() + "','" + ((ProviderData) provider).getLocation() + "');");
+                (((ProviderData) provider).getRating() + "','" + ((ProviderData) provider).getLocation()+ "','" +
+                        ((ProviderData) provider).getEmail() + "');");
         try {
             PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -42,6 +43,7 @@ public class SQLProviderDAO implements CRUD {
                 providerData.setName(resultSet.getString("name"));
                 providerData.setRating(resultSet.getInt("rating"));
                 providerData.setLocation(resultSet.getString("location"));
+                providerData.setEmail(resultSet.getString("email"));
                 return providerData;
             }
         } catch (SQLException e) {
@@ -66,7 +68,8 @@ public class SQLProviderDAO implements CRUD {
                         "name='" + ((ProviderData)provider).getName() + "'," +
                         "rating='" + ((ProviderData)provider).getRating() + "'," +
                         "location='" +((ProviderData)provider).getLocation() + "'," +
-                        "WHERE ID=" + ((ProviderData)provider).getId() + ";";
+                        "email='" +((ProviderData)provider).getEmail() + "' " +
+                        "WHERE ID = " + ((ProviderData)provider).getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
 
@@ -116,6 +119,7 @@ public class SQLProviderDAO implements CRUD {
                 providerData.setName(resultSet.getString("name"));
                 providerData.setRating(resultSet.getInt("rating"));
                 providerData.setLocation(resultSet.getString("location"));
+                providerData.setEmail(resultSet.getString("email"));
                 data.put(providerData.getId(),providerData);
             }
             return data;
@@ -141,6 +145,7 @@ public class SQLProviderDAO implements CRUD {
                 providerData.setName(resultSet.getString("name"));
                 providerData.setRating(resultSet.getInt("rating"));
                 providerData.setLocation(resultSet.getString("location"));
+                providerData.setEmail(resultSet.getString("email"));
                 data.put(providerData.getId(),providerData);
             }
             return data;
@@ -178,6 +183,7 @@ public class SQLProviderDAO implements CRUD {
                 providerData.setName(resultSet.getString("name"));
                 providerData.setRating(resultSet.getInt("rating"));
                 providerData.setLocation(resultSet.getString("location"));
+                providerData.setEmail(resultSet.getString("email"));
                 data.put(providerData.getId(),providerData);
             }
             return data;

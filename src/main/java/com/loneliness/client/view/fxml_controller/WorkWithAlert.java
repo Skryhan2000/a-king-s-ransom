@@ -1,7 +1,15 @@
 package com.loneliness.client.view.fxml_controller;
 
+import com.loneliness.entity.ProviderData;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import javax.validation.ConstraintViolation;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 
 public class WorkWithAlert {
     private static final WorkWithAlert instance = new WorkWithAlert();
@@ -19,6 +27,21 @@ public class WorkWithAlert {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+    public void showAlert(String title, String headerText, Set<ConstraintViolation<ProviderData>> errors,
+                          Stage dialogStage, String type){
+        Alert alert = new Alert(Alert.AlertType.valueOf(type));
+        StringBuilder errMessage=new StringBuilder();
+        alert.initOwner(dialogStage);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+
+        for (ConstraintViolation<ProviderData> violation : errors) {
+           errMessage.append(violation.getMessage());
+        }
+
+        alert.setContentText(errMessage.toString());
         alert.showAndWait();
     }
 }
