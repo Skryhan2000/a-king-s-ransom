@@ -189,7 +189,8 @@ public class SQLUserDAO implements CRUD{
             if(userDataToFind.getLogin()!=null){
                 sql+="WHERE login = '" + userDataToFind.getLogin() + "' ";
                 whereIsNotUsed=false;
-            }else if(userDataToFind.getType()!=null){
+            }
+            if(userDataToFind.getType()!=null){
                 if(whereIsNotUsed) {
                     sql+="WHERE type = '" + userDataToFind.getType() + "' ";
                 }

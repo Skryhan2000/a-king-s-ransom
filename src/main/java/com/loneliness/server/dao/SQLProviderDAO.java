@@ -164,7 +164,8 @@ public class SQLProviderDAO implements CRUD {
             if(providerDataToFind.getLocation()!=null){
                 sql+="WHERE location = '" + providerDataToFind.getLocation() + "' ";
                 whereIsNotUsed=false;
-            }else if(providerDataToFind.getRating()!=-1){
+            }
+            if(providerDataToFind.getRating()!=-1){
                 if(whereIsNotUsed) {
                     sql+="WHERE rating = " + providerDataToFind.getRating() + " ";
                 }

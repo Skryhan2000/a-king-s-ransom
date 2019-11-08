@@ -3,6 +3,10 @@ package com.loneliness.entity;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -10,11 +14,20 @@ import java.util.Objects;
 public class OrderData implements Serializable {
     private static final long serialVersionUID=3L;
     private int id;
+    @Positive(message = "Id клиента должно быть больше 0")
+    @NotNull(message = "Должен быть задан сушествующий id клиента")
     private int customerId;
+    @NotNull(message = "Должен быть задано имя заказа. ")
     private String orderName;
+    @PastOrPresent(message = "Дата получения заказа должна быть в прошлом. ")
+    @NotNull(message = "Должна быть задана дата получения заказа. ")
     private LocalDate dateOfReceiving;
+    @Future(message = "Дата выполнения должна быть в будующем. ")
+    @NotNull(message = "Долна быть задана дата выполнения. ")
     private LocalDate dateOfCompletion;
+    @NotNull(message = "Должен быть задан статус. ")
     private String status;
+
     private transient StringProperty orderNameString;
     private transient StringProperty statusString;
 

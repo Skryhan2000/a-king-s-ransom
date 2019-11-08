@@ -4,6 +4,7 @@ package com.loneliness.server.controller;
 
 
 
+import com.loneliness.server.controller.command_impl.order_command.*;
 import com.loneliness.server.controller.command_impl.provider_command.*;
 import com.loneliness.server.controller.command_impl.server_command.ShutDown;
 import com.loneliness.server.controller.command_impl.WrongRequest;
@@ -27,6 +28,7 @@ public class CommandProvider {
         repository.put(CommandName.SHUT_DOWN,new ShutDown());
         repository.put(CommandName.FIND_USERS_BY_LOGIN_AND_TYPE,new FindAllByLoginAndType());
         repository.put(CommandName.RECEIVE_ALL_USERS_IN_LIMIT,new ReceiveAllUsersInLimit());
+
         repository.put(CommandName.CREATE_PROVIDER,new CreateProvider());
         repository.put(CommandName.RECEIVE_ALL_PROVIDERS_IN_LIMIT,new ReceiveAllProvidersInLimit());
         repository.put(CommandName.DELETE_PROVIDER,new DeleteProvider());
@@ -34,6 +36,14 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_PROVIDER_DATA,new ReceiveProviderData());
         repository.put(CommandName.UPDATE_PROVIDER,new UpdateProvider());
         repository.put(CommandName.FIND_PROVIDER_BY_LOCATION_AND_RATING,new FindProviderByLocationAndRating());
+
+        repository.put(CommandName.CREATE_ORDER,new CreateOrder());
+        repository.put(CommandName.DELETE_ORDER,new DeleteOrder());
+        repository.put(CommandName.FIND_ALL_ORDERS_BY_DATE_OF_COMPLETION_AND_STATUS,new FindAllOrdersByDateOfCompletionAndStatus());
+        repository.put(CommandName.RECEIVE_ALL_ORDERS_IN_LIMIT,new ReceiveAllOrdersInLimit());
+        repository.put(CommandName.RECEIVE_ALL_ORDERS,new ReceiveAllOrders());
+        repository.put(CommandName.RECEIVE_ORDER_DATA,new ReceiveOrderData());
+        repository.put(CommandName.UPDATE_ORDER,new UpdateOrder());
     }
 
 

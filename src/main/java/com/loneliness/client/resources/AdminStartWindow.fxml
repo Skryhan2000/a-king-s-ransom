@@ -9,7 +9,7 @@
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab onSelectionChanged="#setDataTypeUsers" text="Пользователи" >
+          <Tab onSelectionChanged="#setDataTypeUsers" text="Пользователи">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -68,7 +68,7 @@
                            <items>
                               <AnchorPane prefHeight="286.0" prefWidth="240.0">
                                  <children>
-                                    <TableView fx:id="providerTable" layoutX="6.0" prefHeight="286.0" prefWidth="254.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="providerTable" layoutX="6.0" prefHeight="287.0" prefWidth="195.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                                       <columns>
                                         <TableColumn fx:id="providerLocationColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="115.99999618530273" text="Местоположение" />
                                           <TableColumn fx:id="providerRatingColumn" maxWidth="1.7976931348623157E308" text="Рейтинг" />
@@ -114,7 +114,7 @@
                                  <children>
                                     <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn maxWidth="1.7976931348623157E308" prefWidth="90.39999085664749" text="Имя заказа" />
+                                        <TableColumn maxWidth="1.7976931348623157E308" prefWidth="90.39999085664749" text="Дедлайн" />
                                         <TableColumn maxWidth="1.7976931348623157E308" prefWidth="79.20000305175782" text="Статус" />
                                       </columns>
                                     </TableView>
