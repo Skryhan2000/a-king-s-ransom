@@ -243,17 +243,24 @@ public class AdminStartWindowController implements CRUD_Controller {
     private boolean searchHandler() {
         Stage dialogStage = null;
         try {
-            switch (dataType) {
-                case "users":
                     dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                            getSearchUserData(), "Поиск пользователя");
+                            getSearchUserData(), "Поиск данных");
                     SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-                    controller.setDialogStage(dialogStage, usersTable, usersData);
-                    dialogStage.showAndWait();
-                    return controller.isOkClicked();
-            }
+                    switch (dataType) {
+                        case "users":
+                            controller.setDialogStageUser(dialogStage, usersTable, usersData, dataType);
+                            dialogStage.showAndWait();
+                            return controller.isOkClicked();
+                        case "providers":
+                            controller.setDialogStageProviders(dialogStage, providerTable, providersData, dataType);
+                            dialogStage.showAndWait();
+                            return controller.isOkClicked();
+
+                    }
         } catch (ViewException e) {
-            e.printStackTrace();
+            WorkWithAlert.getInstance().showAlert("Поиск данных",
+                    "Поиск невозможен", "Что то пошло не так",
+                    this.dialogStage, "ERROR");
         }
         return false;
     }
@@ -265,7 +272,7 @@ public class AdminStartWindowController implements CRUD_Controller {
             switch (dataType) {
                 case "users":
                     dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                            getChangeUSerData(), "Добавления пользователя");
+                            getChangeUSerData(), "Добавления данных");
                     ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
                     controller.setData(new UserData());
                     controller.setDialogStage(dialogStage, "create");
@@ -273,7 +280,9 @@ public class AdminStartWindowController implements CRUD_Controller {
                     return controller.isOkClicked();
             }
         } catch (ViewException e) {
-            e.printStackTrace();
+            WorkWithAlert.getInstance().showAlert("Добавления данных",
+                    "Поиск невозможен", "Что то пошло не так",
+                    this.dialogStage, "ERROR");
         }
         return false;
     }
@@ -292,8 +301,8 @@ public class AdminStartWindowController implements CRUD_Controller {
                             WorkWithAlert.getInstance().showAlert("Удаление пользователя",
                                     "Успех", "Данные сохранены", dialogStage, "INFORMATION");
                         } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                                    "Ошибка", "Попробуйте повторить действие позже",
+                            WorkWithAlert.getInstance().showAlert("Поиск данных",
+                                    "Поиск невозможен", "Что то пошло не так",
                                     this.dialogStage, "ERROR");
                         }
                         break;
@@ -345,7 +354,8 @@ public class AdminStartWindowController implements CRUD_Controller {
                     getInstance().getAuthorisationFormController())));
         } catch (IOException e) {
             WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
-                    "Нарушение целостности программы", "Попробуйте повторить действие позже",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
                     this.dialogStage, "ERROR");
         }
         return false;

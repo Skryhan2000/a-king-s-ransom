@@ -20,6 +20,7 @@ public class UserServiceImpl implements Service{
         return DAOFactory.getInstance().getUserDAO().findAllByLoginAndType((UserData)obj);
     }
 
+
     public Object authorization(Object obj) {
         return DAOFactory.getInstance().getUserDAO().receiveUserType((UserData)obj);
     }

@@ -38,7 +38,19 @@ public class ClientWorkingThread implements Runnable{
                 if(transmission.getUserData()!=null) {
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getUserData());
-                } else { response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+
+                }else if(transmission.getProviderData()!=null){
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                            execute(transmission.getProviderData());
+
+                }else if(transmission.getOrderData()!=null){
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                            execute(transmission.getProviderData());
+                }
+                else if(transmission.getCustomerData()!=null) {
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                            execute(transmission.getCustomerData());
+                }else { response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                         execute(transmission);}
                 outObject.writeObject(response);
                 outObject.reset();
@@ -49,7 +61,7 @@ public class ClientWorkingThread implements Runnable{
             killOneClient();
         } catch (IOException e) {
            // System.out.println("Количество людей на сервере "+(--Server.qwantity));
-            synchronized (StartWindowController.class){StartWindowController.updateQuantity(-1);}
+           // synchronized (StartWindowController.class){StartWindowController.updateQuantity(-1);}
             killOneClient();
         }
 

@@ -1,5 +1,6 @@
 package com.loneliness.server.logic;
 
+import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
@@ -32,5 +33,8 @@ public class ProviderServiceImpl implements Service{
     @Override
     public Object receiveAllElemInLimit(Object obj) {
         return DAOFactory.getInstance().getProviderDAO().receiveAllInLimit((Transmission) obj);
+    }
+    public Object findAllByLocationAndRating(Object obj) {
+        return DAOFactory.getInstance().getProviderDAO().findAllByLocationAndRating((ProviderData) obj);
     }
 }

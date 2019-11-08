@@ -43,7 +43,7 @@ public class Server extends Thread {
                 serverList.add(clientWorkingThread);
                 //              quantity++;
                 //System.out.println("Количество людей на сервере "+(++quantity));
-                Platform.runLater(()-> StartWindowController.updateQuantity(+1));
+               // Platform.runLater(()-> StartWindowController.updateQuantity(+1));
              //   StartWindowController.updateQuantity(+1);
                 executorService.submit( clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
             } catch(IOException e){

@@ -9,7 +9,7 @@
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab onSelectionChanged="#setDataTypeUsers" text="Пользователи">
+          <Tab onSelectionChanged="#setDataTypeUsers" text="Пользователи" >
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

@@ -33,6 +33,7 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_PROVIDERS,new ReceiveAllProviders());
         repository.put(CommandName.RECEIVE_PROVIDER_DATA,new ReceiveProviderData());
         repository.put(CommandName.UPDATE_PROVIDER,new UpdateProvider());
+        repository.put(CommandName.FIND_PROVIDER_BY_LOCATION_AND_RATING,new FindProviderByLocationAndRating());
     }
 
 

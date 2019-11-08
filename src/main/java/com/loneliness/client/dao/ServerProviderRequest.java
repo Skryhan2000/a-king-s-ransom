@@ -81,4 +81,15 @@ public class ServerProviderRequest implements CRUD{
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
+    public ConcurrentHashMap<Integer,ProviderData> findByLocationAndRating(ProviderData providerData) throws DAOException {
+        Transmission transmission=new Transmission();
+        transmission.setProviderData(providerData);
+        transmission.setCommand("FIND_PROVIDER_BY_LOCATION_AND_RATING");
+        try {
+            Client.getOutObject().writeObject(transmission);
+            return (ConcurrentHashMap<Integer, ProviderData>) Client.getInObject().readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+        }
+    }
 }

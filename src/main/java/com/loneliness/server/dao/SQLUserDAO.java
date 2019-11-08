@@ -1,7 +1,6 @@
 package com.loneliness.server.dao;
 
 
-
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SQLProviderDAO implements CRUD {
@@ -135,6 +136,43 @@ public class SQLProviderDAO implements CRUD {
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while (resultSet.next()) {
+                providerData=new ProviderData();
+                providerData.setId(resultSet.getInt("ID"));
+                providerData.setName(resultSet.getString("name"));
+                providerData.setRating(resultSet.getInt("rating"));
+                providerData.setLocation(resultSet.getString("location"));
+                data.put(providerData.getId(),providerData);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+    public Map<Integer,ProviderData> findAllByLocationAndRating(ProviderData providerDataToFind){
+        ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
+        try {
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM providers ";
+            boolean whereIsNotUsed=true;
+            if(providerDataToFind.getLocation()!=null){
+                sql+="WHERE location = '" + providerDataToFind.getLocation() + "' ";
+                whereIsNotUsed=false;
+            }else if(providerDataToFind.getRating()!=-1){
+                if(whereIsNotUsed) {
+                    sql+="WHERE rating = " + providerDataToFind.getRating() + " ";
+                }
+                else {
+                    sql += "AND rating = " +providerDataToFind.getRating() + " ";
+                }
+
+            }
+            sql+=";";
+            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+            ProviderData providerData;
+            while ( resultSet.next()){
                 providerData=new ProviderData();
                 providerData.setId(resultSet.getInt("ID"));
                 providerData.setName(resultSet.getString("name"));
