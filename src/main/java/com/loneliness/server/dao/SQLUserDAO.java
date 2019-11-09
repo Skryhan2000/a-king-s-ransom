@@ -15,8 +15,12 @@ public class SQLUserDAO implements CRUD{
     @Override
     public boolean create(Object user) {
         String sql = "INSERT Users (login , password , type, secret_answer, secret_question) "+
-                "VALUES ('"+((UserData)user).getLogin()+"','"+((UserData)user).getPassword()+"','"+((UserData)user).getType()+"','"+((UserData)user).getSecretAnswer()+
-                "','"+((UserData)user).getSecretQuestion()+"');";
+                "VALUES ('"+
+                ((UserData)user).getLogin()+"','"+
+                ((UserData)user).getPassword()+"','"+
+                ((UserData)user).getType().toString()+"','"+
+                ((UserData)user).getSecretAnswer()+ "','"+
+                ((UserData)user).getSecretQuestion()+"');";
         try {
             PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -73,7 +77,7 @@ public class SQLUserDAO implements CRUD{
                 sql = "UPDATE users SET " +
                         "login='" + ((UserData)user).getLogin() + "'," +
                         "password='" + ((UserData)user).getPassword() + "'," +
-                        "type='" + ((UserData)user).getType() + "'," +
+                        "type='" + ((UserData)user).getType().toString() + "'," +
                         "secret_answer='" + ((UserData)user).getSecretAnswer() + "'," +
                         "secret_question='" + ((UserData)user).getSecretQuestion() + "' " +
                         "WHERE ID=" + ((UserData)user).getId() + ";";
@@ -110,7 +114,7 @@ public class SQLUserDAO implements CRUD{
         return false;
     }
 
-    public String receiveUserType(UserData userData){
+    public UserData.Type receiveUserType(UserData userData){
         ResultSet resultSet;
         Statement statement;
         try {
@@ -119,12 +123,12 @@ public class SQLUserDAO implements CRUD{
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             if( resultSet.next()){
-                return resultSet.getString("type");
+                return UserData.Type.valueOf(resultSet.getString("type"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "noType";
+        return UserData.Type.valueOf("NO_TYPE");
     }
     @Override
     public Map<Integer,UserData> receiveAll(){

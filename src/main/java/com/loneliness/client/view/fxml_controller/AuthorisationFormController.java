@@ -36,27 +36,22 @@ public class AuthorisationFormController implements Handler {
             userData.setLogin(loginField.getText());
             userData.setPassword(passwordField.getText());
             try {
-                switch ((String) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData)) {
-                    case "admin":
+                switch ((UserData.Type) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData)) {
+                    case ADMIN:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getAdminStartWindow())));
                         break;
-                    case "manager":
+                    case MANAGER:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getManagerStartWindow())));
                         break;
-                    case "client":
+                    case CLIENT:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getClientStartWindow())));
                         break;
-                    case "noType":
+                    case NO_TYPE:
                         WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
-                                "Нет такого пользователя", "Неверный логин и/или пароль",
-                                dialogStage, "ERROR");
-                        break;
-                    case "validate_this_user":
-                        WorkWithAlert.getInstance().showAlert("Ошибка авторизации",
-                                "Ваши права еще не подтверждены", "авторизуйтесь позже",
+                                "Нет такого пользователя или ваш статус еще не подтвержден", "Неверный логин и/или пароль",
                                 dialogStage, "ERROR");
                         break;
                     default:

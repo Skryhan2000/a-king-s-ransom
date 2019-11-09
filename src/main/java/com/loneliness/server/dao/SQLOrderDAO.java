@@ -14,13 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SQLOrderDAO implements CRUD{
     @Override
     public boolean create(Object  orderData) {
-        String sql = "INSERT orders ( customer_ID, order_name , date_of_receiving, date_of_completion, status ) " +
+        String sql = "INSERT orders ( customer_ID, order_name , date_of_receiving, date_of_completion, status, payment ) " +
                 "VALUES ('" +
                 ((OrderData) orderData).getCustomerId() + "','" +
                 ((OrderData) orderData).getOrderName() + "','" +
                 ((OrderData) orderData).getDateOfReceiving() + "','" +
                 ((OrderData) orderData).getDateOfCompletion() + "','" +
                 ((OrderData) orderData).getStatus()+ "','" +
+                ((OrderData) orderData).getPayment().toString()+
                 "');";
         try {
             PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
@@ -49,6 +50,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
+                order.setPayment(resultSet.getString("payment"));
                 return order;
             }
         } catch (SQLException e) {
@@ -69,12 +71,13 @@ public class SQLOrderDAO implements CRUD{
             String sql  = "SELECT * FROM orders WHERE id = '" + ((OrderData) orderData).getId() + "';";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                sql = "UPDATE providers SET " +
+                sql = "UPDATE orders SET " +
                         "customer_ID ='" + ((OrderData) orderData).getCustomerId() + "'," +
                         "order_name ='" + ((OrderData) orderData).getOrderName() + "'," +
                         "date_of_receiving ='" +((OrderData) orderData).getDateOfReceiving() + "'," +
                         "date_of_completion ='" +((OrderData) orderData).getDateOfCompletion() + "' ," +
-                        "status ='" +((OrderData) orderData).getStatus()+ "' " +
+                        "status ='" +((OrderData) orderData).getStatus()+ "' ," +
+                        "payment ='" +((OrderData) orderData).getPayment().toString()+"' " +
                         "WHERE ID = " + ((OrderData) orderData).getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
@@ -126,6 +129,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
+                order.setPayment(resultSet.getString("payment"));
                 data.put(order.getId(),order);
             }
             return data;
@@ -141,7 +145,7 @@ public class SQLOrderDAO implements CRUD{
         try {
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT * FROM providers LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
+            String sql = "SELECT * FROM orders LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
             statement = DataBaseConnection.getInstance().getConnection().createStatement();
             resultSet = statement.executeQuery(sql);
             OrderData order;
@@ -153,6 +157,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
+                order.setPayment(resultSet.getString("payment"));
                 data.put(order.getId(),order);
             }
             return data;
@@ -194,6 +199,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
+                order.setPayment(resultSet.getString("payment"));
                 data.put(order.getId(),order);
             }
             return data;

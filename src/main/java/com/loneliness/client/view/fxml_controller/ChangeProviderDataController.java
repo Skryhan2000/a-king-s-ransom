@@ -47,10 +47,10 @@ public class ChangeProviderDataController implements Handler{
         providerData.setLocation(locationField.getText());
         providerData.setEmail(emailField.getText());
 
-        Set<ConstraintViolation<ProviderData>> errors = null;
+        Set<ConstraintViolation<Object>> errors = null;
         try {
             providerData.setRating(Integer.parseInt(ratingField.getText()));
-            errors = (Set<ConstraintViolation<ProviderData>>)
+            errors = (Set<ConstraintViolation<Object>>)
                     CommandProvider.getCommandProvider().getCommand("PROVIDER_VALIDATION").execute(providerData);
             if (errors.size() == 0) {
                 return true;
@@ -102,7 +102,8 @@ public class ChangeProviderDataController implements Handler{
                 }
 
             } catch (ControllerException e) {
-                e.printStackTrace();
+                WorkWithAlert.getInstance().showAlert("Сбой программы","Целостность нарушена",
+                        e.getExceptionMessage().toString() , dialogStage, "ERROR");
             }
         }
     }

@@ -16,7 +16,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
 
@@ -29,7 +29,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (ProviderData) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
 
     }
@@ -68,7 +68,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, ProviderData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
     @Override
@@ -78,7 +78,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, ProviderData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
     public ConcurrentHashMap<Integer,ProviderData> findByLocationAndRating(ProviderData providerData) throws DAOException {
@@ -89,7 +89,7 @@ public class ServerProviderRequest implements CRUD{
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, ProviderData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
+            throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
 }

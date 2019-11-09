@@ -63,13 +63,13 @@ public class ServerUserRequest implements CRUD {
 
     }
 
-    public String authorize(UserData userData) throws DAOException {
+    public UserData.Type authorize(UserData userData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("AUTHORIZATION_USER");
             transmission.setUserData(userData);
             Client.getOutObject().writeObject(transmission);
-            return (String) Client.getInObject().readObject();
+            return (UserData.Type) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }

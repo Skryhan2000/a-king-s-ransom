@@ -3,18 +3,39 @@ package com.loneliness.entity.user;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class UserData extends UserPrivateData implements Serializable {
     private static final long serialVersionUID=1L;
-    private String type;
     private int id;
+    @NotNull(message = "Тип должен быть задан. ")
+    private Type type;
+    @NotNull(message = "Секретный ответ должен быть задан. ")
     private String secretAnswer;
+    @NotNull(message = "Секретный вопрос должен быть задан. ")
     private String secretQuestion;
     private transient StringProperty typeProperty;
 
+    public enum Type{
+        ADMIN,CLIENT,MANAGER, NO_TYPE
+    }
+
+    public Type getType(String type){
+        type=type.replace(" ","_");
+        return Type.valueOf(type.toUpperCase());
+    }
+
     public UserData() {
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setTypeProperty(String typeProperty) {
+        this.typeProperty.set(typeProperty);
     }
 
     public UserData(String login, String password) {
@@ -22,14 +43,14 @@ public class UserData extends UserPrivateData implements Serializable {
     }
 
     public UserData(String type, int id) {
-        this.type = type;
+        this.type = Type.valueOf(type);
         this.id = id;
         typeProperty =new SimpleStringProperty(type);
     }
 
     public UserData(String login, String password, String type, int id) {
         super(login, password);
-        this.type = type;
+        this.type = Type.valueOf(type);
         this.id = id;
         typeProperty =new SimpleStringProperty(type);
     }
@@ -38,12 +59,12 @@ public class UserData extends UserPrivateData implements Serializable {
         return serialVersionUID;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = Type.valueOf(type);
         typeProperty =new SimpleStringProperty(type);
     }
 
@@ -77,7 +98,7 @@ public class UserData extends UserPrivateData implements Serializable {
 
     public StringProperty typePropertyProperty() {
         if(typeProperty==null){
-            typeProperty =new SimpleStringProperty(type);
+            typeProperty =new SimpleStringProperty(type.toString());
         }
         return typeProperty;
     }

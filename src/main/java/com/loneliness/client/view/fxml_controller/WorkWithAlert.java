@@ -29,15 +29,14 @@ public class WorkWithAlert {
         alert.setContentText(contentText);
         alert.showAndWait();
     }
-    public void showAlert(String title, String headerText, Set<ConstraintViolation<ProviderData>> errors,
+    public void showAlert(String title, String headerText, Set<ConstraintViolation<Object>> errors,
                           Stage dialogStage, String type){
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
         StringBuilder errMessage=new StringBuilder();
         alert.initOwner(dialogStage);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
-
-        for (ConstraintViolation<ProviderData> violation : errors) {
+        for (ConstraintViolation<Object> violation : errors) {
            errMessage.append(violation.getMessage());
         }
 

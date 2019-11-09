@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loneliness.client.view.fxml_controller.ChangeOrderDataController">
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#finishWork" text="Сохранение" />
+            <Button mnemonicParsing="false" onAction="#goBack" text="Отмена" />
+        </buttons>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </ButtonBar>
+   </bottom>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane prefHeight="162.0" prefWidth="502.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="id клиента" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Имя заказа" GridPane.rowIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата получения заказа" GridPane.rowIndex="2" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата выполнения заказа" GridPane.rowIndex="3" />
+                  <TextField fx:id="customerIDTextField" GridPane.columnIndex="1" />
+                  <TextField fx:id="orderNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="dateOfReceivingDatePicker" prefHeight="26.0" prefWidth="326.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="dateOfCompletionDatePicker" prefHeight="26.0" prefWidth="321.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="290.0" text="Статус заказа" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <items>
+                        <RadioMenuItem fx:id="decorated" mnemonicParsing="false" text="Оформлён" />
+                        <RadioMenuItem fx:id="componentCollection" mnemonicParsing="false" text="Сбор комплектующих" />
+                        <RadioMenuItem fx:id="completed" mnemonicParsing="false" text="Выполнен" />
+                        <RadioMenuItem fx:id="delivered" mnemonicParsing="false" text="Доставлен" />
+                        <RadioMenuItem fx:id="canceled" mnemonicParsing="false" text="Отменен" />
+                        <RadioMenuItem fx:id="waitingForPayment" mnemonicParsing="false" text="Ожидание оплаты" />
+                        <RadioMenuItem fx:id="issued" mnemonicParsing="false" text="Выдан" />
+                        <RadioMenuItem fx:id="refund" mnemonicParsing="false" text="Возврат" />
+                     </items>
+                     <GridPane.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </GridPane.margin>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="274.0" text="Оплата" GridPane.rowIndex="4">
+                    <items>
+                        <Menu mnemonicParsing="false" text="Оплата по получению">
+                           <items>
+                              <RadioMenuItem fx:id="paymentOnReceiptCashToSupplier" mnemonicParsing="false" text="Наличными доставшику" />
+                              <RadioMenuItem fx:id="paymentOnReceiptCOD" mnemonicParsing="false" text="Наложенный платеж" />
+                              <RadioMenuItem fx:id="paymentOnReceiptCashless" mnemonicParsing="false" text="Безналичный расчёт" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Предоплата">
+                           <items>
+                              <RadioMenuItem fx:id="prepaymentCOD" mnemonicParsing="false" text="Наличными в офисе" />
+                              <RadioMenuItem fx:id="prepaymentCash" mnemonicParsing="false" text="Наложенный платеж" />
+                              <RadioMenuItem fx:id="prepaymentCashless" mnemonicParsing="false" text="Безналичный расчёт" />
+                           </items>
+                        </Menu>
+                    </items>
+                     <GridPane.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </GridPane.margin>
+                  </MenuButton>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

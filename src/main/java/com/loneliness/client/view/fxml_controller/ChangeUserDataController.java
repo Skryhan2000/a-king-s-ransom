@@ -140,8 +140,8 @@ public class ChangeUserDataController implements Handler {
         questionField.setText(userData.getSecretQuestion());
         answerField.setText(userData.getSecretAnswer());
         if(userData.getType()!=null) {
-            type=userData.getType();
-            setSelectedType(userData.getType());
+            type=userData.getType().toString();
+            setSelectedType(userData.getType().toString());
         }
         else type="";
     }

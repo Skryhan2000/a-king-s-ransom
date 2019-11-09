@@ -2,6 +2,7 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
+import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
 import javafx.collections.ObservableList;
@@ -11,6 +12,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -22,12 +26,15 @@ public class SearchWindowController implements Handler{
     @FXML private Stage dialogStage;
     private ProviderData providerData=new ProviderData();
     private UserData userData=new UserData();
+    private OrderData orderData=new OrderData();
     private boolean okClicked = false;
     private TableView<UserData> usersTable;
     private ObservableList<UserData> usersData;
     private String type;
     private TableView<ProviderData> providersTable;
     private ObservableList<ProviderData> providersData;
+    private TableView<OrderData> ordersTable;
+    private  ObservableList<OrderData> ordersData;
     public boolean isOkClicked() {
         return okClicked;
     }
@@ -52,6 +59,15 @@ public class SearchWindowController implements Handler{
 
     }
 
+    public void setDialogStageOrders(Stage dialogStage, TableView<OrderData> ordersTable, ObservableList<OrderData> ordersData, String type){
+        this.dialogStage = dialogStage;
+        this.ordersTable=ordersTable;
+        this.ordersData=ordersData;
+        this.type=type;
+        name1.setText("Статус");
+        name.setText("Дедлайн");
+    }
+
     @Override
     public boolean isInputValid() {
         boolean valid=false;
@@ -59,22 +75,34 @@ public class SearchWindowController implements Handler{
             valid=true;
         }
          if(textField1.getText()!=null&& textField1.getText().length()!=0){
-            try {
-                if(Integer.parseInt(textField1.getText())>=0) {
-                    valid = true;
-                }else {
-                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                            "Ошибка проверки введеных данных", "В воле рейтинг должно быть не отрицательное число",
-                            dialogStage, "ERROR");
-                }
-            }
-            catch (NumberFormatException e){
-                valid=false;
-                WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                        "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
-                        dialogStage, "ERROR");
-            }
-        }
+             if (type.equals("providers")) {
+                 try {
+
+                     if (Integer.parseInt(textField1.getText()) >= 0) {
+                         valid = true;
+                     } else {
+                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                 "Ошибка проверки введеных данных", "В воле рейтинг должно быть не отрицательное число",
+                                 dialogStage, "ERROR");
+                     }
+                 } catch(NumberFormatException e){
+                         valid = false;
+                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                 "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
+                                 dialogStage, "ERROR");
+                     }
+                 }
+             else if(type.equals("orders")){
+                 try {
+                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
+                     orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
+                 }catch (DateTimeException e){
+                     WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                             "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
+                             dialogStage, "ERROR");
+                 }
+             }
+             }
         return valid;
     }
     private void setData(UserData userData){
@@ -94,6 +122,11 @@ public class SearchWindowController implements Handler{
         }
         else  providerData.setRating(-1);
     }
+    private void setData(OrderData orderData){
+        if(textField.getText()!=null&& textField.getText().length()!=0){
+            orderData.setStatus(textField.getText());
+        }
+    }
 
     @Override
     public void goBack() {
@@ -104,8 +137,7 @@ public class SearchWindowController implements Handler{
     @Override
     public void finishWork() {
         if(isInputValid()){
-
-            boolean err=false;
+            boolean noData=false;
             try {
                 switch (type) {
                     case "users":
@@ -118,7 +150,7 @@ public class SearchWindowController implements Handler{
                         usersTable.refresh();
                         usersTable.setItems(usersData);
                     }
-                     else err=true;
+                     else noData=true;
                      break;
                     case "providers":
                         setData(providerData);
@@ -130,13 +162,29 @@ public class SearchWindowController implements Handler{
                             providersTable.refresh();
                             providersTable.setItems(providersData);
                         }
+                        else noData=true;
+                        break;
+                    case "orders":
+                        setData(orderData);
+                        ConcurrentHashMap<Integer, OrderData> orderMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
+                                getCommandProvider().getCommand("FIND_ALL_ORDERS_BY_DATE_OF_COMPLETION_AND_STATUS").execute(providerData);
+                        if(orderMap.size()!=0) {
+                            ordersData.clear();
+                            ordersData.addAll(orderMap.values());
+                            ordersTable.refresh();
+                            ordersTable.setItems(ordersData);
+                        }
+                        else noData=true;
+                        break;
                 }
 
-                if(err){
+                if(noData){
                     WorkWithAlert.getInstance().showAlert("Поиск данных",
                             "Отчет о поиске", "Данных нет", dialogStage, "INFORMATION");
                 }
-                goBack();
+                else {
+                    goBack();
+                }
             } catch (ControllerException e) {
                 WorkWithAlert.getInstance().showAlert("Ошибка", e.getExceptionMessage().toString(),
                         "Повторите попыткку позже" , dialogStage, "ERROR");

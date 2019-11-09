@@ -3,19 +3,21 @@ package com.loneliness.entity.user;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class UserPrivateData implements Serializable {
+    @NotNull(message = "Логин должен быть задан. ")
     private String login;
     private String password;
     private static final long serialVersionUID=0L;
     private transient StringProperty loginProperty;
 
-    public UserPrivateData() {
+    UserPrivateData() {
     }
 
-    public UserPrivateData(String login, String password) {
+    UserPrivateData(String login, String password) {
         this.login = login;
         this.password = password;
         loginProperty=new SimpleStringProperty(login);

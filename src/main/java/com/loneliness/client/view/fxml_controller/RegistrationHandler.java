@@ -34,7 +34,7 @@ public class RegistrationHandler implements Handler {
                 userData.setPassword(passwordField.getText());
                 userData.setSecretQuestion(questionField.getText());
                 userData.setSecretAnswer(answerField.getText());
-                userData.setType("validate_this_user");
+                userData.setType(userData.getType("NO_TYPE"));
                 if((Boolean) CommandProvider.getCommandProvider().getCommand("CREATE_USER").execute(userData)){
                     WorkWithAlert.getInstance().showAlert("Регистрация пользователя", "Регистрация успешна",
                             "Добро пожаловать", dialogStage, "INFORMATION");

@@ -125,27 +125,29 @@ public class ProviderData implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProviderData providerData = (ProviderData) o;
-        return id == providerData.id &&
-                rating == providerData.rating &&
-                name.equals(providerData.name) &&
-                location.equals(providerData.location) &&
-                locationString.equals(providerData.locationString) &&
-                ratingInteger.equals(providerData.ratingInteger);
+        ProviderData that = (ProviderData) o;
+        return id == that.id &&
+                rating == that.rating &&
+                name.equals(that.name) &&
+                location.equals(that.location) &&
+                email.equals(that.email) &&
+                Objects.equals(locationString, that.locationString) &&
+                Objects.equals(ratingInteger, that.ratingInteger);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, rating, location, locationString, ratingInteger);
+        return Objects.hash(id, name, rating, location, email, locationString, ratingInteger);
     }
 
     @Override
     public String toString() {
-        return "Provider{" +
+        return "ProviderData{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rating=" + rating +
                 ", location='" + location + '\'' +
+                ", email='" + email + '\'' +
                 ", locationString=" + locationString +
                 ", ratingInteger=" + ratingInteger +
                 '}';

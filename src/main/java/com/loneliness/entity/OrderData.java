@@ -26,34 +26,60 @@ public class OrderData implements Serializable {
     @NotNull(message = "Долна быть задана дата выполнения. ")
     private LocalDate dateOfCompletion;
     @NotNull(message = "Должен быть задан статус. ")
-    private String status;
-
-    private transient StringProperty orderNameString;
+    private Status status;
+    @NotNull(message = "Должен быть задан статус. ")
+    private Payment payment;
+    private transient StringProperty dateOfCompletionString;
     private transient StringProperty statusString;
 
-    public OrderData(int id, int customerId, String orderName, LocalDate dateOfReceiving, LocalDate dateOfCompletion, String status, StringProperty orderNameString, StringProperty statusString) {
+    public enum Payment{
+        ОПЛАТА_ПО_ПОЛУЧЕНИЮ_НАЛИЧНЫМИ_ДОСТАВШИКУ, ОПЛАТА_ПО_ПОЛУЧЕНИЮ_НАЛОЖЕННЫЙ_ПЛАТЕЖ,
+        ОПЛАТА_ПО_ПОЛУЧЕНИЮ_БЕЗНАЛИЧНЫЙ_РАСЧЁТ,
+
+        ПРЕДОПЛАТА_НАЛИЧНЫМИ,ПРЕДОПЛАТА_НАЛОЖЕННЫЙ_ПЛАТЕЖ,
+        ПРЕДОПЛАТА_БЕЗНАЛИЧНЫЙ_РАСЧЁТ
+    }
+
+    public enum Status{
+        ОФОРМЛЁН, СБОР_КОМПЛЕКТУЮЩИХ, ВЫПОЛНЕН, ДОСТАВЛЕН, ОТМЕНЕН, ОЖИДАНИЕ_ОПЛАТЫ, ВЫДАН, ВОЗВРАТ
+    }
+
+    public OrderData(int id, @Positive(message = "Id клиента должно быть больше 0") @NotNull(message = "Должен быть задан сушествующий id клиента") int customerId, @NotNull(message = "Должен быть задано имя заказа. ") String orderName, @PastOrPresent(message = "Дата получения заказа должна быть в прошлом. ") @NotNull(message = "Должна быть задана дата получения заказа. ") LocalDate dateOfReceiving, @Future(message = "Дата выполнения должна быть в будующем. ") @NotNull(message = "Долна быть задана дата выполнения. ") LocalDate dateOfCompletion, @NotNull(message = "Должен быть задан статус. ") Status status, @NotNull(message = "Должен быть задан статус. ") Payment payment, StringProperty dateOfCompletionString, StringProperty statusString) {
         this.id = id;
         this.customerId = customerId;
         this.orderName = orderName;
         this.dateOfReceiving = dateOfReceiving;
         this.dateOfCompletion = dateOfCompletion;
         this.status = status;
-        this.orderNameString = orderNameString;
+        this.payment = payment;
+        this.dateOfCompletionString = dateOfCompletionString;
         this.statusString = statusString;
     }
 
-    public OrderData(int id, int customerId, String orderName, LocalDate dateOfReceiving, LocalDate dateOfCompletion, String status) {
+    public OrderData(int id, @Positive(message = "Id клиента должно быть больше 0") @NotNull(message = "Должен быть задан сушествующий id клиента") int customerId, @NotNull(message = "Должен быть задано имя заказа. ") String orderName, @PastOrPresent(message = "Дата получения заказа должна быть в прошлом. ") @NotNull(message = "Должна быть задана дата получения заказа. ") LocalDate dateOfReceiving, @Future(message = "Дата выполнения должна быть в будующем. ") @NotNull(message = "Долна быть задана дата выполнения. ") LocalDate dateOfCompletion, @NotNull(message = "Должен быть задан статус. ") Status status, @NotNull(message = "Должен быть задан статус. ") Payment payment) {
         this.id = id;
         this.customerId = customerId;
         this.orderName = orderName;
         this.dateOfReceiving = dateOfReceiving;
         this.dateOfCompletion = dateOfCompletion;
         this.status = status;
-        orderNameString=new SimpleStringProperty(orderName);
-        statusString=new SimpleStringProperty(status);
+        this.payment = payment;
+        dateOfCompletionString =new SimpleStringProperty(dateOfCompletion.toString());
+        statusString=new SimpleStringProperty(status.toString());
     }
 
-    public OrderData() {
+    public OrderData() { }
+
+    public void setPayment(String payment){
+        this.payment=Payment.valueOf(payment);
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Payment getPayment() {
+        return payment;
     }
 
     public int getId() {
@@ -78,7 +104,6 @@ public class OrderData implements Serializable {
 
     public void setOrderName(String orderName) {
         this.orderName = orderName;
-        orderNameString=new SimpleStringProperty(orderName);
     }
 
     public LocalDate getDateOfReceiving() {
@@ -95,27 +120,31 @@ public class OrderData implements Serializable {
 
     public void setDateOfCompletion(LocalDate dateOfCompletion) {
         this.dateOfCompletion = dateOfCompletion;
+        dateOfCompletionString =new SimpleStringProperty(dateOfCompletion.toString());
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = Status.valueOf(status);
         statusString=new SimpleStringProperty(status);
     }
 
-    public String getOrderNameString() {
-        return orderNameString.get();
+    public String getDateOfCompletionString() {
+        return dateOfCompletionString.get();
     }
 
-    public StringProperty orderNameStringProperty() {
-        return orderNameString;
+    public StringProperty dateOfCompletionStringProperty() {
+        if(dateOfCompletionString==null){
+            dateOfCompletionString =new SimpleStringProperty(dateOfCompletion.toString());
+        }
+        return dateOfCompletionString;
     }
 
-    public void setOrderNameString(String orderNameString) {
-        this.orderNameString.set(orderNameString);
+    public void setDateOfCompletionString(String dateOfCompletionString) {
+        this.dateOfCompletionString.set(dateOfCompletionString);
     }
 
     public String getStatusString() {
@@ -123,6 +152,9 @@ public class OrderData implements Serializable {
     }
 
     public StringProperty statusStringProperty() {
+        if(statusString==null){
+            statusString=new SimpleStringProperty(status.toString());
+        }
         return statusString;
     }
 
@@ -140,26 +172,28 @@ public class OrderData implements Serializable {
                 orderName.equals(orderData.orderName) &&
                 dateOfReceiving.equals(orderData.dateOfReceiving) &&
                 dateOfCompletion.equals(orderData.dateOfCompletion) &&
-                status.equals(orderData.status) &&
-                orderNameString.equals(orderData.orderNameString) &&
-                statusString.equals(orderData.statusString);
+                status == orderData.status &&
+                payment == orderData.payment &&
+                Objects.equals(dateOfCompletionString, orderData.dateOfCompletionString) &&
+                Objects.equals(statusString, orderData.statusString);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, customerId, orderName, dateOfReceiving, dateOfCompletion, status, orderNameString, statusString);
+        return Objects.hash(id, customerId, orderName, dateOfReceiving, dateOfCompletion, status, payment, dateOfCompletionString, statusString);
     }
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderData{" +
                 "id=" + id +
                 ", customerId=" + customerId +
                 ", orderName='" + orderName + '\'' +
                 ", dateOfReceiving=" + dateOfReceiving +
                 ", dateOfCompletion=" + dateOfCompletion +
-                ", status='" + status + '\'' +
-                ", orderNameString=" + orderNameString +
+                ", status=" + status +
+                ", payment=" + payment +
+                ", dateOfCompletionString=" + dateOfCompletionString +
                 ", statusString=" + statusString +
                 '}';
     }

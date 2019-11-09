@@ -120,14 +120,12 @@ public class CustomerData implements Serializable {
                 numberOfOrders == customerData.numberOfOrders &&
                 name.equals(customerData.name) &&
                 location.equals(customerData.location) &&
-                email.equals(customerData.email) &&
-                nameString.equals(customerData.nameString) &&
-                numberOfOrdersInteger.equals(customerData.numberOfOrdersInteger);
+                email.equals(customerData.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, numberOfOrders, location, email, nameString, numberOfOrdersInteger);
+        return Objects.hash(id, name, numberOfOrders, location, email);
     }
 
     @Override
@@ -138,8 +136,6 @@ public class CustomerData implements Serializable {
                 ", numberOfOrders=" + numberOfOrders +
                 ", location='" + location + '\'' +
                 ", email='" + email + '\'' +
-                ", nameString=" + nameString +
-                ", numberOfOrdersInteger=" + numberOfOrdersInteger +
                 '}';
     }
 }
