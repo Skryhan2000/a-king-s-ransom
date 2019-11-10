@@ -3,6 +3,7 @@ package com.loneliness.client.view.fxml_controller;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.entity.OrderData;
+import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
 import javafx.collections.ObservableList;
@@ -27,6 +28,7 @@ public class SearchWindowController implements Handler{
     private ProviderData providerData=new ProviderData();
     private UserData userData=new UserData();
     private OrderData orderData=new OrderData();
+    private ProductInStock productInStock=new ProductInStock();
     private boolean okClicked = false;
     private TableView<UserData> usersTable;
     private ObservableList<UserData> usersData;
@@ -34,7 +36,10 @@ public class SearchWindowController implements Handler{
     private TableView<ProviderData> providersTable;
     private ObservableList<ProviderData> providersData;
     private TableView<OrderData> ordersTable;
-    private  ObservableList<OrderData> ordersData;
+    private ObservableList<OrderData> ordersData;
+
+    private TableView<ProductInStock> productInStockTable;
+    private ObservableList<ProductInStock> productsInStockData;
     public boolean isOkClicked() {
         return okClicked;
     }
@@ -67,42 +72,68 @@ public class SearchWindowController implements Handler{
         name1.setText("Статус");
         name.setText("Дедлайн");
     }
+    public void setDialogStageProductInStock(Stage dialogStage, TableView<ProductInStock> productInStockTable, ObservableList<ProductInStock> productsInStockData, String type){
+        this.dialogStage = dialogStage;
+        this.productInStockTable=productInStockTable;
+        this.productsInStockData=productsInStockData;
+        this.type=type;
+        name.setText("Имя");
+        name1.setText("Количество");
+    }
 
     @Override
     public boolean isInputValid() {
-        boolean valid=false;
-        if(textField.getText()!=null&& textField.getText().length()!=0){
-            valid=true;
+        boolean valid = false;
+        if (textField.getText() != null && textField.getText().length() != 0) {
+            valid = true;
         }
-         if(textField1.getText()!=null&& textField1.getText().length()!=0){
-             if (type.equals("providers")) {
-                 try {
+        if (textField1.getText() != null && textField1.getText().length() != 0) {
+            if (type.equals("providers")) {
+                try {
 
-                     if (Integer.parseInt(textField1.getText()) >= 0) {
-                         valid = true;
-                     } else {
-                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                                 "Ошибка проверки введеных данных", "В воле рейтинг должно быть не отрицательное число",
-                                 dialogStage, "ERROR");
-                     }
-                 } catch(NumberFormatException e){
-                         valid = false;
-                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                                 "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
-                                 dialogStage, "ERROR");
-                     }
-                 }
-             else if(type.equals("orders")){
-                 try {
-                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
-                     orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
-                 }catch (DateTimeException e){
-                     WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                             "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
-                             dialogStage, "ERROR");
-                 }
-             }
-             }
+                    if (Integer.parseInt(textField1.getText()) >= 0) {
+                        valid = true;
+                    } else {
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле рейтинг должно быть не отрицательное число",
+                                dialogStage, "ERROR");
+                    }
+                } catch (NumberFormatException e) {
+                    valid = false;
+                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                            "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
+                            dialogStage, "ERROR");
+                }
+            }
+            else if (type.equals("orders")) {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
+                    orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
+                } catch (DateTimeException e) {
+                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                            "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
+                            dialogStage, "ERROR");
+                }
+            }
+            else if (type.equals("product_in_stock")) {
+                try {
+                    productInStock.setQuantity(Integer.parseInt(textField1.getText()));
+                    if ( productInStock.getQuantity() >= 0) {
+                        valid = true;
+                    } else {
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                                dialogStage, "ERROR");
+                    }
+                } catch (NumberFormatException e) {
+                    valid = false;
+                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                            "Ошибка проверки введеных данных", "В поле количество должно быть число",
+                            dialogStage, "ERROR");
+                }
+
+            }
+        }
         return valid;
     }
     private void setData(UserData userData){
@@ -125,6 +156,11 @@ public class SearchWindowController implements Handler{
     private void setData(OrderData orderData){
         if(textField.getText()!=null&& textField.getText().length()!=0){
             orderData.setStatus(textField.getText());
+        }
+    }
+    private void setData(ProductInStock productInStock){
+        if(textField.getText()!=null&& textField.getText().length()!=0){
+            productInStock.setName(textField.getText());
         }
     }
 
@@ -167,12 +203,24 @@ public class SearchWindowController implements Handler{
                     case "orders":
                         setData(orderData);
                         ConcurrentHashMap<Integer, OrderData> orderMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
-                                getCommandProvider().getCommand("FIND_ALL_ORDERS_BY_DATE_OF_COMPLETION_AND_STATUS").execute(providerData);
+                                getCommandProvider().getCommand("FIND_ALL_ORDERS_BY_DATE_OF_COMPLETION_AND_STATUS").execute(orderData);
                         if(orderMap.size()!=0) {
                             ordersData.clear();
                             ordersData.addAll(orderMap.values());
                             ordersTable.refresh();
                             ordersTable.setItems(ordersData);
+                        }
+                        else noData=true;
+                        break;
+                    case "product_in_stock":
+                        setData(productInStock);
+                        ConcurrentHashMap<Integer, ProductInStock> productInStockMap = (ConcurrentHashMap<Integer, ProductInStock>) CommandProvider.
+                                getCommandProvider().getCommand("FIND_ALL_PRODUCT_IN_STOCK_BY_NAME_AND_QUANTITY").execute(productInStock);
+                        if(productInStockMap.size()!=0) {
+                            productsInStockData.clear();
+                            productsInStockData.addAll(productInStockMap.values());
+                            productInStockTable.refresh();
+                            productInStockTable.setItems(productsInStockData);
                         }
                         else noData=true;
                         break;

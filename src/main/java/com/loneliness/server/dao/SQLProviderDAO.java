@@ -4,10 +4,7 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,8 +15,8 @@ public class SQLProviderDAO implements CRUD {
                 "VALUES ('" + ((ProviderData) provider).getId() + "','" + ((ProviderData) provider).getName() + "','" +
                 (((ProviderData) provider).getRating() + "','" + ((ProviderData) provider).getLocation()+ "','" +
                         ((ProviderData) provider).getEmail() + "');");
-        try {
-            PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -30,12 +27,12 @@ public class SQLProviderDAO implements CRUD {
 
     @Override
     public Object read(Object provider) {
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql;
             sql = "SELECT * FROM providers WHERE id = '" + ((ProviderData) provider).getId() + "';";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             ProviderData providerData = new ProviderData();
             if (resultSet.next()) {
@@ -57,9 +54,9 @@ public class SQLProviderDAO implements CRUD {
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
 
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement =connection.createStatement();
 
             String sql = "SELECT * FROM providers WHERE id = " + ((ProviderData)provider).getId() + ";";
             resultSet = statement.executeQuery(sql);
@@ -89,9 +86,9 @@ public class SQLProviderDAO implements CRUD {
 
     @Override
     public boolean delete(Object provider) {
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM providers WHERE id = '"+((ProviderData)provider).getId()+"';";
-            Statement statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
             }
@@ -106,11 +103,11 @@ public class SQLProviderDAO implements CRUD {
     @Override
     public Object receiveAll() {
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
-        try {
+        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while ( resultSet.next()){
@@ -132,11 +129,11 @@ public class SQLProviderDAO implements CRUD {
     @Override
     public Object receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, ProviderData> data = new ConcurrentHashMap<>();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while (resultSet.next()) {
@@ -156,7 +153,7 @@ public class SQLProviderDAO implements CRUD {
     }
     public Map<Integer,ProviderData> findAllByLocationAndRating(ProviderData providerDataToFind){
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
-        try {
+        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers ";
@@ -175,7 +172,7 @@ public class SQLProviderDAO implements CRUD {
 
             }
             sql+=";";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while ( resultSet.next()){

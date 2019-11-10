@@ -5,6 +5,7 @@ package com.loneliness.server.controller;
 
 
 import com.loneliness.server.controller.command_impl.order_command.*;
+import com.loneliness.server.controller.command_impl.product_in_stock_command.*;
 import com.loneliness.server.controller.command_impl.provider_command.*;
 import com.loneliness.server.controller.command_impl.server_command.ShutDown;
 import com.loneliness.server.controller.command_impl.WrongRequest;
@@ -44,6 +45,14 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_ORDERS,new ReceiveAllOrders());
         repository.put(CommandName.RECEIVE_ORDER_DATA,new ReceiveOrderData());
         repository.put(CommandName.UPDATE_ORDER,new UpdateOrder());
+
+        repository.put(CommandName.CREATE_PRODUCT_IN_STOCK,new CreateProductInStock());
+        repository.put(CommandName.DELETE_PRODUCT_IN_STOCK,new DeleteProductInStock());
+        repository.put(CommandName.FIND_ALL_PRODUCT_IN_STOCK_BY_NAME_AND_QUANTITY,new FindAllProductInStockByNameAndQuantity());
+        repository.put(CommandName.RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT,new ReceiveAllProductInStockInLimit());
+        repository.put(CommandName.RECEIVE_ALL_PRODUCT_IN_STOCK,new ReceiveAllProductInStock());
+        repository.put(CommandName.RECEIVE_PRODUCT_IN_STOCK,new ReceiveProductInStock());
+        repository.put(CommandName.UPDATE_PRODUCT_IN_STOCK,new UpdateProductInStock());
     }
 
 

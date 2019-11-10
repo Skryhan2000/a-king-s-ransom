@@ -32,4 +32,5 @@ public class PathManager {
     public String getSearchUserData(){return "/SearchWindow.fxml";}
     public String getChangeProviderData(){return "/ChangeProviderData.fxml";}
     public String getChangeOrderData(){return "/ChangeOrderData.fxml";}
+    public String getChangeProductInStock(){return "/ChangeProductInStock.fxml";}
 }

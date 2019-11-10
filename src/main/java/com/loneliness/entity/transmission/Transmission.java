@@ -3,6 +3,7 @@ package com.loneliness.entity.transmission;
 
 import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.OrderData;
+import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
 
@@ -18,10 +19,28 @@ public class Transmission implements Serializable {
     private ProviderData providerData;
     private OrderData orderData;
     private CustomerData customerData;
+    private ProductInStock productInStock;
+    private ConcurrentHashMap<Integer, ProductInStock> ProductInStockConcurrentHashMap;
     private ConcurrentHashMap<Integer,CustomerData> customerDataConcurrentHashMap;
     private ConcurrentHashMap<Integer, UserData> userDataConcurrentHashMap;
     private ConcurrentHashMap<Integer, ProviderData> providerConcurrentHashMap;
     private ConcurrentHashMap<Integer, OrderData> orderConcurrentHashMap;
+
+    public ProductInStock getProductInStock() {
+        return productInStock;
+    }
+
+    public void setProductInStock(ProductInStock productInStock) {
+        this.productInStock = productInStock;
+    }
+
+    public ConcurrentHashMap<Integer, ProductInStock> getProductInStockConcurrentHashMap() {
+        return ProductInStockConcurrentHashMap;
+    }
+
+    public void setProductInStockConcurrentHashMap(ConcurrentHashMap<Integer, ProductInStock> productInStockConcurrentHashMap) {
+        ProductInStockConcurrentHashMap = productInStockConcurrentHashMap;
+    }
 
     public OrderData getOrderData() {
         return orderData;

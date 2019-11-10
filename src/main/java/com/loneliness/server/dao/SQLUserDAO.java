@@ -4,10 +4,7 @@ package com.loneliness.server.dao;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,8 +18,8 @@ public class SQLUserDAO implements CRUD{
                 ((UserData)user).getType().toString()+"','"+
                 ((UserData)user).getSecretAnswer()+ "','"+
                 ((UserData)user).getSecretQuestion()+"');";
-        try {
-            PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -34,7 +31,7 @@ public class SQLUserDAO implements CRUD{
     @Override
     public UserData read(Object user) {
         UserData userData=new UserData();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -44,7 +41,7 @@ public class SQLUserDAO implements CRUD{
             else {
                 sql= "SELECT * FROM Users WHERE login = '" + ((UserData)user).getLogin() + "';";
             }
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
 
             if( resultSet.next()){
@@ -67,9 +64,9 @@ public class SQLUserDAO implements CRUD{
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
 
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
 
             String sql = "SELECT * FROM Users WHERE id = " + ((UserData)user).getId() + ";";
             resultSet = statement.executeQuery(sql);
@@ -100,9 +97,9 @@ public class SQLUserDAO implements CRUD{
 
     @Override
     public boolean delete(Object user) {
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM Users WHERE id = '"+((UserData)user).getId()+"';";
-            Statement statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
             }
@@ -117,10 +114,10 @@ public class SQLUserDAO implements CRUD{
     public UserData.Type receiveUserType(UserData userData){
         ResultSet resultSet;
         Statement statement;
-        try {
+        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
             String sql = "SELECT * FROM Users WHERE login = '" + userData.getLogin() + "' AND password ='"+
                     userData.getPassword()+"';";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if( resultSet.next()){
                 return UserData.Type.valueOf(resultSet.getString("type"));
@@ -133,11 +130,11 @@ public class SQLUserDAO implements CRUD{
     @Override
     public Map<Integer,UserData> receiveAll(){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData;
         while ( resultSet.next()){
@@ -159,12 +156,12 @@ public class SQLUserDAO implements CRUD{
     @Override
     public Map<Integer,UserData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, UserData> data = new ConcurrentHashMap<>();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
 
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData;
             while (resultSet.next()) {
@@ -185,7 +182,7 @@ public class SQLUserDAO implements CRUD{
     }
     public Map<Integer,UserData> findAllByLoginAndType(UserData userDataToFind){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users ";
@@ -204,7 +201,7 @@ public class SQLUserDAO implements CRUD{
 
             }
             sql+=";";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData;
             while ( resultSet.next()){

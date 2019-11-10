@@ -6,6 +6,7 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.client.view.ViewException;
 import com.loneliness.entity.OrderData;
+import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
@@ -63,6 +64,16 @@ public class AdminStartWindowController implements CRUD_Controller {
     @FXML private TableColumn<OrderData, String> orderDateOfCompletionColumn;
     @FXML private TableColumn<OrderData, String> orderStatusColumn;
     private ObservableList<OrderData> ordersData = FXCollections.observableArrayList();
+
+    @FXML private Text productInStockName;
+    @FXML private Text productInStockReceiptDate;
+    @FXML private Text productInStockQuantity;
+    @FXML private Text productInStockUnitPrice;
+    @FXML private Text productInStockProviderId;
+    @FXML private TableView<ProductInStock> productInStockTable;
+    @FXML private TableColumn<ProductInStock, String> productInStockNameColumn;
+    @FXML private TableColumn<ProductInStock, Integer> productInStockQuantityColumn;
+    private ObservableList<ProductInStock> productsInStockData = FXCollections.observableArrayList();
 
     @FXML
     private void setDataTypeUsers() {
@@ -138,10 +149,13 @@ public class AdminStartWindowController implements CRUD_Controller {
         providersData.addAll(map.values());
         return providersData;
     }
-
     public ObservableList<OrderData> setAndGetOrdersData(ConcurrentHashMap<Integer, OrderData> map) {
         ordersData.addAll(map.values());
         return ordersData;
+    }
+    public ObservableList<ProductInStock> setAndGetProductsInStock(ConcurrentHashMap<Integer, ProductInStock> map) {
+        productsInStockData .addAll(map.values());
+        return productsInStockData ;
     }
 
     private void fillText(UserData userData) {
@@ -159,7 +173,7 @@ public class AdminStartWindowController implements CRUD_Controller {
             type.setText(userData.getType().toString());
         }
     }
-        private void fillText(ProviderData providerData) {
+    private void fillText(ProviderData providerData) {
             if (providerData == null) {
                 providerName.setText("");
                 providerLocation.setText("");
@@ -190,7 +204,21 @@ public class AdminStartWindowController implements CRUD_Controller {
             orderPayment.setText(orderData.getPayment().toString());
         }
     }
-
+    private void fillText(ProductInStock productInStock) {
+        if (productInStock == null) {
+            productInStockName.setText("");
+            productInStockReceiptDate.setText("");
+            productInStockQuantity.setText("");
+            productInStockUnitPrice.setText("");
+            productInStockProviderId.setText("");
+        } else {
+            productInStockName.setText(productInStock.getName());
+            productInStockReceiptDate.setText(productInStock.getReceipt_date().toString());
+            productInStockQuantity.setText(String.valueOf(productInStock.getQuantity()));
+            productInStockUnitPrice.setText(String.valueOf(productInStock.getUnitPrice()));
+            productInStockProviderId.setText(String.valueOf(productInStock.getProvider_ID()));
+        }
+    }
 
     @Override
     public boolean update() {
@@ -228,6 +256,15 @@ public class AdminStartWindowController implements CRUD_Controller {
                             .execute(transmission));
                     orderTable.refresh();
                     orderTable.setItems(ordersData);
+                    return true;
+                case "product_in_stock":
+                    productsInStockData.clear();
+                    transmission.setCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT");
+                    setAndGetProductsInStock((ConcurrentHashMap<Integer, ProductInStock>)CommandProvider.
+                            getCommandProvider().getCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT")
+                            .execute(transmission));
+                    productInStockTable.refresh();
+                    productInStockTable.setItems( productsInStockData);
                     return true;
 
             }
@@ -272,12 +309,23 @@ public class AdminStartWindowController implements CRUD_Controller {
                 orderTable.getSelectionModel().selectedItemProperty().addListener((
                         (observableValue, OrderData, newOrderData) -> fillText(newOrderData)));
 
-                orderDateOfCompletionColumn.setCellValueFactory(providerDataStringCellDataFeatures ->
-                        providerDataStringCellDataFeatures.getValue().dateOfCompletionStringProperty());
-                orderStatusColumn.setCellValueFactory(providerDataIntegerCellDataFeatures ->
-                        providerDataIntegerCellDataFeatures.getValue().statusStringProperty());
+                orderDateOfCompletionColumn.setCellValueFactory(orderDataStringCellDataFeatures ->
+                       orderDataStringCellDataFeatures.getValue().dateOfCompletionStringProperty());
+                orderStatusColumn.setCellValueFactory(orderDataStringCellDataFeatures ->
+                        orderDataStringCellDataFeatures.getValue().statusStringProperty());
                 OrderData orderData = null;
                 fillText(orderData);
+                break;
+            case "product_in_stock":
+                productInStockTable.getSelectionModel().selectedItemProperty().addListener((
+                        (observableValue, OrderData, newOrderData) -> fillText(newOrderData)));
+
+                productInStockNameColumn.setCellValueFactory(productInStockStringCellDataFeatures ->
+                        productInStockStringCellDataFeatures.getValue().nameStringProperty());
+                productInStockQuantityColumn.setCellValueFactory(productInStockDoubleCellDataFeatures ->
+                        productInStockDoubleCellDataFeatures.getValue().quantityIntegerProperty().asObject());
+                ProductInStock productInStock = null;
+                fillText(productInStock);
                 break;
         }
         update();
@@ -301,6 +349,10 @@ public class AdminStartWindowController implements CRUD_Controller {
                             return controller.isOkClicked();
                         case "orders":
                             controller.setDialogStageOrders(dialogStage, orderTable, ordersData, dataType);
+                            dialogStage.showAndWait();
+                            return controller.isOkClicked();
+                        case "product_in_stock":
+                            controller.setDialogStageProductInStock(dialogStage, productInStockTable, productsInStockData, dataType);
                             dialogStage.showAndWait();
                             return controller.isOkClicked();
 
@@ -342,6 +394,14 @@ public class AdminStartWindowController implements CRUD_Controller {
                     changeOrderDataController.setDialogStage(dialogStage, "create");
                     dialogStage.showAndWait();
                     return changeOrderDataController.isOkClicked();
+                case "product_in_stock":
+                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                            getChangeProductInStock(), "Добавления данных");
+                    ChangeProductInStockController changeProductInStockController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    changeProductInStockController.setData(new ProductInStock());
+                    changeProductInStockController.setDialogStage(dialogStage, "create");
+                    dialogStage.showAndWait();
+                    return changeProductInStockController.isOkClicked();
 
             }
         } catch (ViewException e) {
@@ -440,6 +500,34 @@ public class AdminStartWindowController implements CRUD_Controller {
                             this.dialogStage, "ERROR");
                 }
                 break;
+            case "product_in_stock":
+                selectedIndex = productInStockTable.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    try {
+                        ProductInStock productInStock=new ProductInStock();
+                        productInStock.setId(productsInStockData.get(selectedIndex).getId());
+                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PRODUCT_IN_STOCK").execute(productInStock)) {
+                            productInStockTable.getItems().remove(selectedIndex);
+                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
+                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
+                                    "Удаление невозможен", "Что то пошло не так",
+                                    this.dialogStage, "ERROR");
+                        }
+                    } catch (ControllerException e) {
+                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                                this.dialogStage, "ERROR");
+                    }
+
+                } else {
+                    // Ничего не выбрано.
+                    WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
+                            "Удаление невозможно", "Выберите товар со склада для удаления",
+                            this.dialogStage, "ERROR");
+                }
+                break;
         }
         return false;
     }
@@ -484,6 +572,18 @@ public class AdminStartWindowController implements CRUD_Controller {
                         changeOrderDataController.setDialogStage(dialogStage, "update");
                         dialogStage.showAndWait();
                         return changeOrderDataController.isOkClicked();
+                    }
+                    return false;
+                case "product_in_stock":
+                   ProductInStock productInStock= getSelectedProductInStockModel();
+                    if (productInStock != null) {
+                        dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                                getChangeProductInStock(), "Добавления данных");
+                        ChangeProductInStockController changeProductInStockController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                        changeProductInStockController.setData(productInStock);
+                        changeProductInStockController.setDialogStage(dialogStage, "update");
+                        dialogStage.showAndWait();
+                        return changeProductInStockController.isOkClicked();
                     }
                     return false;
             }
@@ -543,6 +643,17 @@ public class AdminStartWindowController implements CRUD_Controller {
             return null;
         } else {
             return selectedOrder;
+        }
+    }
+    private ProductInStock getSelectedProductInStockModel(){
+        ProductInStock selectedProductInStock=productInStockTable.getSelectionModel().getSelectedItem();
+        if (selectedProductInStock == null) {
+            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
+                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
+                    this.dialogStage, "ERROR");
+            return null;
+        } else {
+            return selectedProductInStock;
         }
     }
 }

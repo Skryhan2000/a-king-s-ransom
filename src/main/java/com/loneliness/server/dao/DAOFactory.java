@@ -5,10 +5,12 @@ public class DAOFactory {
     private final SQLUserDAO userDAO;
     private final SQLProviderDAO providerDAO;
     private final SQLOrderDAO orderDAO;
+    private final SQLProductInStockDAO productInStockDAO;
     private DAOFactory() {
         userDAO= new SQLUserDAO();
         providerDAO=new SQLProviderDAO();
         orderDAO=new SQLOrderDAO();
+        productInStockDAO=new SQLProductInStockDAO();
     }
 
     public static DAOFactory getInstance() {
@@ -25,5 +27,9 @@ public class DAOFactory {
 
     public SQLOrderDAO getOrderDAO() {
         return orderDAO;
+    }
+
+    public SQLProductInStockDAO getProductInStockDAO() {
+        return productInStockDAO;
     }
 }

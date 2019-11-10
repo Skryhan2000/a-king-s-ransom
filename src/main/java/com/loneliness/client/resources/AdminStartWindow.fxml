@@ -180,10 +180,10 @@
                            <items>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <TableView layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="productInStockTable" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn prefWidth="75.0" text="Имя" />
-                                        <TableColumn prefWidth="122.4000244140625" text="Количество" />
+                                        <TableColumn fx:id="productInStockNameColumn" prefWidth="75.0" text="Имя" />
+                                        <TableColumn fx:id="productInStockQuantityColumn" prefWidth="122.4000244140625" text="Количество" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -206,13 +206,13 @@
                                           <Label text="Имя" />
                                           <Label text="Дата поступления" GridPane.rowIndex="1" />
                                           <Label text="Количество " GridPane.rowIndex="2" />
-                                          <Label text="Простаивает" GridPane.rowIndex="4" />
                                           <Label text="Цена за единицу" GridPane.rowIndex="3" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Text fx:id="productInStockName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
+                                          <Text fx:id="productInStockReceiptDate" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Text fx:id="productInStockQuantity" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Text fx:id="productInStockUnitPrice" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="id поставшика" GridPane.rowIndex="4" />
+                                          <Text fx:id="productInStockProviderId" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                        </children>
                                     </GridPane>
                                  </children>

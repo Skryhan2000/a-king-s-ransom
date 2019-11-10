@@ -2,6 +2,7 @@ package com.loneliness.client.service;
 
 import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.OrderData;
+import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.entity.user.UserPrivateData;
@@ -41,6 +42,10 @@ public class DataValidationFactory {
     }
 
     public Set<ConstraintViolation<CustomerData>> validate(CustomerData data) {
+        return validator.validate(data);
+    }
+
+    public Set<ConstraintViolation<ProductInStock>> validate(ProductInStock data) {
         return validator.validate(data);
     }
 

@@ -50,6 +50,9 @@ public class ClientWorkingThread implements Runnable{
                 else if(transmission.getCustomerData()!=null) {
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getCustomerData());
+                }else if(transmission.getProductInStock()!=null) {
+                        response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                                execute(transmission.getProductInStock());
                 }else { response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                         execute(transmission);}
                 outObject.writeObject(response);
