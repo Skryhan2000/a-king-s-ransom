@@ -2,7 +2,7 @@ package com.loneliness.client.dao;
 
 import com.loneliness.client.launcher.Client;
 import com.loneliness.entity.ProductInStock;
-import com.loneliness.entity.ProviderData;
+
 import com.loneliness.entity.transmission.Transmission;
 
 import java.io.IOException;
@@ -23,13 +23,13 @@ public class ServerProductInStockRequest implements CRUD{
     }
 
     @Override
-    public ProviderData read(Object productInStock) throws DAOException {
+    public ProductInStock read(Object productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_PRODUCT_IN_STOCK");
             transmission.setProductInStock((ProductInStock)productInStock);
             Client.getOutObject().writeObject(transmission);
-            return (ProviderData) Client.getInObject().readObject();
+            return (ProductInStock) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProductInStockRequest " + e.getMessage());
         }

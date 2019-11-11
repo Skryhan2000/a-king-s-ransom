@@ -2,6 +2,7 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
+import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
@@ -25,10 +26,13 @@ public class SearchWindowController implements Handler{
     @FXML private TextField textField;
     @FXML private TextField textField1;
     @FXML private Stage dialogStage;
+
     private ProviderData providerData=new ProviderData();
     private UserData userData=new UserData();
     private OrderData orderData=new OrderData();
     private ProductInStock productInStock=new ProductInStock();
+    private CustomerData customerData=new CustomerData();
+
     private boolean okClicked = false;
     private TableView<UserData> usersTable;
     private ObservableList<UserData> usersData;
@@ -37,9 +41,11 @@ public class SearchWindowController implements Handler{
     private ObservableList<ProviderData> providersData;
     private TableView<OrderData> ordersTable;
     private ObservableList<OrderData> ordersData;
-
     private TableView<ProductInStock> productInStockTable;
     private ObservableList<ProductInStock> productsInStockData;
+    private TableView<CustomerData> customerTable;
+    private ObservableList<CustomerData> customersData;
+
     public boolean isOkClicked() {
         return okClicked;
     }
@@ -81,6 +87,15 @@ public class SearchWindowController implements Handler{
         name1.setText("Количество");
     }
 
+    public void setDialogCustomerData(Stage dialogStage, TableView<CustomerData> customerTable, ObservableList<CustomerData> customersData, String type){
+        this.dialogStage = dialogStage;
+        this.customerTable=customerTable;
+        this.customersData=customersData;
+        this.type=type;
+        name.setText("Имя");
+        name1.setText("Количество заказов");
+    }
+
     @Override
     public boolean isInputValid() {
         boolean valid = false;
@@ -88,50 +103,70 @@ public class SearchWindowController implements Handler{
             valid = true;
         }
         if (textField1.getText() != null && textField1.getText().length() != 0) {
-            if (type.equals("providers")) {
-                try {
+            switch (type) {
+                case "providers":
+                    try {
 
-                    if (Integer.parseInt(textField1.getText()) >= 0) {
-                        valid = true;
-                    } else {
+                        if (Integer.parseInt(textField1.getText()) >= 0) {
+                            valid = true;
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                    "Ошибка проверки введеных данных", "В поле рейтинг должно быть не отрицательное число",
+                                    dialogStage, "ERROR");
+                        }
+                    } catch (NumberFormatException e) {
+                        valid = false;
                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                                "Ошибка проверки введеных данных", "В поле рейтинг должно быть не отрицательное число",
+                                "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
                                 dialogStage, "ERROR");
                     }
-                } catch (NumberFormatException e) {
-                    valid = false;
-                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                            "Ошибка проверки введеных данных", "В воле рейтинг должно быть число",
-                            dialogStage, "ERROR");
-                }
-            }
-            else if (type.equals("orders")) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
-                    orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
-                } catch (DateTimeException e) {
-                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                            "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
-                            dialogStage, "ERROR");
-                }
-            }
-            else if (type.equals("product_in_stock")) {
-                try {
-                    productInStock.setQuantity(Integer.parseInt(textField1.getText()));
-                    if ( productInStock.getQuantity() >= 0) {
-                        valid = true;
-                    } else {
+                    break;
+                case "orders":
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
+                        orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
+                    } catch (DateTimeException e) {
                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                                "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                                "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
                                 dialogStage, "ERROR");
                     }
-                } catch (NumberFormatException e) {
-                    valid = false;
-                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                            "Ошибка проверки введеных данных", "В поле количество должно быть число",
-                            dialogStage, "ERROR");
-                }
+                    break;
+                case "product_in_stock":
+                    try {
+                        productInStock.setQuantity(Integer.parseInt(textField1.getText()));
+                        if (productInStock.getQuantity() >= 0) {
+                            valid = true;
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                    "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                                    dialogStage, "ERROR");
+                        }
+                    } catch (NumberFormatException e) {
+                        valid = false;
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле количество должно быть число",
+                                dialogStage, "ERROR");
+                    }
 
+                    break;
+                case "customers":
+                    try {
+                        customerData.setNumberOfOrders(Integer.parseInt(textField1.getText()));
+                        if (customerData.getNumberOfOrders() >= 0) {
+                            valid = true;
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                    "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                                    dialogStage, "ERROR");
+                        }
+                    } catch (NumberFormatException e) {
+                        valid = false;
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле количество должно быть число",
+                                dialogStage, "ERROR");
+                    }
+
+                    break;
             }
         }
         return valid;
@@ -161,6 +196,11 @@ public class SearchWindowController implements Handler{
     private void setData(ProductInStock productInStock){
         if(textField.getText()!=null&& textField.getText().length()!=0){
             productInStock.setName(textField.getText());
+        }
+    }
+    private void setData(CustomerData customerData){
+        if(textField.getText()!=null&& textField.getText().length()!=0){
+            customerData.setName(textField.getText());
         }
     }
 
@@ -221,6 +261,18 @@ public class SearchWindowController implements Handler{
                             productsInStockData.addAll(productInStockMap.values());
                             productInStockTable.refresh();
                             productInStockTable.setItems(productsInStockData);
+                        }
+                        else noData=true;
+                        break;
+                    case "customers":
+                        setData(customerData);
+                        ConcurrentHashMap<Integer, CustomerData> customerDataMap = (ConcurrentHashMap<Integer, CustomerData>) CommandProvider.
+                                getCommandProvider().getCommand("FIND_ALL_CUSTOMERS_DATA_BY_NAME_AND_NUMBER_OF_ORDERS").execute(customerData);
+                        if(customerDataMap.size()!=0) {
+                            customersData.clear();
+                            customersData.addAll(customerDataMap.values());
+                            customerTable.refresh();
+                            customerTable.setItems(customersData);
                         }
                         else noData=true;
                         break;

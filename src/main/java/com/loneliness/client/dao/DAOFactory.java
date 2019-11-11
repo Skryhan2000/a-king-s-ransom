@@ -8,6 +8,7 @@ public class DAOFactory {
     private final ServerProviderRequest providerDAO=new ServerProviderRequest();
     private final ServerOrderRequest orderRequest=new ServerOrderRequest();
     private final ServerProductInStockRequest productInStockRequest=new ServerProductInStockRequest();
+    private final ServerCustomerDataRequest customerDataRequest=new ServerCustomerDataRequest();
     public static DAOFactory getInstance() {
         return instance;
     }
@@ -23,6 +24,11 @@ public class DAOFactory {
     public ServerProductInStockRequest getProductInStockRequest() {
         return productInStockRequest;
     }
+
+    public ServerCustomerDataRequest getCustomerDataRequest() {
+        return customerDataRequest;
+    }
+
     public ServerOrderRequest getOrderRequest() {
         return orderRequest;
     }

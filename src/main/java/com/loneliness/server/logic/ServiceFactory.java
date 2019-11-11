@@ -9,6 +9,7 @@ public class ServiceFactory {
     private final ProviderServiceImpl providerService=new ProviderServiceImpl();
     private final OrderServiceImpl orderService=new OrderServiceImpl();
     private final ProductInStockServiceImpl productInStockService = new ProductInStockServiceImpl();
+    private final CustomerDataServiceImpl customerDataService=new CustomerDataServiceImpl();
 
     public static ServiceFactory getInstance() {
         return instance;
@@ -28,5 +29,9 @@ public class ServiceFactory {
 
     public ProductInStockServiceImpl getProductInStockService() {
         return productInStockService;
+    }
+
+    public CustomerDataServiceImpl getCustomerDataService() {
+        return customerDataService;
     }
 }

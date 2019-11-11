@@ -4,10 +4,7 @@ import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,8 +20,8 @@ public class SQLOrderDAO implements CRUD{
                 ((OrderData) orderData).getStatus()+ "','" +
                 ((OrderData) orderData).getPayment().toString()+
                 "');";
-        try {
-            PreparedStatement preparedStatement = DataBaseConnection.getInstance().getConnection().prepareStatement(sql);
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -35,13 +32,13 @@ public class SQLOrderDAO implements CRUD{
 
     @Override
     public Object read(Object  orderData) {
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql;
             OrderData order=new OrderData();
             sql = "SELECT * FROM orders WHERE id = '" + ((OrderData) orderData).getId() + "';";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 order.setId(resultSet.getInt("ID"));
@@ -64,9 +61,9 @@ public class SQLOrderDAO implements CRUD{
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
 
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
 
             String sql  = "SELECT * FROM orders WHERE id = '" + ((OrderData) orderData).getId() + "';";
             resultSet = statement.executeQuery(sql);
@@ -97,9 +94,9 @@ public class SQLOrderDAO implements CRUD{
 
     @Override
     public boolean delete(Object orderData) {
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             String sql="DELETE FROM orders WHERE id = '"+((OrderData) orderData).getId()+"';";
-            Statement statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
             }
@@ -114,11 +111,11 @@ public class SQLOrderDAO implements CRUD{
     @Override
     public Object receiveAll() {
         ConcurrentHashMap<Integer,OrderData> data=new ConcurrentHashMap<>();
-        try {
+        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             OrderData order;
             while ( resultSet.next()){
@@ -142,11 +139,11 @@ public class SQLOrderDAO implements CRUD{
     @Override
     public Object receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             OrderData order;
             while (resultSet.next()) {
@@ -170,7 +167,7 @@ public class SQLOrderDAO implements CRUD{
     public  ConcurrentHashMap<Integer,OrderData> findAllByDateOfCompletionAndStatus(OrderData orderDataToFind){
         ConcurrentHashMap<Integer,OrderData> data=new ConcurrentHashMap<>();
         OrderData order;
-        try {
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders ";
@@ -189,7 +186,7 @@ public class SQLOrderDAO implements CRUD{
 
             }
             sql+=";";
-            statement = DataBaseConnection.getInstance().getConnection().createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while ( resultSet.next()){
                 order=new OrderData();

@@ -1,6 +1,8 @@
 package com.loneliness.client.controller;
 
 
+
+import com.loneliness.client.controller.command_impl.customer_command.*;
 import com.loneliness.client.controller.command_impl.product_in_stock_command.*;
 import com.loneliness.client.controller.command_impl.validation_command.*;
 import com.loneliness.client.controller.command_impl.WrongRequest;
@@ -57,6 +59,13 @@ public class CommandProvider {
         repository.put(CommandName.PRODUCT_IN_STOCK_VALIDATION,new ProductInStockValidation());
 
         repository.put(CommandName.CUSTOMER_DATA_VALIDATION,new CustomerDataValidation());
+        repository.put(CommandName.CREATE_CUSTOMER_DATA,new CreateCustomerData());
+        repository.put(CommandName.DELETE_CUSTOMER_DATA,new DeleteCustomerData());
+        repository.put(CommandName.FIND_ALL_CUSTOMERS_DATA_BY_NAME_AND_NUMBER_OF_ORDERS,new FindAllCustomersDataByNameAndNumberOfOrders());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA,new ReceiveAllCustomersData());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT,new ReceiveAllCustomersDataInLimit());
+        repository.put(CommandName.RECEIVE_CUSTOMER_DATA,new ReceiveCustomerData());
+        repository.put(CommandName.UPDATE_CUSTOMER_DATA,new UpdateCustomerData());
     }
 
     public Map<CommandName, Command> getRepository() {

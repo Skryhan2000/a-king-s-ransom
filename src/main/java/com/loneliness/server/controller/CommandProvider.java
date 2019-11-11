@@ -4,7 +4,9 @@ package com.loneliness.server.controller;
 
 
 
+import com.loneliness.server.controller.command_impl.customer_command.*;
 import com.loneliness.server.controller.command_impl.order_command.*;
+import com.loneliness.server.controller.command_impl.order_command.UpdateOrder;
 import com.loneliness.server.controller.command_impl.product_in_stock_command.*;
 import com.loneliness.server.controller.command_impl.provider_command.*;
 import com.loneliness.server.controller.command_impl.server_command.ShutDown;
@@ -53,6 +55,14 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_PRODUCT_IN_STOCK,new ReceiveAllProductInStock());
         repository.put(CommandName.RECEIVE_PRODUCT_IN_STOCK,new ReceiveProductInStock());
         repository.put(CommandName.UPDATE_PRODUCT_IN_STOCK,new UpdateProductInStock());
+
+        repository.put(CommandName.CREATE_CUSTOMER_DATA,new CreateCustomerData());
+        repository.put(CommandName.DELETE_CUSTOMER_DATA,new DeleteCustomerData());
+        repository.put(CommandName.FIND_ALL_CUSTOMERS_DATA_BY_NAME_AND_NUMBER_OF_ORDERS,new FindAllCustomersDataByNameAndNumberOfOrders());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA,new ReceiveAllCustomersData());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT,new ReceiveAllCustomersDataInLimit());
+        repository.put(CommandName.RECEIVE_CUSTOMER_DATA,new ReceiveCustomerData());
+        repository.put(CommandName.UPDATE_CUSTOMER_DATA,new UpdateCustomerData());
     }
 
 

@@ -5,6 +5,7 @@ import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.client.view.ViewException;
+import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
@@ -75,6 +76,15 @@ public class AdminStartWindowController implements CRUD_Controller {
     @FXML private TableColumn<ProductInStock, Integer> productInStockQuantityColumn;
     private ObservableList<ProductInStock> productsInStockData = FXCollections.observableArrayList();
 
+    @FXML private Text customerName;
+    @FXML private Text customerQuantityOfOrders;
+    @FXML private Text customerLocation;
+    @FXML private Text customerEmail;
+    @FXML private TableView<CustomerData> customerTable;
+    @FXML private TableColumn<CustomerData, String> customerNameColumn;
+    @FXML private TableColumn<CustomerData, Integer> customerQuantityColumn;
+    private ObservableList<CustomerData> customersData = FXCollections.observableArrayList();
+
     @FXML
     private void setDataTypeUsers() {
         if (dataType != null) {
@@ -124,6 +134,18 @@ public class AdminStartWindowController implements CRUD_Controller {
     }
 
     @FXML
+    private void setDataTypeCustomers(){
+        if(dataType!=null) {
+            if (!dataType.equals("customers")) {
+                dataType = "customers";
+                indexOfCurrentValue[0] = 0;
+                indexOfCurrentValue[1] = 20;
+                initialize();
+            }
+        }
+    }
+
+    @FXML
     private void addTwentyNode() {
         indexOfCurrentValue[0] += 20;
         indexOfCurrentValue[1] += 20;
@@ -154,8 +176,12 @@ public class AdminStartWindowController implements CRUD_Controller {
         return ordersData;
     }
     public ObservableList<ProductInStock> setAndGetProductsInStock(ConcurrentHashMap<Integer, ProductInStock> map) {
-        productsInStockData .addAll(map.values());
+        productsInStockData.addAll(map.values());
         return productsInStockData ;
+    }
+    public ObservableList<CustomerData> setAndGetCustomerData(ConcurrentHashMap<Integer, CustomerData> map){
+        customersData.addAll(map.values());
+        return customersData;
     }
 
     private void fillText(UserData userData) {
@@ -219,6 +245,19 @@ public class AdminStartWindowController implements CRUD_Controller {
             productInStockProviderId.setText(String.valueOf(productInStock.getProvider_ID()));
         }
     }
+    private void fillText(CustomerData customerData){
+        if(customerData==null) {
+            customerName.setText("");
+            customerQuantityOfOrders.setText("");
+            customerLocation.setText("");
+            customerEmail.setText("");
+        }else {
+            customerName.setText(customerData.getName());
+            customerQuantityOfOrders.setText(String.valueOf(customerData.getNumberOfOrders()));
+            customerLocation.setText(customerData.getLocation());
+            customerEmail.setText(customerData.getEmail());
+        }
+    }
 
     @Override
     public boolean update() {
@@ -265,6 +304,15 @@ public class AdminStartWindowController implements CRUD_Controller {
                             .execute(transmission));
                     productInStockTable.refresh();
                     productInStockTable.setItems( productsInStockData);
+                    return true;
+                case "customers":
+                    customersData.clear();
+                    transmission.setCommand("RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT");
+                    setAndGetCustomerData((ConcurrentHashMap<Integer, CustomerData>)CommandProvider.
+                            getCommandProvider().getCommand("RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT")
+                            .execute(transmission));
+                    customerTable.refresh();
+                    customerTable.setItems(customersData);
                     return true;
 
             }
@@ -327,6 +375,17 @@ public class AdminStartWindowController implements CRUD_Controller {
                 ProductInStock productInStock = null;
                 fillText(productInStock);
                 break;
+            case "customers":
+                customerTable.getSelectionModel().selectedItemProperty().addListener((
+                        (observableValue, CustomerData, newCustomerData) -> fillText(newCustomerData)));
+
+                customerNameColumn.setCellValueFactory(customerDataStringCellDataFeatures  ->
+                        customerDataStringCellDataFeatures.getValue().nameStringProperty());
+                customerQuantityColumn.setCellValueFactory(customerDataIntegerCellDataFeatures ->
+                        customerDataIntegerCellDataFeatures.getValue().numberOfOrdersIntegerProperty().asObject());
+                CustomerData customerData=null;
+                fillText(customerData);
+                break;
         }
         update();
     }
@@ -353,6 +412,10 @@ public class AdminStartWindowController implements CRUD_Controller {
                             return controller.isOkClicked();
                         case "product_in_stock":
                             controller.setDialogStageProductInStock(dialogStage, productInStockTable, productsInStockData, dataType);
+                            dialogStage.showAndWait();
+                            return controller.isOkClicked();
+                        case "customers":
+                            controller.setDialogCustomerData(dialogStage, customerTable, customersData, dataType);
                             dialogStage.showAndWait();
                             return controller.isOkClicked();
 
@@ -402,11 +465,19 @@ public class AdminStartWindowController implements CRUD_Controller {
                     changeProductInStockController.setDialogStage(dialogStage, "create");
                     dialogStage.showAndWait();
                     return changeProductInStockController.isOkClicked();
+                case "customers":
+                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                            getChangeCustomerData(), "Добавления данных");
+                    ChangeCustomerDataController changeCustomerDataController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                    changeCustomerDataController.setData(new CustomerData());
+                    changeCustomerDataController.setDialogStage(dialogStage, "create");
+                    dialogStage.showAndWait();
+                    return  changeCustomerDataController.isOkClicked();
 
             }
         } catch (ViewException e) {
             WorkWithAlert.getInstance().showAlert("Добавления данных",
-                    "Поиск невозможен", "Что то пошло не так",
+                    "Добавление невозможено", "Что то пошло не так",
                     this.dialogStage, "ERROR");
         }
         return false;
@@ -528,6 +599,34 @@ public class AdminStartWindowController implements CRUD_Controller {
                             this.dialogStage, "ERROR");
                 }
                 break;
+            case "customers":
+                selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    try {
+                       CustomerData customerData=new CustomerData();
+                        customerData.setId(customersData.get(selectedIndex).getId());
+                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData)) {
+                            customerTable.getItems().remove(selectedIndex);
+                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
+                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
+                                    "Удаление невозможен", "Что то пошло не так",
+                                    this.dialogStage, "ERROR");
+                        }
+                    } catch (ControllerException e) {
+                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                                this.dialogStage, "ERROR");
+                    }
+
+                } else {
+                    // Ничего не выбрано.
+                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                            "Удаление невозможно", "Выберите пользователя для удаления",
+                            this.dialogStage, "ERROR");
+                }
+                break;
         }
         return false;
     }
@@ -584,6 +683,18 @@ public class AdminStartWindowController implements CRUD_Controller {
                         changeProductInStockController.setDialogStage(dialogStage, "update");
                         dialogStage.showAndWait();
                         return changeProductInStockController.isOkClicked();
+                    }
+                    return false;
+                case "customers":
+                    CustomerData customerData= getSelectedCustomersModel();
+                    if (customerData!= null) {
+                        dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                                getChangeCustomerData(), "Добавления данных");
+                        ChangeCustomerDataController changeCustomerDataController = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                        changeCustomerDataController.setData(customerData);
+                        changeCustomerDataController.setDialogStage(dialogStage, "update");
+                        dialogStage.showAndWait();
+                        return changeCustomerDataController.isOkClicked();
                     }
                     return false;
             }
@@ -654,6 +765,17 @@ public class AdminStartWindowController implements CRUD_Controller {
             return null;
         } else {
             return selectedProductInStock;
+        }
+    }
+    private CustomerData getSelectedCustomersModel() {
+        CustomerData selectedCustomer=customerTable.getSelectionModel().getSelectedItem();
+        if (selectedCustomer == null) {
+            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
+                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
+                    this.dialogStage, "ERROR");
+            return null;
+        } else {
+            return selectedCustomer;
         }
     }
 }

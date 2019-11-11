@@ -223,18 +223,18 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Заказчики">
+            <Tab onSelectionChanged="#setDataTypeCustomers" text="Заказчики">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <SplitPane dividerPositions="0.41304347826086957" layoutX="75.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.3411371237458194" layoutX="75.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <items>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <TableView prefHeight="288.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="customerTable" prefHeight="288.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn prefWidth="80.79995423555374" text="Имя" />
-                                        <TableColumn prefWidth="181.6000518798828" text="Количество заказов" />
+                                        <TableColumn fx:id="customerNameColumn" prefWidth="78.0" text="Имя" />
+                                        <TableColumn fx:id="customerQuantityColumn" prefWidth="122.0" text="Количество заказов" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -257,10 +257,10 @@
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Кол-во заказов" GridPane.rowIndex="1" />
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Местоположение" GridPane.rowIndex="2" />
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="email" GridPane.rowIndex="3" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Text fx:id="customerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
+                                          <Text fx:id="customerQuantityOfOrders" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Text fx:id="customerLocation" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Text fx:id="customerEmail" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                        </children>
                                     </GridPane>
                                  </children>

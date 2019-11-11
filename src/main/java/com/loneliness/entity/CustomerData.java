@@ -5,15 +5,24 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class CustomerData implements Serializable {
     private static final long serialVersionUID=4L;
     private int id;
+    @NotNull(message = "Должен быть задано имя поставщика. ")
     private String name;
+    @NotNull(message = "Задайте количество заказов. ")
+    @Positive(message = "Число заказов должно быть положительно. ")
     private int numberOfOrders;
+    @NotNull(message = "Должен быть задано местоположение. ")
     private String location;
+    @NotNull(message = "Введите эл.почту ")
+    @Email(message = "Почта введена неверно ")
     private String email;
     private transient StringProperty nameString;
     private transient IntegerProperty numberOfOrdersInteger;
@@ -88,10 +97,16 @@ public class CustomerData implements Serializable {
     }
 
     public String getNameString() {
+        if (nameString==null) {
+            nameString = new SimpleStringProperty(name);
+        }
         return nameString.get();
     }
 
     public StringProperty nameStringProperty() {
+        if(nameString==null){
+            nameString = new SimpleStringProperty(name);
+        }
         return nameString;
     }
 
@@ -104,6 +119,9 @@ public class CustomerData implements Serializable {
     }
 
     public IntegerProperty numberOfOrdersIntegerProperty() {
+        if(numberOfOrdersInteger==null){
+            numberOfOrdersInteger=new SimpleIntegerProperty(numberOfOrders);
+        }
         return numberOfOrdersInteger;
     }
 
