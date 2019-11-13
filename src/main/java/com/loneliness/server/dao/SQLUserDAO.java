@@ -8,32 +8,39 @@ import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLUserDAO implements CRUD{
+public class SQLUserDAO implements CRUD<UserData>{
+    private UserData getDataFromResultSet(ResultSet resultSet) throws SQLException {
+            UserData userData = new UserData();
+            userData.setId(resultSet.getInt("id"));
+            userData.setLogin(resultSet.getString("login"));
+            userData.setPassword(resultSet.getString("password"));
+            userData.setType(resultSet.getString("type"));
+            userData.setSecretAnswer(resultSet.getString("secret_answer"));
+            userData.setSecretQuestion(resultSet.getString("secret_question"));
+            return userData;
+        }
     @Override
-    public boolean create(Object user) {
+    public boolean create(UserData user) {
         String sql;
-        switch (((UserData)user).getType()) {
-
-            case CLIENT:
-                sql="BEGIN; INSERT Users (login , password , type, secret_answer, secret_question) " +
-                "VALUES ('" +
-                        ((UserData) user).getLogin() + "','" +
-                        ((UserData) user).getPassword() + "','" +
-                        ((UserData) user).getType().toString() + "','" +
-                        ((UserData) user).getSecretAnswer() + "','" +
-                        ((UserData) user).getSecretQuestion() + "'); "+
-                        "INSERT INTO customer_representative (customer_id,user_id) VALUES("+
-                        ((UserData) user).getType().getCompanyID()+
-                        ",LAST_INSERT_ID()); COMMIT;";
-                break;
-            default:
-                sql = "INSERT Users (login , password , type, secret_answer, secret_question) " +
-                        "VALUES ('" +
-                        ((UserData) user).getLogin() + "','" +
-                        ((UserData) user).getPassword() + "','" +
-                        ((UserData) user).getType().toString() + "','" +
-                        ((UserData) user).getSecretAnswer() + "','" +
-                        ((UserData) user).getSecretQuestion() + "');";
+        if (user.getType() == UserData.Type.CLIENT) {
+            sql = "BEGIN; INSERT Users (login , password , type, secret_answer, secret_question) " +
+                    "VALUES ('" +
+                    user.getLogin() + "','" +
+                    user.getPassword() + "','" +
+                    user.getType().toString() + "','" +
+                    user.getSecretAnswer() + "','" +
+                    user.getSecretQuestion() + "'); " +
+                    "INSERT INTO customer_representative (customer_id,user_id) VALUES(" +
+                    user.getType().getCompanyID() +
+                    ",LAST_INSERT_ID()); COMMIT;";
+        } else {
+            sql = "INSERT Users (login , password , type, secret_answer, secret_question) " +
+                    "VALUES ('" +
+                    user.getLogin() + "','" +
+                    user.getPassword() + "','" +
+                    user.getType().toString() + "','" +
+                    user.getSecretAnswer() + "','" +
+                    user.getSecretQuestion() + "');";
         }
 
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
@@ -47,7 +54,7 @@ public class SQLUserDAO implements CRUD{
     }
 
     @Override
-    public UserData read(Object user) {
+    public UserData read(UserData user) {
         UserData userData=new UserData();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
@@ -63,13 +70,7 @@ public class SQLUserDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
 
             if( resultSet.next()){
-                userData.setId(resultSet.getInt("id"));
-                userData.setLogin(resultSet.getString("login"));
-                userData.setType(resultSet.getString("type"));
-                userData.setSecretAnswer(resultSet.getString("secret_answer"));
-                userData.setSecretQuestion(resultSet.getString("secret_question"));
-
-                return userData;
+                return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,7 +79,7 @@ public class SQLUserDAO implements CRUD{
     }
 
     @Override
-    public boolean update(Object user) {
+    public boolean update(UserData user) {
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -86,16 +87,16 @@ public class SQLUserDAO implements CRUD{
 
             statement = connection.createStatement();
 
-            String sql = "SELECT * FROM Users WHERE id = " + ((UserData)user).getId() + ";";
+            String sql = "SELECT * FROM Users WHERE id = " + user.getId() + ";";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 sql = "UPDATE users SET " +
-                        "login='" + ((UserData)user).getLogin() + "'," +
-                        "password='" + ((UserData)user).getPassword() + "'," +
-                        "type='" + ((UserData)user).getType().toString() + "'," +
-                        "secret_answer='" + ((UserData)user).getSecretAnswer() + "'," +
-                        "secret_question='" + ((UserData)user).getSecretQuestion() + "' " +
-                        "WHERE ID=" + ((UserData)user).getId() + ";";
+                        "login='" + user.getLogin() + "'," +
+                        "password='" + user.getPassword() + "'," +
+                        "type='" + user.getType().toString() + "'," +
+                        "secret_answer='" + user.getSecretAnswer() + "'," +
+                        "secret_question='" + user.getSecretQuestion() + "' " +
+                        "WHERE ID=" + user.getId() + ";";
                 try {
                     return statement.executeUpdate(sql) == 1;
 
@@ -114,9 +115,9 @@ public class SQLUserDAO implements CRUD{
     }
 
     @Override
-    public boolean delete(Object user) {
+    public boolean delete(UserData user) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
-            String sql="DELETE FROM Users WHERE id = '"+((UserData)user).getId()+"';";
+            String sql="DELETE FROM Users WHERE id = '"+user.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
@@ -145,6 +146,7 @@ public class SQLUserDAO implements CRUD{
         }
         return UserData.Type.valueOf("NO_TYPE");
     }
+
     @Override
     public Map<Integer,UserData> receiveAll(){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
@@ -156,13 +158,7 @@ public class SQLUserDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
             UserData userData;
         while ( resultSet.next()){
-            userData=new UserData();
-            userData.setId(resultSet.getInt("id"));
-            userData.setLogin(resultSet.getString("login"));
-            userData.setPassword(resultSet.getString("password"));
-            userData.setType(resultSet.getString("type"));
-            userData.setSecretAnswer(resultSet.getString("secret_answer"));
-            userData.setSecretQuestion(resultSet.getString("secret_question"));
+            userData=getDataFromResultSet(resultSet);
             data.put(userData.getId(),userData);
         }
         return data;
@@ -183,14 +179,8 @@ public class SQLUserDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
             UserData userData;
             while (resultSet.next()) {
-                userData = new UserData();
-                userData.setId(resultSet.getInt("id"));
-                userData.setLogin(resultSet.getString("login"));
-                userData.setPassword(resultSet.getString("password"));
-                userData.setType(resultSet.getString("type"));
-                userData.setSecretAnswer(resultSet.getString("secret_answer"));
-                userData.setSecretQuestion(resultSet.getString("secret_question"));
-                data.put(userData.getId(), userData);
+                userData=getDataFromResultSet(resultSet);
+                data.put(userData.getId(),userData);
             }
             return data;
         } catch (SQLException e) {
@@ -223,14 +213,15 @@ public class SQLUserDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
             UserData userData;
             while ( resultSet.next()){
-                userData=new UserData();
-                userData.setId(resultSet.getInt("id"));
-                userData.setLogin(resultSet.getString("login"));
-                userData.setPassword(resultSet.getString("password"));
-                userData.setType(resultSet.getString("type"));
-                userData.setSecretAnswer(resultSet.getString("secret_answer"));
-                userData.setSecretQuestion(resultSet.getString("secret_question"));
+                userData=getDataFromResultSet(resultSet);
                 data.put(userData.getId(),userData);
+//                userData.setId(resultSet.getInt("id"));
+//                userData.setLogin(resultSet.getString("login"));
+//                userData.setPassword(resultSet.getString("password"));
+//                userData.setType(resultSet.getString("type"));
+//                userData.setSecretAnswer(resultSet.getString("secret_answer"));
+//                userData.setSecretQuestion(resultSet.getString("secret_question"));
+//                data.put(userData.getId(),userData);
             }
             return data;
         } catch (SQLException e) {

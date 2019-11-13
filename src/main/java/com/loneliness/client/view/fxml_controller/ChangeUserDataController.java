@@ -55,13 +55,13 @@ public class ChangeUserDataController implements Handler {
 
     private String getType() {
         if (admin.isSelected()) {
-            return "admin";
+            return "ADMIN";
         } else if (client.isSelected()) {
-            return "client";
+            return "CLIENT";
         } else if (manager.isSelected()) {
-            return "manager";
+            return "MANAGER";
         } else if (noType.isSelected()) {
-            return "noType";
+            return "NO_TYPE";
         } else return "err";
     }
 

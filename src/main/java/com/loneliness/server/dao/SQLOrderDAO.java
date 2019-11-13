@@ -1,5 +1,6 @@
 package com.loneliness.server.dao;
 
+import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.orders.OrderCustomerData;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
@@ -7,18 +8,31 @@ import com.loneliness.entity.transmission.Transmission;
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLOrderDAO implements CRUD{
+public class SQLOrderDAO implements CRUD<OrderData>{
+    private OrderData getDataFromResultSet(ResultSet resultSet) throws SQLException {
+        OrderData order=new OrderData();
+        order.setId(resultSet.getInt("ID"));
+        order.setCustomerId(resultSet.getInt("customer_ID"));
+        order.setOrderName(resultSet.getString("order_name"));
+        order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
+        order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
+        order.setStatus(resultSet.getString("status"));
+        order.setPayment(resultSet.getString("payment"));
+        order.setManagerID(resultSet.getInt("manager_ID"));
+        return order;
+    }
+
     @Override
-    public boolean create(Object  orderData) {
+    public boolean create(OrderData  orderData) {
         String sql = "INSERT orders ( customer_ID, order_name , date_of_receiving, date_of_completion, status, payment ,manager_ID ) " +
                 "VALUES ('" +
-                ((OrderData) orderData).getCustomerId() + "','" +
-                ((OrderData) orderData).getOrderName() + "','" +
-                ((OrderData) orderData).getDateOfReceiving() + "','" +
-                ((OrderData) orderData).getDateOfCompletion() + "','" +
-                ((OrderData) orderData).getStatus()+ "','" +
-                ((OrderData) orderData).getPayment().toString()+"','" +
-                ((OrderData) orderData).getManagerID()+
+                orderData.getCustomerId() + "','" +
+                orderData.getOrderName() + "','" +
+                orderData.getDateOfReceiving() + "','" +
+                orderData.getDateOfCompletion() + "','" +
+                orderData.getStatus()+ "','" +
+                orderData.getPayment().toString()+"','" +
+                orderData.getManagerID()+
                 "');";
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -31,25 +45,16 @@ public class SQLOrderDAO implements CRUD{
     }
 
     @Override
-    public Object read(Object  orderData) {
+    public Object read(OrderData  orderData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql;
-            OrderData order=new OrderData();
-            sql = "SELECT * FROM orders WHERE id = '" + ((OrderData) orderData).getId() + "';";
+            sql = "SELECT * FROM orders WHERE id = '" + orderData.getId() + "';";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("customer_ID"));
-                order.setOrderName(resultSet.getString("order_name"));
-                order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
-                order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
-                order.setStatus(resultSet.getString("status"));
-                order.setPayment(resultSet.getString("payment"));
-                order.setManagerID(resultSet.getInt("manager_ID"));
-                return order;
+                return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +63,7 @@ public class SQLOrderDAO implements CRUD{
     }
 
     @Override
-    public boolean update(Object orderData) {
+    public boolean update(OrderData orderData) {
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -66,18 +71,18 @@ public class SQLOrderDAO implements CRUD{
 
             statement = connection.createStatement();
 
-            String sql  = "SELECT * FROM orders WHERE id = '" + ((OrderData) orderData).getId() + "';";
+            String sql  = "SELECT * FROM orders WHERE id = '" + orderData.getId() + "';";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 sql = "UPDATE orders SET " +
-                        "customer_ID ='" + ((OrderData) orderData).getCustomerId() + "'," +
-                        "order_name ='" + ((OrderData) orderData).getOrderName() + "'," +
-                        "date_of_receiving ='" +((OrderData) orderData).getDateOfReceiving() + "'," +
-                        "date_of_completion ='" +((OrderData) orderData).getDateOfCompletion() + "' ," +
-                        "status ='" +((OrderData) orderData).getStatus()+ "' ," +
-                        "payment ='" +((OrderData) orderData).getPayment().toString()+"' ," +
-                        "manager_ID = '"+((OrderData) orderData).getManagerID()+"' "+
-                        "WHERE ID = " + ((OrderData) orderData).getId() + " ;";
+                        "customer_ID ='" + orderData.getCustomerId() + "'," +
+                        "order_name ='" + orderData.getOrderName() + "'," +
+                        "date_of_receiving ='" + orderData.getDateOfReceiving() + "'," +
+                        "date_of_completion ='" + orderData.getDateOfCompletion() + "' ," +
+                        "status ='" + orderData.getStatus()+ "' ," +
+                        "payment ='" + orderData.getPayment().toString()+"' ," +
+                        "manager_ID = '"+ orderData.getManagerID()+"' "+
+                        "WHERE ID = " + orderData.getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
                 } catch (SQLException e) {
@@ -95,9 +100,9 @@ public class SQLOrderDAO implements CRUD{
     }
 
     @Override
-    public boolean delete(Object orderData) {
+    public boolean delete(OrderData orderData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
-            String sql="DELETE FROM orders WHERE id = '"+((OrderData) orderData).getId()+"';";
+            String sql="DELETE FROM orders WHERE id = '"+ orderData.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
@@ -121,15 +126,7 @@ public class SQLOrderDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
             OrderData order;
             while ( resultSet.next()){
-                order=new OrderData();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("customer_ID"));
-                order.setOrderName(resultSet.getString("order_name"));
-                order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
-                order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
-                order.setStatus(resultSet.getString("status"));
-                order.setPayment(resultSet.getString("payment"));
-                order.setManagerID(resultSet.getInt("manager_ID"));
+                order=getDataFromResultSet(resultSet);
                 data.put(order.getId(),order);
             }
             return data;
@@ -186,15 +183,7 @@ public class SQLOrderDAO implements CRUD{
             resultSet = statement.executeQuery(sql);
             OrderData order;
             while (resultSet.next()) {
-                order=new OrderData();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("customer_ID"));
-                order.setOrderName(resultSet.getString("order_name"));
-                order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
-                order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
-                order.setStatus(resultSet.getString("status"));
-                order.setPayment(resultSet.getString("payment"));
-                order.setManagerID(resultSet.getInt("manager_ID"));
+                order=getDataFromResultSet(resultSet);
                 data.put(order.getId(),order);
             }
             return data;
@@ -230,15 +219,7 @@ public class SQLOrderDAO implements CRUD{
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while ( resultSet.next()){
-                order=new OrderData();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("customer_ID"));
-                order.setOrderName(resultSet.getString("order_name"));
-                order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
-                order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
-                order.setStatus(resultSet.getString("status"));
-                order.setPayment(resultSet.getString("payment"));
-                order.setManagerID(resultSet.getInt("manager_ID"));
+                order=getDataFromResultSet(resultSet);
                 data.put(order.getId(),order);
             }
             return data;

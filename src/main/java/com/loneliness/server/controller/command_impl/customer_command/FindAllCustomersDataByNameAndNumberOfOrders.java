@@ -3,12 +3,13 @@ package com.loneliness.server.controller.command_impl.customer_command;
 
 
 
+import com.loneliness.entity.CustomerData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindAllCustomersDataByNameAndNumberOfOrders implements Command {
+public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData> {
     @Override
-    public Object execute(Object request)  {
+    public Object execute(CustomerData request)  {
             return ServiceFactory.getInstance().getCustomerDataService().findAllByNameAndNumberOfOrders(request);
     }
 }

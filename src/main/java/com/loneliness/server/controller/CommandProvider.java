@@ -4,6 +4,7 @@ package com.loneliness.server.controller;
 
 
 
+import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.command_impl.customer_command.*;
 import com.loneliness.server.controller.command_impl.order_command.*;
 import com.loneliness.server.controller.command_impl.order_command.UpdateOrder;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
-    private final Map<CommandName, Command> repository = new HashMap<>();
+    private final Map<CommandName, Command> repository = new HashMap();
     private static final CommandProvider commandProvider=new CommandProvider();
     private CommandProvider(){
         repository.put(CommandName.WRONG_REQUEST,new WrongRequest());

@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
@@ -22,6 +23,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 public class ManagerStartWindowController {
+
+
+
 
     @FXML
     private Stage dialogStage;
@@ -68,6 +72,33 @@ public class ManagerStartWindowController {
     @FXML private TableColumn<CustomerData, Integer> customerQuantityColumn;
     private ObservableList<CustomerData> customersData = FXCollections.observableArrayList();
 
+    @FXML private void searchForBurningOrders(){
+        // TODO: 13.11.2019 вывод заказов о окошке дата сдачи которых меньше 1 недели
+    }
+    @FXML private void orderCostCalculation(){
+        // TODO: 13.11.2019 открытие окна со всеми задазами с подсчетом суммы каждого заказчика, заказа и общей суммы всех заказов
+    }
+    @FXML private void takeInventory(){
+        // TODO: 13.11.2019 придумать норм функционал, как вариант писмо админу о просьбе о инвентаризации
+    }
+    @FXML private void searchForTheBestSupplier(){
+        // TODO: 13.11.2019 поиск поставшика на основе рейтинга и локации, реализовать выбор весов
+    }
+    @FXML private void generateReport(){
+        // TODO: 13.11.2019 генерация отчета в текстовый файл/exel и кладем его в заранее заданную папку
+    }
+
+    @FXML private void printReport(){
+        // TODO: 13.11.2019 открытие базового средства обзора принтеров
+    }
+
+    @FXML private void productChart(){
+        // TODO: 13.11.2019 открытие в отдельном окне с возможностью работать с приложением парралельно графика товаров
+    }
+
+    @FXML private void supplierRatingChart(){
+        // TODO: 13.11.2019 открытие в отдельном окне с возможностью работать с приложением парралельно графика поставщиков
+    }
 
     @FXML
     private void setDataTypeProviders() {

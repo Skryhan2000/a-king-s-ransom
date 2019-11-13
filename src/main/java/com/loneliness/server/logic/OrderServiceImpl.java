@@ -4,7 +4,7 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class OrderServiceImpl implements Service{
+public class OrderServiceImpl implements Service<OrderData>{
     @Override
     public Object receiveAllElem() {
         return DAOFactory.getInstance().getOrderDAO().receiveAll();
@@ -15,30 +15,30 @@ public class OrderServiceImpl implements Service{
         return DAOFactory.getInstance().getOrderDAO().receiveAllInLimit((Transmission)obj);
     }
 
-    public Object findAllByDateOfCompletionAndStatus(Object obj){
-        return DAOFactory.getInstance().getOrderDAO().findAllByDateOfCompletionAndStatus((OrderData)obj);
+    public Object findAllByDateOfCompletionAndStatus(OrderData obj){
+        return DAOFactory.getInstance().getOrderDAO().findAllByDateOfCompletionAndStatus(obj);
     }
 
     @Override
-    public Object create(Object obj) {
+    public Object create(OrderData obj) {
         return DAOFactory.getInstance().getOrderDAO().create(obj);
     }
 
     @Override
-    public Object receive(Object obj) {
+    public Object receive(OrderData obj) {
         return DAOFactory.getInstance().getOrderDAO().read(obj);
     }
 
     @Override
-    public Object update(Object obj) {
+    public Object update(OrderData obj) {
         return DAOFactory.getInstance().getOrderDAO().update(obj);
     }
 
     @Override
-    public Object delete(Object obj) {
+    public Object delete(OrderData obj) {
         return DAOFactory.getInstance().getOrderDAO().delete(obj);
     }
 
-    public Object receiveAllCustomerOrderInLimit(Object obj){
-        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit((Transmission)obj);}
+    public Object receiveAllCustomerOrderInLimit(Transmission obj){
+        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit(obj);}
 }

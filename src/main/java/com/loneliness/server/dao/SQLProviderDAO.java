@@ -8,13 +8,24 @@ import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLProviderDAO implements CRUD {
+public class SQLProviderDAO implements CRUD<ProviderData> {
+
+    private ProviderData getDataFromResultSet(ResultSet resultSet) throws SQLException {
+        ProviderData providerData=new ProviderData();
+        providerData.setId(resultSet.getInt("ID"));
+        providerData.setName(resultSet.getString("name"));
+        providerData.setRating(resultSet.getInt("rating"));
+        providerData.setLocation(resultSet.getString("location"));
+        providerData.setEmail(resultSet.getString("email"));
+        return providerData;
+    }
+
     @Override
-    public boolean create(Object provider) {
+    public boolean create(ProviderData provider) {
         String sql = "INSERT providers (ID , name , rating, location, email ) " +
-                "VALUES ('" + ((ProviderData) provider).getId() + "','" + ((ProviderData) provider).getName() + "','" +
-                (((ProviderData) provider).getRating() + "','" + ((ProviderData) provider).getLocation()+ "','" +
-                        ((ProviderData) provider).getEmail() + "');");
+                "VALUES ('" + provider.getId() + "','" + provider.getName() + "','" +
+                (provider.getRating() + "','" + provider.getLocation()+ "','" +
+                        provider.getEmail() + "');");
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -26,22 +37,17 @@ public class SQLProviderDAO implements CRUD {
     }
 
     @Override
-    public Object read(Object provider) {
+    public Object read(ProviderData provider) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql;
-            sql = "SELECT * FROM providers WHERE id = '" + ((ProviderData) provider).getId() + "';";
+            sql = "SELECT * FROM providers WHERE id = '" + provider.getId() + "';";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-            ProviderData providerData = new ProviderData();
+            ProviderData providerData;
             if (resultSet.next()) {
-                providerData.setId(resultSet.getInt("ID"));
-                providerData.setName(resultSet.getString("name"));
-                providerData.setRating(resultSet.getInt("rating"));
-                providerData.setLocation(resultSet.getString("location"));
-                providerData.setEmail(resultSet.getString("email"));
-                return providerData;
+                return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,7 +56,7 @@ public class SQLProviderDAO implements CRUD {
     }
 
     @Override
-    public boolean update(Object provider) {
+    public boolean update(ProviderData provider) {
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -58,15 +64,15 @@ public class SQLProviderDAO implements CRUD {
 
             statement =connection.createStatement();
 
-            String sql = "SELECT * FROM providers WHERE id = " + ((ProviderData)provider).getId() + ";";
+            String sql = "SELECT * FROM providers WHERE id = " + provider.getId() + ";";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 sql = "UPDATE providers SET " +
-                        "name='" + ((ProviderData)provider).getName() + "'," +
-                        "rating='" + ((ProviderData)provider).getRating() + "'," +
-                        "location='" +((ProviderData)provider).getLocation() + "'," +
-                        "email='" +((ProviderData)provider).getEmail() + "' " +
-                        "WHERE ID = " + ((ProviderData)provider).getId() + " ;";
+                        "name='" + provider.getName() + "'," +
+                        "rating='" + provider.getRating() + "'," +
+                        "location='" +provider.getLocation() + "'," +
+                        "email='" +provider.getEmail() + "' " +
+                        "WHERE ID = " + provider.getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
 
@@ -85,9 +91,9 @@ public class SQLProviderDAO implements CRUD {
     }
 
     @Override
-    public boolean delete(Object provider) {
+    public boolean delete(ProviderData provider) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
-            String sql="DELETE FROM providers WHERE id = '"+((ProviderData)provider).getId()+"';";
+            String sql="DELETE FROM providers WHERE id = '"+provider.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
@@ -111,12 +117,7 @@ public class SQLProviderDAO implements CRUD {
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while ( resultSet.next()){
-                providerData=new ProviderData();
-                providerData.setId(resultSet.getInt("ID"));
-                providerData.setName(resultSet.getString("name"));
-                providerData.setRating(resultSet.getInt("rating"));
-                providerData.setLocation(resultSet.getString("location"));
-                providerData.setEmail(resultSet.getString("email"));
+                providerData=getDataFromResultSet(resultSet);
                 data.put(providerData.getId(),providerData);
             }
             return data;
@@ -137,12 +138,7 @@ public class SQLProviderDAO implements CRUD {
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while (resultSet.next()) {
-                providerData=new ProviderData();
-                providerData.setId(resultSet.getInt("ID"));
-                providerData.setName(resultSet.getString("name"));
-                providerData.setRating(resultSet.getInt("rating"));
-                providerData.setLocation(resultSet.getString("location"));
-                providerData.setEmail(resultSet.getString("email"));
+                providerData=getDataFromResultSet(resultSet);
                 data.put(providerData.getId(),providerData);
             }
             return data;
@@ -176,12 +172,7 @@ public class SQLProviderDAO implements CRUD {
             resultSet = statement.executeQuery(sql);
             ProviderData providerData;
             while ( resultSet.next()){
-                providerData=new ProviderData();
-                providerData.setId(resultSet.getInt("ID"));
-                providerData.setName(resultSet.getString("name"));
-                providerData.setRating(resultSet.getInt("rating"));
-                providerData.setLocation(resultSet.getString("location"));
-                providerData.setEmail(resultSet.getString("email"));
+                providerData=getDataFromResultSet(resultSet);
                 data.put(providerData.getId(),providerData);
             }
             return data;

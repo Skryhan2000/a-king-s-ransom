@@ -4,7 +4,7 @@ import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class CustomerDataServiceImpl implements Service{
+public class CustomerDataServiceImpl implements Service<CustomerData>{
     @Override
     public Object receiveAllElem() {
         return DAOFactory.getInstance().getCustomerDataDAO().receiveAll();
@@ -15,27 +15,27 @@ public class CustomerDataServiceImpl implements Service{
         return DAOFactory.getInstance().getCustomerDataDAO().receiveAllInLimit((Transmission)obj);
     }
 
-    public Object findAllByNameAndNumberOfOrders(Object obj){
-        return DAOFactory.getInstance().getCustomerDataDAO().findAllByNameAndNumberOfOrders((CustomerData) obj);
+    public Object findAllByNameAndNumberOfOrders(CustomerData obj){
+        return DAOFactory.getInstance().getCustomerDataDAO().findAllByNameAndNumberOfOrders(obj);
     }
 
     @Override
-    public Object create(Object obj) {
+    public Object create(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().create(obj);
     }
 
     @Override
-    public Object receive(Object obj) {
+    public Object receive(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().read(obj);
     }
 
     @Override
-    public Object update(Object obj) {
+    public Object update(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().update(obj);
     }
 
     @Override
-    public Object delete(Object obj) {
+    public Object delete(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().delete(obj);
     }
 }

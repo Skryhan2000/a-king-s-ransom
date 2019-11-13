@@ -3,12 +3,13 @@ package com.loneliness.server.controller.command_impl.provider_command;
 
 
 
+import com.loneliness.entity.ProviderData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindProviderByLocationAndRating implements Command {
+public class FindProviderByLocationAndRating implements Command<ProviderData> {
     @Override
-    public Object execute(Object request)  {
+    public Object execute(ProviderData request)  {
             return ServiceFactory.getInstance().getProviderService().findAllByLocationAndRating(request);
     }
 }

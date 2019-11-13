@@ -4,24 +4,24 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class ProviderServiceImpl implements Service{
+public class ProviderServiceImpl implements Service<ProviderData>{
     @Override
-    public Object create(Object obj) {
+    public Object create(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().create(obj);
     }
 
     @Override
-    public Object receive(Object obj) {
+    public Object receive(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().read(obj);
     }
 
     @Override
-    public Object update(Object obj) {
+    public Object update(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().update(obj);
     }
 
     @Override
-    public Object delete(Object obj) {
+    public Object delete(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().delete(obj);
     }
 
@@ -34,7 +34,7 @@ public class ProviderServiceImpl implements Service{
     public Object receiveAllElemInLimit(Object obj) {
         return DAOFactory.getInstance().getProviderDAO().receiveAllInLimit((Transmission) obj);
     }
-    public Object findAllByLocationAndRating(Object obj) {
-        return DAOFactory.getInstance().getProviderDAO().findAllByLocationAndRating((ProviderData) obj);
+    public Object findAllByLocationAndRating(ProviderData obj) {
+        return DAOFactory.getInstance().getProviderDAO().findAllByLocationAndRating( obj);
     }
 }

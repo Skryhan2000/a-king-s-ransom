@@ -1,20 +1,32 @@
 package com.loneliness.server.dao;
 
 import com.loneliness.entity.CustomerData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLCustomerDataDAO implements CRUD{
+public class SQLCustomerDataDAO implements CRUD<CustomerData>{
+
+    private CustomerData getDataFromResultSet(ResultSet resultSet) throws SQLException {
+        CustomerData customerData=new CustomerData();
+        customerData.setId(resultSet.getInt("ID"));
+        customerData.setName(resultSet.getString("name"));
+        customerData.setNumberOfOrders(resultSet.getInt("number_of_orders"));
+        customerData.setLocation(resultSet.getString("location"));
+        customerData.setEmail(resultSet.getString("email"));
+        return  customerData;
+    }
+
     @Override
-    public boolean create(Object  customerData) {
+    public boolean create(CustomerData  customerData) {
         String sql = "INSERT customers ( name, number_of_orders , location, email ) " +
                 "VALUES ('" +
-                ((CustomerData) customerData).getName() + "','" +
-                ((CustomerData) customerData).getNumberOfOrders() + "','" +
-                ((CustomerData) customerData).getLocation() + "','" +
-                ((CustomerData) customerData).getEmail() +
+                customerData.getName() + "','" +
+                customerData.getNumberOfOrders() + "','" +
+                customerData.getLocation() + "','" +
+                customerData.getEmail() +
                 "');";
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -27,22 +39,16 @@ public class SQLCustomerDataDAO implements CRUD{
     }
 
     @Override
-    public Object read(Object customerData) {
+    public Object read(CustomerData customerData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql;
-            CustomerData nCustomerData=new CustomerData();
-            sql = "SELECT * FROM customers  WHERE id = '" + ((CustomerData) customerData).getId() + "';";
+            sql = "SELECT * FROM customers  WHERE id = '" + customerData.getId() + "';";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                nCustomerData.setId(resultSet.getInt("ID"));
-                nCustomerData.setName(resultSet.getString("name"));
-                nCustomerData.setNumberOfOrders(resultSet.getInt("number_of_orders"));
-                nCustomerData.setLocation(resultSet.getString("location"));
-                nCustomerData.setEmail(resultSet.getString("email"));
-                return nCustomerData;
+                return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +57,7 @@ public class SQLCustomerDataDAO implements CRUD{
     }
 
     @Override
-    public boolean update(Object customerData) {
+    public boolean update(CustomerData customerData) {
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
@@ -59,15 +65,15 @@ public class SQLCustomerDataDAO implements CRUD{
 
             statement = connection.createStatement();
 
-            String sql  = "SELECT * FROM customers WHERE id = '" + ((CustomerData) customerData).getId() + "';";
+            String sql  = "SELECT * FROM customers WHERE id = '" + customerData.getId() + "';";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 sql = "UPDATE customers SET " +
-                        "name ='" + ((CustomerData) customerData).getName() + "'," +
-                        "number_of_orders ='" + ((CustomerData) customerData).getNumberOfOrders() + "'," +
-                        "location ='" +((CustomerData) customerData).getLocation() + "' ," +
-                        "email ='" +((CustomerData) customerData).getEmail()+ "' " +
-                        "WHERE id = " + ((CustomerData) customerData).getId() + " ;";
+                        "name ='" + customerData.getName() + "'," +
+                        "number_of_orders ='" + customerData.getNumberOfOrders() + "'," +
+                        "location ='" + customerData.getLocation() + "' ," +
+                        "email ='" + customerData.getEmail()+ "' " +
+                        "WHERE id = " + customerData.getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
                 } catch (SQLException e) {
@@ -85,9 +91,9 @@ public class SQLCustomerDataDAO implements CRUD{
     }
 
     @Override
-    public boolean delete(Object customerData) {
+    public boolean delete(CustomerData customerData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
-            String sql="DELETE FROM customers WHERE id = '"+((CustomerData) customerData).getId()+"';";
+            String sql="DELETE FROM customers WHERE id = '"+ customerData.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return true;
@@ -109,15 +115,10 @@ public class SQLCustomerDataDAO implements CRUD{
             String sql = "SELECT * FROM customers ;";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-            CustomerData nCustomerData;
+            CustomerData customerData;
             while ( resultSet.next()){
-                nCustomerData=new CustomerData();
-                nCustomerData.setId(resultSet.getInt("ID"));
-                nCustomerData.setName(resultSet.getString("name"));
-                nCustomerData.setNumberOfOrders(resultSet.getInt("number_of_orders"));
-                nCustomerData.setLocation(resultSet.getString("location"));
-                nCustomerData.setEmail(resultSet.getString("email"));
-                data.put(nCustomerData.getId(),nCustomerData);
+                customerData=getDataFromResultSet(resultSet);
+                data.put(customerData.getId(),customerData);
             }
             return data;
         } catch (SQLException e) {
@@ -135,15 +136,10 @@ public class SQLCustomerDataDAO implements CRUD{
             String sql = "SELECT * FROM customers LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-            CustomerData nCustomerData;
+            CustomerData customerData;
             while (resultSet.next()) {
-                nCustomerData=new CustomerData();
-                nCustomerData.setId(resultSet.getInt("ID"));
-                nCustomerData.setName(resultSet.getString("name"));
-                nCustomerData.setNumberOfOrders(resultSet.getInt("number_of_orders"));
-                nCustomerData.setLocation(resultSet.getString("location"));
-                nCustomerData.setEmail(resultSet.getString("email"));
-                data.put(nCustomerData.getId(),nCustomerData);
+                customerData=getDataFromResultSet(resultSet);
+                data.put(customerData.getId(),customerData);
             }
             return data;
         } catch (SQLException e) {
