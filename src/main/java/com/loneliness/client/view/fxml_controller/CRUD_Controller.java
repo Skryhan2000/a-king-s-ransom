@@ -8,4 +8,5 @@ public interface CRUD_Controller {
     @FXML boolean addHandler();
     @FXML boolean deleteHandler();
     @FXML boolean changeHandler();
+    @FXML boolean searchHandler();
 }

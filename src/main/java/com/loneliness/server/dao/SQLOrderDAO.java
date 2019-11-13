@@ -1,5 +1,6 @@
 package com.loneliness.server.dao;
 
+import com.loneliness.entity.OrderCustomerData;
 import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
@@ -11,14 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SQLOrderDAO implements CRUD{
     @Override
     public boolean create(Object  orderData) {
-        String sql = "INSERT orders ( customer_ID, order_name , date_of_receiving, date_of_completion, status, payment ) " +
+        String sql = "INSERT orders ( customer_ID, order_name , date_of_receiving, date_of_completion, status, payment ,manager_ID ) " +
                 "VALUES ('" +
                 ((OrderData) orderData).getCustomerId() + "','" +
                 ((OrderData) orderData).getOrderName() + "','" +
                 ((OrderData) orderData).getDateOfReceiving() + "','" +
                 ((OrderData) orderData).getDateOfCompletion() + "','" +
                 ((OrderData) orderData).getStatus()+ "','" +
-                ((OrderData) orderData).getPayment().toString()+
+                ((OrderData) orderData).getPayment().toString()+"','" +
+                ((OrderData) orderData).getManagerID()+
                 "');";
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -48,6 +50,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
                 order.setPayment(resultSet.getString("payment"));
+                order.setManagerID(resultSet.getInt("manager_ID"));
                 return order;
             }
         } catch (SQLException e) {
@@ -74,7 +77,8 @@ public class SQLOrderDAO implements CRUD{
                         "date_of_receiving ='" +((OrderData) orderData).getDateOfReceiving() + "'," +
                         "date_of_completion ='" +((OrderData) orderData).getDateOfCompletion() + "' ," +
                         "status ='" +((OrderData) orderData).getStatus()+ "' ," +
-                        "payment ='" +((OrderData) orderData).getPayment().toString()+"' " +
+                        "payment ='" +((OrderData) orderData).getPayment().toString()+"' ," +
+                        "manager_ID = '"+((OrderData) orderData).getManagerID()+"' "+
                         "WHERE ID = " + ((OrderData) orderData).getId() + " ;";
                 try {
                     return statement.executeUpdate(sql) == 1;
@@ -127,6 +131,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
                 order.setPayment(resultSet.getString("payment"));
+                order.setManagerID(resultSet.getInt("manager_ID"));
                 data.put(order.getId(),order);
             }
             return data;
@@ -136,7 +141,43 @@ public class SQLOrderDAO implements CRUD{
         return data;
     }
 
-    @Override
+
+    public Object receiveAllCustomerOrderInLimit(Transmission transmission) {
+        ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT id,customer_ID,order_name,date_of_receiving,date_of_completion,\n" +
+                    "\t\tstatus,payment,`a-king-s-ransom`.orders.manager_ID,`a-king-s-ransom`.manager_data.email \n" +
+                    "FROM `a-king-s-ransom`.orders \n" +
+                    "inner join `a-king-s-ransom`.manager_data \n" +
+                    "on `a-king-s-ransom`.orders.manager_ID = `a-king-s-ransom`.manager_data.manager_id " +
+                    "WHERE customer_id=" + transmission.getOrderCustomerData().getCustomerId()+
+                    " LIMIT " +
+                    transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            OrderCustomerData order;
+            while (resultSet.next()) {
+                order=new OrderCustomerData();
+                order.setId(resultSet.getInt("ID"));
+                order.setCustomerId(resultSet.getInt("customer_ID"));
+                order.setOrderName(resultSet.getString("order_name"));
+                order.setDateOfReceiving(resultSet.getDate("date_of_receiving").toLocalDate());
+                order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
+                order.setStatus(resultSet.getString("status"));
+                order.setPayment(resultSet.getString("payment"));
+                order.setManagerID(resultSet.getInt("manager_ID"));
+                order.setManagerEmail(resultSet.getString("email"));
+                data.put(order.getId(),order);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
     public Object receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
@@ -155,6 +196,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
                 order.setPayment(resultSet.getString("payment"));
+                order.setManagerID(resultSet.getInt("manager_ID"));
                 data.put(order.getId(),order);
             }
             return data;
@@ -163,6 +205,7 @@ public class SQLOrderDAO implements CRUD{
         }
         return data;
     }
+
 
     public  ConcurrentHashMap<Integer,OrderData> findAllByDateOfCompletionAndStatus(OrderData orderDataToFind){
         ConcurrentHashMap<Integer,OrderData> data=new ConcurrentHashMap<>();
@@ -197,6 +240,7 @@ public class SQLOrderDAO implements CRUD{
                 order.setDateOfCompletion(resultSet.getDate("date_of_completion").toLocalDate());
                 order.setStatus(resultSet.getString("status"));
                 order.setPayment(resultSet.getString("payment"));
+                order.setManagerID(resultSet.getInt("manager_ID"));
                 data.put(order.getId(),order);
             }
             return data;

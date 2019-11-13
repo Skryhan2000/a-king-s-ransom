@@ -19,7 +19,20 @@ public class UserData extends UserPrivateData implements Serializable {
     private transient StringProperty typeProperty;
 
     public enum Type{
-        ADMIN,CLIENT,MANAGER, NO_TYPE
+        ADMIN,CLIENT,MANAGER, NO_TYPE;
+        private Type(){}
+        private Type(int companyID){
+        this.companyID=companyID;
+        }
+        private int companyID;
+
+        public int getCompanyID() {
+            return companyID;
+        }
+
+        public void setCompanyID(int companyID) {
+            this.companyID = companyID;
+        }
     }
 
     public Type getType(String type){

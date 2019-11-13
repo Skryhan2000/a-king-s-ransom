@@ -19,6 +19,7 @@ public class ChangeOrderDataController implements Handler {
     private boolean okClicked = false;
     private OrderData orderData = new OrderData();
 
+
     @FXML
     private TextField customerIDTextField;
     @FXML
@@ -27,7 +28,9 @@ public class ChangeOrderDataController implements Handler {
     private DatePicker dateOfReceivingDatePicker;
     @FXML
     private DatePicker dateOfCompletionDatePicker;
+
     private OrderData.Status status;
+
     private OrderData.Payment payment;
     @FXML
     private ToggleGroup statusGroup = new ToggleGroup();

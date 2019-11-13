@@ -1,10 +1,7 @@
 package com.loneliness.entity.transmission;
 
 
-import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.OrderData;
-import com.loneliness.entity.ProductInStock;
-import com.loneliness.entity.ProviderData;
+import com.loneliness.entity.*;
 import com.loneliness.entity.user.UserData;
 
 import java.io.Serializable;
@@ -20,11 +17,29 @@ public class Transmission implements Serializable {
     private OrderData orderData;
     private CustomerData customerData;
     private ProductInStock productInStock;
-    private ConcurrentHashMap<Integer, ProductInStock> ProductInStockConcurrentHashMap;
+    private OrderCustomerData orderCustomerData;
+    private ConcurrentHashMap<Integer, OrderCustomerData> orderCustomerDataConcurrentHashMap;
+    private ConcurrentHashMap<Integer, ProductInStock> productInStockConcurrentHashMap;
     private ConcurrentHashMap<Integer,CustomerData> customerDataConcurrentHashMap;
     private ConcurrentHashMap<Integer, UserData> userDataConcurrentHashMap;
     private ConcurrentHashMap<Integer, ProviderData> providerConcurrentHashMap;
     private ConcurrentHashMap<Integer, OrderData> orderConcurrentHashMap;
+
+    public OrderCustomerData getOrderCustomerData() {
+        return orderCustomerData;
+    }
+
+    public void setOrderCustomerData(OrderCustomerData orderCustomerData) {
+        this.orderCustomerData = orderCustomerData;
+    }
+
+    public ConcurrentHashMap<Integer, OrderCustomerData> getOrderCustomerDataConcurrentHashMap() {
+        return orderCustomerDataConcurrentHashMap;
+    }
+
+    public void setOrderCustomerDataConcurrentHashMap(ConcurrentHashMap<Integer, OrderCustomerData> orderCustomerDataConcurrentHashMap) {
+        this.orderCustomerDataConcurrentHashMap = orderCustomerDataConcurrentHashMap;
+    }
 
     public ProductInStock getProductInStock() {
         return productInStock;
@@ -35,11 +50,11 @@ public class Transmission implements Serializable {
     }
 
     public ConcurrentHashMap<Integer, ProductInStock> getProductInStockConcurrentHashMap() {
-        return ProductInStockConcurrentHashMap;
+        return productInStockConcurrentHashMap;
     }
 
     public void setProductInStockConcurrentHashMap(ConcurrentHashMap<Integer, ProductInStock> productInStockConcurrentHashMap) {
-        ProductInStockConcurrentHashMap = productInStockConcurrentHashMap;
+        this.productInStockConcurrentHashMap = productInStockConcurrentHashMap;
     }
 
     public OrderData getOrderData() {

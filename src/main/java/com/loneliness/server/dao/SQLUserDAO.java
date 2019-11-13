@@ -11,13 +11,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SQLUserDAO implements CRUD{
     @Override
     public boolean create(Object user) {
-        String sql = "INSERT Users (login , password , type, secret_answer, secret_question) "+
-                "VALUES ('"+
-                ((UserData)user).getLogin()+"','"+
-                ((UserData)user).getPassword()+"','"+
-                ((UserData)user).getType().toString()+"','"+
-                ((UserData)user).getSecretAnswer()+ "','"+
-                ((UserData)user).getSecretQuestion()+"');";
+        String sql;
+        switch (((UserData)user).getType()) {
+
+            case CLIENT:
+                sql="BEGIN; INSERT Users (login , password , type, secret_answer, secret_question) " +
+                "VALUES ('" +
+                        ((UserData) user).getLogin() + "','" +
+                        ((UserData) user).getPassword() + "','" +
+                        ((UserData) user).getType().toString() + "','" +
+                        ((UserData) user).getSecretAnswer() + "','" +
+                        ((UserData) user).getSecretQuestion() + "'); "+
+                        "INSERT INTO customer_representative (customer_id,user_id) VALUES("+
+                        ((UserData) user).getType().getCompanyID()+
+                        ",LAST_INSERT_ID()); COMMIT;";
+                break;
+            default:
+                sql = "INSERT Users (login , password , type, secret_answer, secret_question) " +
+                        "VALUES ('" +
+                        ((UserData) user).getLogin() + "','" +
+                        ((UserData) user).getPassword() + "','" +
+                        ((UserData) user).getType().toString() + "','" +
+                        ((UserData) user).getSecretAnswer() + "','" +
+                        ((UserData) user).getSecretQuestion() + "');";
+        }
+
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();

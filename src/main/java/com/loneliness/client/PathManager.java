@@ -14,7 +14,7 @@ public class PathManager {
         return "/AuthorisationForm.fxml";
     }
     public String getClientStartWindow(){
-        return "";
+        return "/CustomerStartWindow.fxml";
     }
     public String getAdminStartWindow(){
         return "/AdminStartWindow.fxml";

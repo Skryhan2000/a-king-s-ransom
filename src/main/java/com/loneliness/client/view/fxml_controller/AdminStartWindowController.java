@@ -27,6 +27,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class AdminStartWindowController implements CRUD_Controller {
+
+    // TODO: 12.11.2019 просести по системе добавление поля в бд manager_ID
+
+
+
     @FXML
     private Stage dialogStage;
     private int[] indexOfCurrentValue = {0, 20};
@@ -390,8 +395,8 @@ public class AdminStartWindowController implements CRUD_Controller {
         update();
     }
 
-    @FXML
-    private boolean searchHandler() {
+    @Override
+    public boolean searchHandler() {
         Stage dialogStage = null;
         try {
                     dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().

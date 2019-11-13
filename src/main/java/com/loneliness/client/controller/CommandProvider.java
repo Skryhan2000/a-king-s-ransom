@@ -31,6 +31,7 @@ public class CommandProvider {
         repository.put(CommandName.USER_DATA_VALIDATION,new UserDataValidation());
         repository.put(CommandName.USER_PRIVATE_DATA_VALIDATION,new UserPrivateDataValidation());
 
+
         repository.put(CommandName.CREATE_PROVIDER,new CreateProvider());
         repository.put(CommandName.RECEIVE_ALL_PROVIDERS_IN_LIMIT,new ReceiveAllProvidersInLimit());
         repository.put(CommandName.DELETE_PROVIDER,new DeleteProvider());
@@ -40,6 +41,7 @@ public class CommandProvider {
         repository.put(CommandName.FIND_PROVIDER_BY_LOCATION_AND_RATING,new FindProviderByLocationAndRating());
         repository.put(CommandName.PROVIDER_VALIDATION,new ProviderValidation());
 
+
         repository.put(CommandName.CREATE_ORDER,new CreateOrder());
         repository.put(CommandName.DELETE_ORDER,new DeleteOrder());
         repository.put(CommandName.FIND_ALL_ORDERS_BY_DATE_OF_COMPLETION_AND_STATUS,new FindAllOrdersByDateOfCompletionAndStatus());
@@ -48,6 +50,8 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ORDER_DATA,new ReceiveOrderData());
         repository.put(CommandName.UPDATE_ORDER,new UpdateOrder());
         repository.put(CommandName.ORDER_DATA_VALIDATION,new OrderDataValidation());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMER_ORDER_IN_LIMIT,new ReceiveAllCustomerOrderInLimit());
+
 
         repository.put(CommandName.CREATE_PRODUCT_IN_STOCK,new CreateProductInStock());
         repository.put(CommandName.DELETE_PRODUCT_IN_STOCK,new DeleteProductInStock());

@@ -36,7 +36,8 @@ public class AuthorisationFormController implements Handler {
             userData.setLogin(loginField.getText());
             userData.setPassword(passwordField.getText());
             try {
-                switch ((UserData.Type) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData)) {
+                UserData.Type type=(UserData.Type) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData);
+                switch (type) {
                     case ADMIN:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getAdminStartWindow())));
@@ -48,6 +49,7 @@ public class AuthorisationFormController implements Handler {
                     case CLIENT:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getClientStartWindow())));
+                        ClientStartWindowController.setData(type.getCompanyID());
                         break;
                     case NO_TYPE:
                         WorkWithAlert.getInstance().showAlert("Ошибка авторизации",

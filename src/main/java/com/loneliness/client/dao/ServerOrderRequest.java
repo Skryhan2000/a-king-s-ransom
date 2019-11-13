@@ -1,6 +1,7 @@
 package com.loneliness.client.dao;
 
 import com.loneliness.client.launcher.Client;
+import com.loneliness.entity.OrderCustomerData;
 import com.loneliness.entity.OrderData;
 
 import com.loneliness.entity.transmission.Transmission;
@@ -56,6 +57,19 @@ public class ServerOrderRequest implements CRUD{
             transmission.setOrderData((OrderData) orderData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
+        }
+
+    }
+
+    public ConcurrentHashMap<Integer,OrderCustomerData> receiveAllCustomerOrderInLimit(Transmission transmission) throws DAOException {
+        try {
+//            Transmission transmission = new Transmission();
+//            transmission.setCommand("RECEIVE_ALL_CUSTOMER_ORDER_IN_LIMIT");
+//            transmission.setOrderCustomerData(orderData);
+            Client.getOutObject().writeObject(transmission);
+            return (ConcurrentHashMap<Integer,OrderCustomerData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }

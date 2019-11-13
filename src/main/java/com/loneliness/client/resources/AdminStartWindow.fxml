@@ -148,6 +148,7 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <Label text="Имя заказа" GridPane.rowIndex="1" />
@@ -162,6 +163,8 @@
                                           <Text fx:id="orderCustomerId" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
                                           <Text fx:id="orderPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                           <Label text="Способ оплаты" GridPane.rowIndex="5" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email менеджера" GridPane.rowIndex="6" />
+                                          <Text fx:id="orderManagerEmail" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                        </children>
                                     </GridPane>
                                  </children>
@@ -289,15 +292,18 @@
       </ButtonBar>
    </bottom>
    <top>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #2E3348;" BorderPane.alignment="CENTER">
         <buttons>
             <Button mnemonicParsing="false" onAction="#removeTwentyNode" text="Получить предыдущие 20" />
             <Button mnemonicParsing="false" onAction="#update" text="Обновить" />
           <Button mnemonicParsing="false" onAction="#addTwentyNode" text="Получить следующие 20" />
         </buttons>
          <BorderPane.margin>
-            <Insets left="20.0" right="20.0" />
+            <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets left="20.0" right="45.0" />
+         </padding>
       </ButtonBar>
    </top>
 </BorderPane>

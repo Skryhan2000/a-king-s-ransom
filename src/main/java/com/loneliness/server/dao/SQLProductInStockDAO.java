@@ -14,7 +14,7 @@ public class SQLProductInStockDAO implements CRUD{
     @Override
     public boolean create(Object productInStock) {
         try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
-        String sql = "INSERT `a-king-s-ransom`.products (name , quantity , unit_price) "+
+        String sql = "BEGIN; INSERT `a-king-s-ransom`.products (name , quantity , unit_price) "+
                 "VALUES ('"+
                 ((ProductInStock)productInStock).getName()+"','"+
                 ((ProductInStock)productInStock).getQuantity()+"', "+
@@ -26,7 +26,7 @@ public class SQLProductInStockDAO implements CRUD{
                 "VALUES (last_insert_id(),"+
                 ((ProductInStock)productInStock).getProvider_ID()+",'"+
                 ((ProductInStock)productInStock).getReceipt_date().toString()+
-                "');";
+                "');COMMIT;";
             preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return true;

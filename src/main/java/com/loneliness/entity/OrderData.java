@@ -29,6 +29,9 @@ public class OrderData implements Serializable {
     private Status status;
     @NotNull(message = "Должен быть задан статус. ")
     private Payment payment;
+    @Positive(message = "Id менеджера должно быть больше 0")
+    @NotNull(message = "Должен быть задан сушествующий id менеджера")
+    private int managerID;
     private transient StringProperty dateOfCompletionString;
     private transient StringProperty statusString;
 
@@ -160,6 +163,22 @@ public class OrderData implements Serializable {
 
     public void setStatusString(String statusString) {
         this.statusString.set(statusString);
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public int getManagerID() {
+        return managerID;
+    }
+
+    public void setManagerID(int managerID) {
+        this.managerID = managerID;
     }
 
     @Override

@@ -39,4 +39,7 @@ public class OrderServiceImpl implements Service{
     public Object delete(Object obj) {
         return DAOFactory.getInstance().getOrderDAO().delete(obj);
     }
+
+    public Object receiveAllCustomerOrderInLimit(Object obj){
+        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit((Transmission)obj);}
 }
