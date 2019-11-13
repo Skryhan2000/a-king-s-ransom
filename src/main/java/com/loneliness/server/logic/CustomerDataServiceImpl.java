@@ -4,38 +4,40 @@ import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class CustomerDataServiceImpl implements Service<CustomerData>{
+import java.util.concurrent.ConcurrentHashMap;
+
+public class CustomerDataServiceImpl implements Service<CustomerData, ConcurrentHashMap<Integer,CustomerData>,String,Transmission>{
     @Override
-    public Object receiveAllElem() {
+    public ConcurrentHashMap<Integer,CustomerData> receiveAllElem() {
         return DAOFactory.getInstance().getCustomerDataDAO().receiveAll();
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) {
-        return DAOFactory.getInstance().getCustomerDataDAO().receiveAllInLimit((Transmission)obj);
+    public ConcurrentHashMap<Integer,CustomerData> receiveAllElemInLimit(Transmission obj) {
+        return DAOFactory.getInstance().getCustomerDataDAO().receiveAllInLimit(obj);
     }
 
-    public Object findAllByNameAndNumberOfOrders(CustomerData obj){
+    public ConcurrentHashMap<Integer,CustomerData>  findAllByNameAndNumberOfOrders(CustomerData obj){
         return DAOFactory.getInstance().getCustomerDataDAO().findAllByNameAndNumberOfOrders(obj);
     }
 
     @Override
-    public Object create(CustomerData obj) {
+    public String create(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().create(obj);
     }
 
     @Override
-    public Object receive(CustomerData obj) {
+    public CustomerData receive(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().read(obj);
     }
 
     @Override
-    public Object update(CustomerData obj) {
+    public String update(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().update(obj);
     }
 
     @Override
-    public Object delete(CustomerData obj) {
+    public String delete(CustomerData obj) {
         return DAOFactory.getInstance().getCustomerDataDAO().delete(obj);
     }
 }

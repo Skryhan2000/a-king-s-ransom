@@ -6,13 +6,13 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerProviderRequest implements CRUD{
+public class ServerProviderRequest implements CRUD<ProviderData,Transmission>{
     @Override
-    public boolean create(Object providerData) throws DAOException {
+    public boolean create(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_PROVIDER");
-            transmission.setProviderData((ProviderData) providerData);
+            transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -21,11 +21,11 @@ public class ServerProviderRequest implements CRUD{
     }
 
     @Override
-    public ProviderData read(Object providerData) throws DAOException {
+    public ProviderData read(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_PROVIDER");
-            transmission.setProviderData((ProviderData)providerData);
+            transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
             return (ProviderData) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -34,11 +34,11 @@ public class ServerProviderRequest implements CRUD{
     }
 
     @Override
-    public boolean update(Object providerData) throws DAOException {
+    public boolean update(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_PROVIDER");
-            transmission.setProviderData((ProviderData)providerData);
+            transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -47,11 +47,11 @@ public class ServerProviderRequest implements CRUD{
     }
 
     @Override
-    public boolean delete(Object providerData) throws DAOException {
+    public boolean delete(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_PROVIDER");
-            transmission.setProviderData((ProviderData)providerData);
+            transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -72,9 +72,9 @@ public class ServerProviderRequest implements CRUD{
         }
     }
     @Override
-    public ConcurrentHashMap<Integer,ProviderData> receiveAllInInterval(Object transmission) throws DAOException {
+    public ConcurrentHashMap<Integer,ProviderData> receiveAllInInterval(Transmission transmission) throws DAOException {
         try {
-            ((Transmission)transmission).setCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT");
+            transmission.setCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, ProviderData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {

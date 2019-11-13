@@ -4,9 +4,9 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class UpdateProvider implements Command<ProviderData> {
+public class UpdateProvider implements Command<ProviderData,String> {
     @Override
-    public Object execute(ProviderData request) {
+    public String execute(ProviderData request) {
         return ServiceFactory.getInstance().getProviderService().update(request);
     }
 }

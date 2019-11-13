@@ -3,6 +3,6 @@ package com.loneliness.server.controller;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
-public interface Command<Type> {
-    Object execute(Type request);
+public interface Command<RequestType,ReplyType> {
+    ReplyType execute(RequestType request);
 }

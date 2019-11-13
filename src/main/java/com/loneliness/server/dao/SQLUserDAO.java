@@ -8,7 +8,8 @@ import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLUserDAO implements CRUD<UserData>{
+public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, UserData>,String>{
+
     private UserData getDataFromResultSet(ResultSet resultSet) throws SQLException {
             UserData userData = new UserData();
             userData.setId(resultSet.getInt("id"));
@@ -19,8 +20,9 @@ public class SQLUserDAO implements CRUD<UserData>{
             userData.setSecretQuestion(resultSet.getString("secret_question"));
             return userData;
         }
+
     @Override
-    public boolean create(UserData user) {
+    public String create(UserData user) {
         String sql;
         if (user.getType() == UserData.Type.CLIENT) {
             sql = "BEGIN; INSERT Users (login , password , type, secret_answer, secret_question) " +
@@ -46,11 +48,12 @@ public class SQLUserDAO implements CRUD<UserData>{
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            return true;
+            return "Пользователь успешно создан";
         } catch (SQLException e) {
             e.printStackTrace();
+            return "ERROR Ошибка создания пользователя. Такой пользователь уже существует";
         }
-        return false;
+
     }
 
     @Override
@@ -60,11 +63,11 @@ public class SQLUserDAO implements CRUD<UserData>{
             ResultSet resultSet;
             Statement statement;
             String sql;
-            if(((UserData)user).getId()!=0) {
-                sql = "SELECT * FROM Users WHERE id = '" + ((UserData)user).getId() + "';";
+            if(user.getId()!=0) {
+                sql = "SELECT * FROM Users WHERE id = '" + user.getId() + "';";
             }
             else {
-                sql= "SELECT * FROM Users WHERE login = '" + ((UserData)user).getLogin() + "';";
+                sql= "SELECT * FROM Users WHERE login = '" + user.getLogin() + "';";
             }
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
@@ -74,16 +77,17 @@ public class SQLUserDAO implements CRUD<UserData>{
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
         return userData;
     }
 
     @Override
-    public boolean update(UserData user) {
-        ResultSet resultSet=null;
+    public String update(UserData user) {
+        ResultSet resultSet = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
 
             statement = connection.createStatement();
 
@@ -97,37 +101,37 @@ public class SQLUserDAO implements CRUD<UserData>{
                         "secret_answer='" + user.getSecretAnswer() + "'," +
                         "secret_question='" + user.getSecretQuestion() + "' " +
                         "WHERE ID=" + user.getId() + ";";
-                try {
-                    return statement.executeUpdate(sql) == 1;
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+                if (statement.executeUpdate(sql) == 1) {
+                    return "Пользователь обновлен";
+                } else return "ERROR Такой пользователь уже существует";
+
             } else {
-                return false;
+                return "ERROR Нет такого пользователя";
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "ERROR Ошибка обновления";
         }
-        catch (SQLException e) {
-                e.printStackTrace();
-            }
-        return false;
     }
 
     @Override
-    public boolean delete(UserData user) {
+    public String delete(UserData user) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM Users WHERE id = '"+user.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
-                return true;
+                return "Пользователь удален";
+            }
+            else {
+                return "ERROR Нет такого пользователя";
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return "ERROR Ошибка удаления";
         }
-        return false;
+
     }
 
     public UserData.Type receiveUserType(UserData userData){
@@ -148,7 +152,7 @@ public class SQLUserDAO implements CRUD<UserData>{
     }
 
     @Override
-    public Map<Integer,UserData> receiveAll(){
+    public ConcurrentHashMap<Integer, UserData> receiveAll(){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
@@ -168,7 +172,7 @@ public class SQLUserDAO implements CRUD<UserData>{
         return data;
     }
     @Override
-    public Map<Integer,UserData> receiveAllInLimit(Transmission transmission) {
+    public ConcurrentHashMap<Integer, UserData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, UserData> data = new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
 
@@ -188,7 +192,7 @@ public class SQLUserDAO implements CRUD<UserData>{
         }
         return data;
     }
-    public Map<Integer,UserData> findAllByLoginAndType(UserData userDataToFind){
+    public ConcurrentHashMap<Integer, UserData> findAllByLoginAndType(UserData userDataToFind){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
@@ -215,13 +219,6 @@ public class SQLUserDAO implements CRUD<UserData>{
             while ( resultSet.next()){
                 userData=getDataFromResultSet(resultSet);
                 data.put(userData.getId(),userData);
-//                userData.setId(resultSet.getInt("id"));
-//                userData.setLogin(resultSet.getString("login"));
-//                userData.setPassword(resultSet.getString("password"));
-//                userData.setType(resultSet.getString("type"));
-//                userData.setSecretAnswer(resultSet.getString("secret_answer"));
-//                userData.setSecretQuestion(resultSet.getString("secret_question"));
-//                data.put(userData.getId(),userData);
             }
             return data;
         } catch (SQLException e) {

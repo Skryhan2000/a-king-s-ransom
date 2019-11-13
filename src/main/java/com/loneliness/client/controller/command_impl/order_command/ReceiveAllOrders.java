@@ -4,10 +4,11 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.transmission.Transmission;
 
-public class ReceiveAllOrders implements Command {
+public class ReceiveAllOrders implements Command<Transmission> {
     @Override
-    public Object execute(Object request) throws  ControllerException {
+    public Object execute(Transmission request) throws  ControllerException {
         try {
             return ServiceFactory.getInstance().getOrderService().receiveAllElem(request);
         } catch (ServiceException e) {

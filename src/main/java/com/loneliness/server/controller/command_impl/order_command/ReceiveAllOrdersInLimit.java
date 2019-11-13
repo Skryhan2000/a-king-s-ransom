@@ -1,12 +1,15 @@
 package com.loneliness.server.controller.command_impl.order_command;
 
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class ReceiveAllOrdersInLimit implements Command<Transmission> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ReceiveAllOrdersInLimit implements Command<Transmission, ConcurrentHashMap<Integer, OrderData>> {
     @Override
-    public Object execute(Transmission request) {
+    public ConcurrentHashMap<Integer,OrderData>  execute(Transmission request) {
         return ServiceFactory.getInstance().getOrderService().receiveAllElemInLimit(request);
     }
 }

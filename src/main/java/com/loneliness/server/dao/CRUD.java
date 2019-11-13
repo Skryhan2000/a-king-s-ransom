@@ -3,12 +3,11 @@ package com.loneliness.server.dao;
 
 import com.loneliness.entity.transmission.Transmission;
 
-public interface CRUD<Type> {
-    // TODO: 13.11.2019 добавить jeneric
-    boolean create(Type obj);
-    Object read(Type obj);
-    boolean update(Type obj);
-    boolean delete(Type obj);
-    Object receiveAll();
-    Object receiveAllInLimit(Transmission transmission);
+public interface CRUD<DataType,CollectionType,InfoType> {
+    InfoType create(DataType obj);
+    DataType read(DataType obj);
+    InfoType update(DataType obj);
+    InfoType delete(DataType obj);
+    CollectionType receiveAll();
+    CollectionType receiveAllInLimit(Transmission transmission);
 }

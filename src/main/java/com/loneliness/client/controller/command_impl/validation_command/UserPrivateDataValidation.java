@@ -5,9 +5,9 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.DataValidationFactory;
 import com.loneliness.entity.user.UserPrivateData;
 
-public class UserPrivateDataValidation implements Command {
+public class UserPrivateDataValidation implements Command<UserPrivateData> {
     @Override
-    public Object execute(Object request) throws ControllerException {
-        return DataValidationFactory.getValidatorFactory().validate((UserPrivateData) request);
+    public Object execute(UserPrivateData request) throws ControllerException {
+        return DataValidationFactory.getValidatorFactory().validate(request);
     }
 }

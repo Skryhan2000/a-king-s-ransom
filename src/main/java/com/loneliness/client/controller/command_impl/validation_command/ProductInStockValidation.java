@@ -6,9 +6,9 @@ import com.loneliness.client.service.DataValidationFactory;
 import com.loneliness.entity.ProductInStock;
 
 
-public class ProductInStockValidation implements Command {
+public class ProductInStockValidation implements Command<ProductInStock> {
     @Override
-    public Object execute(Object request) throws ControllerException {
-        return DataValidationFactory.getValidatorFactory().validate((ProductInStock) request);
+    public Object execute(ProductInStock request) throws ControllerException {
+        return DataValidationFactory.getValidatorFactory().validate(request);
     }
 }

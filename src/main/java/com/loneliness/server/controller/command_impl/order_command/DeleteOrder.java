@@ -4,9 +4,9 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class DeleteOrder implements Command<OrderData> {
+public class DeleteOrder implements Command<OrderData,String> {
     @Override
-    public Object execute(OrderData request) {
+    public String execute(OrderData request) {
         return ServiceFactory.getInstance().getOrderService().delete(request);
     }
 }

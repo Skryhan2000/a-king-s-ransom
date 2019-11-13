@@ -7,9 +7,11 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindProviderByLocationAndRating implements Command<ProviderData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindProviderByLocationAndRating implements Command<ProviderData, ConcurrentHashMap<Integer,ProviderData>> {
     @Override
-    public Object execute(ProviderData request)  {
+    public ConcurrentHashMap<Integer,ProviderData> execute(ProviderData request)  {
             return ServiceFactory.getInstance().getProviderService().findAllByLocationAndRating(request);
     }
 }

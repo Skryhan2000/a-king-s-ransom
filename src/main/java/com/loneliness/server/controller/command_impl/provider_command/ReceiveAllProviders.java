@@ -5,9 +5,11 @@ import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class ReceiveAllProviders implements Command<Transmission> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ReceiveAllProviders implements Command<Transmission,ConcurrentHashMap<Integer,ProviderData>> {
     @Override
-    public Object execute(Transmission request) {
+    public ConcurrentHashMap<Integer,ProviderData> execute(Transmission request) {
         return ServiceFactory.getInstance().getProviderService().receiveAllElem();
     }
 }

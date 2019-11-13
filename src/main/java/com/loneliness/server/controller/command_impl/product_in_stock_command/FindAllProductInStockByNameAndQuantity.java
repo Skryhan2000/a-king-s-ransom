@@ -7,9 +7,11 @@ import com.loneliness.entity.ProductInStock;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindAllProductInStockByNameAndQuantity implements Command<ProductInStock> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllProductInStockByNameAndQuantity implements Command<ProductInStock, ConcurrentHashMap<Integer, ProductInStock>> {
     @Override
-    public Object execute(ProductInStock request)  {
+    public ConcurrentHashMap<Integer, ProductInStock> execute(ProductInStock request)  {
             return ServiceFactory.getInstance().getProductInStockService().findAllByNameAndQuantity(request);
     }
 }

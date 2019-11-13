@@ -4,44 +4,46 @@ import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.server.dao.DAOFactory;
 
+import java.util.concurrent.ConcurrentHashMap;
 
-public class UserServiceImpl implements Service<UserData>{
+
+public class UserServiceImpl implements Service<UserData, ConcurrentHashMap<Integer, UserData>,String,Transmission>{
     @Override
-    public Object receiveAllElem() {
+    public ConcurrentHashMap<Integer, UserData> receiveAllElem() {
         return DAOFactory.getInstance().getUserDAO().receiveAll();
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) {
-        return DAOFactory.getInstance().getUserDAO().receiveAllInLimit((Transmission)obj);
+    public ConcurrentHashMap<Integer, UserData> receiveAllElemInLimit(Transmission obj) {
+        return DAOFactory.getInstance().getUserDAO().receiveAllInLimit(obj);
     }
 
-    public Object findAllByLoginAndType(UserData obj) {
+    public ConcurrentHashMap<Integer, UserData> findAllByLoginAndType(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().findAllByLoginAndType(obj);
     }
 
 
-    public Object authorization(UserData obj) {
+    public UserData.Type authorization(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().receiveUserType(obj);
     }
 
     @Override
-    public Object create(UserData obj) {
+    public String create(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().create( obj);
     }
 
     @Override
-    public Object receive(UserData obj) {
+    public UserData receive(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().read(obj);
     }
 
     @Override
-    public Object update(UserData obj) {
+    public String update(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().update(obj);
     }
 
     @Override
-    public Object delete(UserData obj) {
+    public String delete(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().delete(obj);
     }
 

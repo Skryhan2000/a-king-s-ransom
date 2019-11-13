@@ -4,37 +4,39 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class ProviderServiceImpl implements Service<ProviderData>{
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ProviderServiceImpl implements Service<ProviderData, ConcurrentHashMap<Integer,ProviderData>,String,Transmission>{
     @Override
-    public Object create(ProviderData obj) {
+    public String create(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().create(obj);
     }
 
     @Override
-    public Object receive(ProviderData obj) {
+    public ProviderData receive(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().read(obj);
     }
 
     @Override
-    public Object update(ProviderData obj) {
+    public String update(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().update(obj);
     }
 
     @Override
-    public Object delete(ProviderData obj) {
+    public String delete(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().delete(obj);
     }
 
     @Override
-    public Object receiveAllElem() {
+    public ConcurrentHashMap<Integer,ProviderData> receiveAllElem() {
         return DAOFactory.getInstance().getProviderDAO().receiveAll();
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) {
-        return DAOFactory.getInstance().getProviderDAO().receiveAllInLimit((Transmission) obj);
+    public ConcurrentHashMap<Integer,ProviderData> receiveAllElemInLimit(Transmission obj) {
+        return DAOFactory.getInstance().getProviderDAO().receiveAllInLimit(obj);
     }
-    public Object findAllByLocationAndRating(ProviderData obj) {
+    public ConcurrentHashMap<Integer,ProviderData> findAllByLocationAndRating(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().findAllByLocationAndRating( obj);
     }
 }

@@ -4,11 +4,12 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.orders.OrderData;
 
 
-public class CreateOrder implements Command {
+public class CreateOrder implements Command<OrderData> {
     @Override
-    public Object execute(Object request) throws  ControllerException {
+    public Object execute(OrderData request) throws  ControllerException {
         try {
             return  ServiceFactory.getInstance().getOrderService().create(request);
         } catch ( ServiceException e) {

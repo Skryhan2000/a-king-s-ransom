@@ -8,14 +8,14 @@ import com.loneliness.client.launcher.Client;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerUserRequest implements CRUD {
+public class ServerUserRequest implements CRUD<UserData,Transmission> {
     @Override
-    public boolean create(Object user) throws DAOException {
+    public boolean create(UserData user) throws DAOException {
         try {
 
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_USER");
-            transmission.setUserData((UserData)user);
+            transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -24,24 +24,24 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public Object read(Object user) throws DAOException {
+    public Object read(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_USER");
-            transmission.setUserData((UserData)user);
+            transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
-            return (UserData) Client.getInObject().readObject();
+            return Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean update(Object user) throws DAOException {
+    public boolean update(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_USER");
-            transmission.setUserData((UserData)user);
+            transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -50,11 +50,11 @@ public class ServerUserRequest implements CRUD {
     }
 
     @Override
-    public boolean delete(Object user) throws DAOException {
+    public boolean delete(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_USER");
-            transmission.setUserData((UserData)user);
+            transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -87,9 +87,9 @@ public class ServerUserRequest implements CRUD {
         }
     }
     @Override
-    public ConcurrentHashMap<Integer,UserData> receiveAllInInterval(Object transmission) throws DAOException {
+    public ConcurrentHashMap<Integer,UserData> receiveAllInInterval(Transmission transmission) throws DAOException {
         try {
-            ((Transmission)transmission).setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
+            transmission.setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, UserData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {

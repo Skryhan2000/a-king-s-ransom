@@ -5,10 +5,11 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.CustomerData;
 
-public class FindAllCustomersDataByNameAndNumberOfOrders implements Command {
+public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData> {
     @Override
-    public Object execute(Object request) throws ControllerException {
+    public Object execute(CustomerData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getCustomerDataService().findAllCustomersDataByNameAndNumberOfOrders(request);
         } catch (ServiceException e) {

@@ -3,10 +3,11 @@ package com.loneliness.client.service;
 import com.loneliness.client.dao.DAOException;
 import com.loneliness.client.dao.DAOFactory;
 import com.loneliness.entity.ProductInStock;
+import com.loneliness.entity.transmission.Transmission;
 
-public class ProductInStockServiceImpl implements Service{
+public class ProductInStockServiceImpl implements Service<ProductInStock, Transmission>{
     @Override
-    public Object create(Object obj) throws ServiceException {
+    public Object create(ProductInStock obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().create(obj);
         } catch (DAOException e) {
@@ -15,7 +16,7 @@ public class ProductInStockServiceImpl implements Service{
     }
 
     @Override
-    public Object receive(Object obj) throws ServiceException {
+    public Object receive(ProductInStock obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().read(obj);
         } catch (DAOException e) {
@@ -24,7 +25,7 @@ public class ProductInStockServiceImpl implements Service{
     }
 
     @Override
-    public Object update(Object obj) throws ServiceException {
+    public Object update(ProductInStock obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().update(obj);
         } catch (DAOException e) {
@@ -33,7 +34,7 @@ public class ProductInStockServiceImpl implements Service{
     }
 
     @Override
-    public Object delete(Object obj) throws ServiceException {
+    public Object delete(ProductInStock obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().delete(obj);
         } catch (DAOException e) {
@@ -43,7 +44,7 @@ public class ProductInStockServiceImpl implements Service{
 
 
     @Override
-    public Object receiveAllElem(Object obj) throws ServiceException {
+    public Object receiveAllElem(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().receiveAll();
         } catch (DAOException e) {
@@ -52,16 +53,16 @@ public class ProductInStockServiceImpl implements Service{
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) throws ServiceException {
+    public Object receiveAllElemInLimit(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductInStockRequest().receiveAllInInterval(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
-    public Object findAllProductInStockByNameAndQuantity(Object obj) throws ServiceException {
+    public Object findAllProductInStockByNameAndQuantity(ProductInStock obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getProductInStockRequest().findAllProductInStockByNameAndQuantity((ProductInStock) obj);
+            return DAOFactory.getInstance().getProductInStockRequest().findAllProductInStockByNameAndQuantity(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }

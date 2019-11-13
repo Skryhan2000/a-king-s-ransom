@@ -4,9 +4,9 @@ import com.loneliness.entity.CustomerData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class ReceiveCustomerData implements Command<CustomerData> {
+public class ReceiveCustomerData implements Command<CustomerData,CustomerData> {
     @Override
-    public Object execute(CustomerData request) {
+    public CustomerData execute(CustomerData request) {
         return ServiceFactory.getInstance().getCustomerDataService().receive(request);
     }
 }

@@ -7,7 +7,7 @@ import com.loneliness.entity.transmission.Transmission;
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLCustomerDataDAO implements CRUD<CustomerData>{
+public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<Integer,CustomerData>,String>{
 
     private CustomerData getDataFromResultSet(ResultSet resultSet) throws SQLException {
         CustomerData customerData=new CustomerData();
@@ -20,7 +20,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
     }
 
     @Override
-    public boolean create(CustomerData  customerData) {
+    public String create(CustomerData  customerData) {
         String sql = "INSERT customers ( name, number_of_orders , location, email ) " +
                 "VALUES ('" +
                 customerData.getName() + "','" +
@@ -31,15 +31,15 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            return true;
+            return "Успешное создание";
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "ERROR Такие данные уже существуют";
     }
 
     @Override
-    public Object read(CustomerData customerData) {
+    public CustomerData read(CustomerData customerData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
@@ -53,14 +53,13 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return customerData;
     }
 
     @Override
-    public boolean update(CustomerData customerData) {
+    public String update(CustomerData customerData) {
         ResultSet resultSet=null;
         Statement statement = null;
-        PreparedStatement preparedStatement = null;
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
 
             statement = connection.createStatement();
@@ -74,40 +73,36 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
                         "location ='" + customerData.getLocation() + "' ," +
                         "email ='" + customerData.getEmail()+ "' " +
                         "WHERE id = " + customerData.getId() + " ;";
-                try {
-                    return statement.executeUpdate(sql) == 1;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+                if (statement.executeUpdate(sql) == 1) {
+                    return "Данные обновлен";
+                } else return "ERROR Такие данные уже существует";
             } else {
-                return false;
+                return "ERROR Нет таких данных";
             }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "ERROR Ошибка обновления";
     }
 
     @Override
-    public boolean delete(CustomerData customerData) {
+    public String delete(CustomerData customerData) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             String sql="DELETE FROM customers WHERE id = '"+ customerData.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
-                return true;
+                return "Данные удалены";
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return false;
+        return "ERROR Ошибка удаления";
     }
 
     @Override
-    public Object receiveAll() {
+    public ConcurrentHashMap<Integer,CustomerData> receiveAll() {
         ConcurrentHashMap<Integer,CustomerData> data=new ConcurrentHashMap<>();
         try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
@@ -128,7 +123,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
     }
 
     @Override
-    public Object receiveAllInLimit(Transmission transmission) {
+    public ConcurrentHashMap<Integer,CustomerData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, CustomerData> data = new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
@@ -171,15 +166,10 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData>{
             sql+=";";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-            CustomerData nCustomerData;
+            CustomerData customerData;
             while (resultSet.next()) {
-                nCustomerData=new CustomerData();
-                nCustomerData.setId(resultSet.getInt("ID"));
-                nCustomerData.setName(resultSet.getString("name"));
-                nCustomerData.setNumberOfOrders(resultSet.getInt("number_of_orders"));
-                nCustomerData.setLocation(resultSet.getString("location"));
-                nCustomerData.setEmail(resultSet.getString("email"));
-                data.put(nCustomerData.getId(),nCustomerData);
+                customerData=getDataFromResultSet(resultSet);
+                data.put(customerData.getId(),customerData);
             }
             return data;
         } catch (SQLException e) {

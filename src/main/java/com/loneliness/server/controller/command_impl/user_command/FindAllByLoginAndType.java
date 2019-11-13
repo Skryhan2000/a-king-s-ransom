@@ -4,9 +4,11 @@ import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindAllByLoginAndType implements Command<UserData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllByLoginAndType implements Command<UserData,ConcurrentHashMap<Integer, UserData>> {
     @Override
-    public Object execute(UserData request) {
+    public ConcurrentHashMap<Integer, UserData> execute(UserData request) {
         return ServiceFactory.getInstance().getUserService().findAllByLoginAndType(request);
     }
 }

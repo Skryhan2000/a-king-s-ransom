@@ -5,9 +5,9 @@ import com.loneliness.client.dao.DAOFactory;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
-public class OrderServiceImpl implements Service{
+public class OrderServiceImpl implements Service<OrderData,Transmission>{
     @Override
-    public Object create(Object obj) throws ServiceException {
+    public Object create(OrderData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().create(obj);
         } catch (DAOException e) {
@@ -16,7 +16,7 @@ public class OrderServiceImpl implements Service{
     }
 
     @Override
-    public Object receive(Object obj) throws ServiceException {
+    public Object receive(OrderData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().read(obj);
         } catch (DAOException e) {
@@ -25,7 +25,7 @@ public class OrderServiceImpl implements Service{
     }
 
     @Override
-    public Object update(Object obj) throws ServiceException {
+    public Object update(OrderData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().update(obj);
         } catch (DAOException e) {
@@ -34,7 +34,7 @@ public class OrderServiceImpl implements Service{
     }
 
     @Override
-    public Object delete(Object obj) throws ServiceException {
+    public Object delete(OrderData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().delete(obj);
         } catch (DAOException e) {
@@ -44,7 +44,7 @@ public class OrderServiceImpl implements Service{
 
 
     @Override
-    public Object receiveAllElem(Object obj) throws ServiceException {
+    public Object receiveAllElem(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().receiveAll();
         } catch (DAOException e) {
@@ -52,25 +52,25 @@ public class OrderServiceImpl implements Service{
         }
     }
 
-    public Object receiveAllCustomerOrderInLimit(Object obj) throws ServiceException {
+    public Object receiveAllCustomerOrderInLimit(Transmission obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getOrderRequest().receiveAllCustomerOrderInLimit((Transmission) obj);
+            return DAOFactory.getInstance().getOrderRequest().receiveAllCustomerOrderInLimit(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) throws ServiceException {
+    public Object receiveAllElemInLimit(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getOrderRequest().receiveAllInInterval(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
-    public Object findAllOrdersByDateOfCompletionAndStatus(Object obj) throws ServiceException {
+    public Object findAllOrdersByDateOfCompletionAndStatus(OrderData obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getOrderRequest().findAllOrdersByDateOfCompletionAndStatus((OrderData) obj);
+            return DAOFactory.getInstance().getOrderRequest().findAllOrdersByDateOfCompletionAndStatus(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }

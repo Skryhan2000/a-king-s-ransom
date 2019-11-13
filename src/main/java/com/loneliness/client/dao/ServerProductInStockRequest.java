@@ -8,13 +8,13 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerProductInStockRequest implements CRUD{
+public class ServerProductInStockRequest implements CRUD<ProductInStock,Transmission>{
     @Override
-    public boolean create(Object productInStock) throws DAOException {
+    public boolean create(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_PRODUCT_IN_STOCK");
-            transmission.setProductInStock((ProductInStock) productInStock);
+            transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -23,11 +23,11 @@ public class ServerProductInStockRequest implements CRUD{
     }
 
     @Override
-    public ProductInStock read(Object productInStock) throws DAOException {
+    public ProductInStock read(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_PRODUCT_IN_STOCK");
-            transmission.setProductInStock((ProductInStock)productInStock);
+            transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
             return (ProductInStock) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -36,11 +36,11 @@ public class ServerProductInStockRequest implements CRUD{
     }
 
     @Override
-    public boolean update(Object productInStock) throws DAOException {
+    public boolean update(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_PRODUCT_IN_STOCK");
-            transmission.setProductInStock((ProductInStock)productInStock);
+            transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -49,11 +49,11 @@ public class ServerProductInStockRequest implements CRUD{
     }
 
     @Override
-    public boolean delete(Object productInStock) throws DAOException {
+    public boolean delete(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_PRODUCT_IN_STOCK");
-            transmission.setProductInStock((ProductInStock) productInStock);
+            transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -74,9 +74,9 @@ public class ServerProductInStockRequest implements CRUD{
         }
     }
     @Override
-    public ConcurrentHashMap<Integer,ProductInStock> receiveAllInInterval(Object transmission) throws DAOException {
+    public ConcurrentHashMap<Integer,ProductInStock> receiveAllInInterval(Transmission transmission) throws DAOException {
         try {
-            ((Transmission)transmission).setCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT");
+            transmission.setCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, ProductInStock>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {

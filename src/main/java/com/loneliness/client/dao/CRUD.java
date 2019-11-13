@@ -1,11 +1,10 @@
 package com.loneliness.client.dao;
 
-public interface CRUD {
-    // TODO: 13.11.2019 добавить jeneric
-    boolean create(Object user) throws  DAOException;
-    Object read(Object user) throws  DAOException;
-    boolean update(Object user) throws  DAOException;
-    boolean delete(Object user) throws  DAOException;
+public interface CRUD <DataType,TransferType>{
+    boolean create(DataType user) throws  DAOException;
+    Object read(DataType user) throws  DAOException;
+    boolean update(DataType user) throws  DAOException;
+    boolean delete(DataType user) throws  DAOException;
     Object receiveAll() throws  DAOException;
-    Object receiveAllInInterval(Object transmission) throws DAOException;
+    Object receiveAllInInterval(TransferType transmission) throws DAOException;
 }

@@ -6,9 +6,11 @@ import com.loneliness.server.controller.Command;
 import com.loneliness.server.dao.DAOFactory;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class ReceiveAllUsers implements Command <Transmission>{
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ReceiveAllUsers implements Command <Transmission, ConcurrentHashMap<Integer, UserData>>{
     @Override
-    public Object execute(Transmission request) {
+    public ConcurrentHashMap<Integer, UserData> execute(Transmission request) {
         return ServiceFactory.getInstance().getUserService().receiveAllElem();
     }
 }

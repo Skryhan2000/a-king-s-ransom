@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLProviderDAO implements CRUD<ProviderData> {
+public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integer,ProviderData>,String> {
 
     private ProviderData getDataFromResultSet(ResultSet resultSet) throws SQLException {
         ProviderData providerData=new ProviderData();
@@ -21,7 +21,7 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
     }
 
     @Override
-    public boolean create(ProviderData provider) {
+    public String create(ProviderData provider) {
         String sql = "INSERT providers (ID , name , rating, location, email ) " +
                 "VALUES ('" + provider.getId() + "','" + provider.getName() + "','" +
                 (provider.getRating() + "','" + provider.getLocation()+ "','" +
@@ -29,15 +29,16 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            return true;
+            return "Успешное создание";
         } catch (SQLException e) {
             e.printStackTrace();
+            return "ERROR Такие данные уже существуют";
         }
-        return false;
+
     }
 
     @Override
-    public Object read(ProviderData provider) {
+    public ProviderData read(ProviderData provider) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
@@ -45,24 +46,23 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
             sql = "SELECT * FROM providers WHERE id = '" + provider.getId() + "';";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
-            ProviderData providerData;
             if (resultSet.next()) {
                 return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return provider;
     }
 
     @Override
-    public boolean update(ProviderData provider) {
-        ResultSet resultSet=null;
+    public String update(ProviderData provider) {
+        ResultSet resultSet = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
 
-            statement =connection.createStatement();
+            statement = connection.createStatement();
 
             String sql = "SELECT * FROM providers WHERE id = " + provider.getId() + ";";
             resultSet = statement.executeQuery(sql);
@@ -70,44 +70,39 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
                 sql = "UPDATE providers SET " +
                         "name='" + provider.getName() + "'," +
                         "rating='" + provider.getRating() + "'," +
-                        "location='" +provider.getLocation() + "'," +
-                        "email='" +provider.getEmail() + "' " +
+                        "location='" + provider.getLocation() + "'," +
+                        "email='" + provider.getEmail() + "' " +
                         "WHERE ID = " + provider.getId() + " ;";
-                try {
-                    return statement.executeUpdate(sql) == 1;
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+                if (statement.executeUpdate(sql) == 1) {
+                    return "Данные обновлен";
+                } else return "ERROR Такие данные уже существует";
             } else {
-                return false;
+                return "ERROR Нет таких данных";
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            return "ERROR Ошибка обновления";
         }
-        return false;
     }
 
     @Override
-    public boolean delete(ProviderData provider) {
+    public String delete(ProviderData provider) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM providers WHERE id = '"+provider.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
-                return true;
+                return "Данные удалены";
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return false;
+        return "ERROR Ошибка удаления";
     }
 
     @Override
-    public Object receiveAll() {
+    public ConcurrentHashMap<Integer,ProviderData> receiveAll() {
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
         try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
             ResultSet resultSet;
@@ -128,7 +123,7 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
     }
 
     @Override
-    public Object receiveAllInLimit(Transmission transmission) {
+    public ConcurrentHashMap<Integer,ProviderData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, ProviderData> data = new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
@@ -147,7 +142,7 @@ public class SQLProviderDAO implements CRUD<ProviderData> {
         }
         return data;
     }
-    public Map<Integer,ProviderData> findAllByLocationAndRating(ProviderData providerDataToFind){
+    public ConcurrentHashMap<Integer,ProviderData> findAllByLocationAndRating(ProviderData providerDataToFind){
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
         try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
             ResultSet resultSet;

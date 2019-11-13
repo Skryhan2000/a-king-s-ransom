@@ -4,9 +4,11 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
-public class FindAllProductInStockByNameAndQuantity implements Command {
+import com.loneliness.entity.ProductInStock;
+
+public class FindAllProductInStockByNameAndQuantity implements Command<ProductInStock> {
     @Override
-    public Object execute(Object request) throws ControllerException {
+    public Object execute(ProductInStock request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getProductInStockService().findAllProductInStockByNameAndQuantity(request);
         } catch (ServiceException e) {

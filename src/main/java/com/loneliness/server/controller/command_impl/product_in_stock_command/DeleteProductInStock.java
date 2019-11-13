@@ -4,9 +4,9 @@ import com.loneliness.entity.ProductInStock;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class DeleteProductInStock implements Command<ProductInStock> {
+public class DeleteProductInStock implements Command<ProductInStock,String> {
     @Override
-    public Object execute(ProductInStock request) {
+    public String execute(ProductInStock request) {
         return ServiceFactory.getInstance().getProductInStockService().delete(request);
     }
 }

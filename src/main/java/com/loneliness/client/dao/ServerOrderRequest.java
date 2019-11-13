@@ -9,13 +9,13 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerOrderRequest implements CRUD{
+public class ServerOrderRequest implements CRUD<OrderData,Transmission>{
     @Override
-    public boolean create(Object orderData) throws DAOException {
+    public boolean create(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_ORDER");
-            transmission.setOrderData((OrderData)  orderData);
+            transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -24,11 +24,11 @@ public class ServerOrderRequest implements CRUD{
     }
 
     @Override
-    public OrderData read(Object  orderData) throws DAOException {
+    public OrderData read(OrderData  orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_ORDER");
-            transmission.setOrderData( (OrderData) orderData);
+            transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
             return (OrderData) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -37,11 +37,11 @@ public class ServerOrderRequest implements CRUD{
     }
 
     @Override
-    public boolean update(Object orderData) throws DAOException {
+    public boolean update(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_ORDER");
-            transmission.setOrderData((OrderData) orderData);
+            transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -50,11 +50,11 @@ public class ServerOrderRequest implements CRUD{
     }
 
     @Override
-    public boolean delete(Object orderData) throws DAOException {
+    public boolean delete(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_ORDER");
-            transmission.setOrderData((OrderData) orderData);
+            transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
             return (Boolean) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -88,9 +88,9 @@ public class ServerOrderRequest implements CRUD{
         }
     }
     @Override
-    public ConcurrentHashMap<Integer,OrderData> receiveAllInInterval(Object transmission) throws DAOException {
+    public ConcurrentHashMap<Integer,OrderData> receiveAllInInterval(Transmission transmission) throws DAOException {
         try {
-            ((Transmission)transmission).setCommand("RECEIVE_ALL_ORDERS_IN_LIMIT");
+            transmission.setCommand("RECEIVE_ALL_ORDERS_IN_LIMIT");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, OrderData>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {

@@ -4,10 +4,11 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.orders.OrderData;
 
-public class FindAllOrdersByDateOfCompletionAndStatus implements Command {
+public class FindAllOrdersByDateOfCompletionAndStatus implements Command<OrderData> {
     @Override
-    public Object execute(Object request) throws ControllerException {
+    public Object execute(OrderData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getOrderService().findAllOrdersByDateOfCompletionAndStatus(request);
         } catch (ServiceException e) {

@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SQLProductInStockDAO implements CRUD<ProductInStock>{
+public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashMap<Integer, ProductInStock>,String>{
 
     private ProductInStock getDataFromResultSet(ResultSet resultSet) throws SQLException {
         ProductInStock productInStock =new ProductInStock();
@@ -25,7 +25,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
     }
 
     @Override
-    public boolean create(ProductInStock productInStock) {
+    public String create(ProductInStock productInStock) {
         try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
         String sql = "BEGIN; INSERT `a-king-s-ransom`.products (name , quantity , unit_price) "+
                 "VALUES ('"+
@@ -42,15 +42,15 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
                 "');COMMIT;";
             preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            return true;
+            return "Успешное создание";
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "ERROR Такие данные уже существуют";
     }
 
     @Override
-    public Object read(ProductInStock productInStock) {
+    public ProductInStock read(ProductInStock productInStock) {
         try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
@@ -73,10 +73,10 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
     }
 
     @Override
-    public boolean update(ProductInStock productInStock) {
+    public String update(ProductInStock productInStock) {
         ResultSet resultSet;
         Statement statement;
-        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
+        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
 
             statement = connection.createStatement();
 
@@ -90,36 +90,35 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
                         "provider_ID='" + productInStock.getProvider_ID() + "'," +
                         "receipt_date='" + productInStock.getReceipt_date() + "' " +
                         "WHERE ID=" + productInStock.getId() + ";";
-                return statement.executeUpdate(sql) > 0;
-
+                if (statement.executeUpdate(sql) == 1) {
+                    return "Данные обновлен";
+                } else return "ERROR Такие данные уже существует";
             } else {
-                return false;
+                return "ERROR Нет таких данных";
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "ERROR Ошибка обновления";
     }
 
     @Override
-    public boolean delete(ProductInStock productInStock) {
+    public String delete(ProductInStock productInStock) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM product_in_stock WHERE product_in_stock_ID = '"+ productInStock.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
-                return true;
+                return "Данные удалены";
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return false;
+        return "ERROR Ошибка удаления";
     }
 
     @Override
-    public Map<Integer,ProductInStock> receiveAll(){
+    public ConcurrentHashMap<Integer, ProductInStock> receiveAll(){
         ConcurrentHashMap<Integer,ProductInStock> data=new ConcurrentHashMap<>();
         String sql;
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
@@ -143,7 +142,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
         return data;
     }
     @Override
-    public Map<Integer,ProductInStock> receiveAllInLimit(Transmission transmission) {
+    public ConcurrentHashMap<Integer, ProductInStock> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, ProductInStock> data = new ConcurrentHashMap<>();
         String sql;
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
@@ -167,7 +166,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock>{
         }
         return data;
     }
-    public Map<Integer,ProductInStock> findAllByNameAndQuantity(ProductInStock productInStockToFind){
+    public ConcurrentHashMap<Integer, ProductInStock> findAllByNameAndQuantity(ProductInStock productInStockToFind){
         ConcurrentHashMap<Integer,ProductInStock> data=new ConcurrentHashMap<>();
         String sql;
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {

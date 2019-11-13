@@ -8,9 +8,9 @@ import com.loneliness.client.dao.DAOFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class UserServiceImpl implements Service {
+public class UserServiceImpl implements Service<UserData,Transmission> {
     @Override
-    public ConcurrentHashMap<Integer,UserData> receiveAllElem(Object obj) throws ServiceException {
+    public ConcurrentHashMap<Integer,UserData> receiveAllElem(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().receiveAll();
         } catch (DAOException e) {
@@ -19,36 +19,36 @@ public class UserServiceImpl implements Service {
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) throws ServiceException {
+    public Object receiveAllElemInLimit(Transmission obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().receiveAllInInterval((Transmission) obj);
+            return DAOFactory.getInstance().getUserDAO().receiveAllInInterval(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
 
 
-    public Object authorization(Object obj) throws  ServiceException {
+    public Object authorization(UserData obj) throws  ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().authorize((UserData)obj);
-        } catch (DAOException e) {
-            throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
-        }
-    }
-
-    @Override
-    public Object create(Object obj) throws ServiceException {
-        try {
-            return DAOFactory.getInstance().getUserDAO().create((UserData)obj);
+            return DAOFactory.getInstance().getUserDAO().authorize(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
 
     @Override
-    public Object receive(Object obj) throws  ServiceException {
+    public Object create(UserData obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().read((UserData) obj);
+            return DAOFactory.getInstance().getUserDAO().create(obj);
+        } catch (DAOException e) {
+            throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
+        }
+    }
+
+    @Override
+    public Object receive(UserData obj) throws  ServiceException {
+        try {
+            return DAOFactory.getInstance().getUserDAO().read(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
@@ -56,25 +56,25 @@ public class UserServiceImpl implements Service {
 
 
     @Override
-    public Object update(Object obj) throws   ServiceException {
+    public Object update(UserData obj) throws   ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().update((UserData)obj);
+            return DAOFactory.getInstance().getUserDAO().update(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }
     }
 
     @Override
-    public Object delete(Object obj) throws  ServiceException {
+    public Object delete(UserData obj) throws  ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().delete((UserData)obj);
+            return DAOFactory.getInstance().getUserDAO().delete(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }
     }
-    public Object findByLoginAndType(Object obj) throws ServiceException {
+    public Object findByLoginAndType(UserData obj) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().findByLoginAndType((UserData) obj);
+            return DAOFactory.getInstance().getUserDAO().findByLoginAndType(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }

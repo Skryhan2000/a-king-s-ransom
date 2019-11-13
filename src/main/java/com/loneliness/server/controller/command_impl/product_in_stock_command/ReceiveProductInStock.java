@@ -4,9 +4,9 @@ import com.loneliness.entity.ProductInStock;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class ReceiveProductInStock implements Command<ProductInStock> {
+public class ReceiveProductInStock implements Command<ProductInStock,ProductInStock> {
     @Override
-    public Object execute(ProductInStock request) {
+    public ProductInStock execute(ProductInStock request) {
         return ServiceFactory.getInstance().getProductInStockService().receive(request);
     }
 }

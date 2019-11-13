@@ -4,9 +4,9 @@ import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class DeleteUser implements Command<UserData> {
+public class DeleteUser implements Command<UserData,String> {
     @Override
-    public Object execute(UserData request) {
+    public String execute(UserData request) {
         return ServiceFactory.getInstance().getUserService().delete(request);
     }
 }

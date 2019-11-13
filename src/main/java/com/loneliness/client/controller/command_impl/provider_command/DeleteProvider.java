@@ -4,10 +4,11 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.ProviderData;
 
-public class DeleteProvider implements Command {
+public class DeleteProvider implements Command <ProviderData>{
     @Override
-    public Object execute(Object request) throws  ControllerException {
+    public Object execute(ProviderData request) throws  ControllerException {
         try {
             return ServiceFactory.getInstance().getProviderService().delete(request);
         } catch (ServiceException e) {

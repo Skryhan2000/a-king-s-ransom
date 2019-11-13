@@ -5,37 +5,39 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
-public class ProductInStockServiceImpl implements Service<ProductInStock>{
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ProductInStockServiceImpl implements Service<ProductInStock, ConcurrentHashMap<Integer, ProductInStock>,String,Transmission>{
     @Override
-    public Object create(ProductInStock obj) {
+    public String create(ProductInStock obj) {
         return DAOFactory.getInstance().getProductInStockDAO().create(obj);
     }
 
     @Override
-    public Object receive(ProductInStock obj) {
+    public ProductInStock receive(ProductInStock obj) {
         return DAOFactory.getInstance().getProductInStockDAO().read(obj);
     }
 
     @Override
-    public Object update(ProductInStock obj) {
+    public String update(ProductInStock obj) {
         return DAOFactory.getInstance().getProductInStockDAO().update(obj);
     }
 
     @Override
-    public Object delete(ProductInStock obj) {
+    public String delete(ProductInStock obj) {
         return DAOFactory.getInstance().getProductInStockDAO().delete(obj);
     }
 
     @Override
-    public Object receiveAllElem() {
+    public ConcurrentHashMap<Integer, ProductInStock> receiveAllElem() {
         return DAOFactory.getInstance().getProductInStockDAO().receiveAll();
     }
 
     @Override
-    public Object receiveAllElemInLimit(Object obj) {
-        return DAOFactory.getInstance().getProductInStockDAO().receiveAllInLimit((Transmission) obj);
+    public ConcurrentHashMap<Integer, ProductInStock> receiveAllElemInLimit(Transmission obj) {
+        return DAOFactory.getInstance().getProductInStockDAO().receiveAllInLimit(obj);
     }
-    public Object findAllByNameAndQuantity(ProductInStock obj) {
+    public ConcurrentHashMap<Integer, ProductInStock> findAllByNameAndQuantity(ProductInStock obj) {
         return DAOFactory.getInstance().getProductInStockDAO().findAllByNameAndQuantity(obj);
     }
 }

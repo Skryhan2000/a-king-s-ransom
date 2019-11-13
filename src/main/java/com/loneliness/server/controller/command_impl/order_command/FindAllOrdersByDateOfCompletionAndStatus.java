@@ -7,9 +7,11 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindAllOrdersByDateOfCompletionAndStatus implements Command<OrderData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllOrdersByDateOfCompletionAndStatus implements Command<OrderData, ConcurrentHashMap<Integer,OrderData>> {
     @Override
-    public Object execute(OrderData request)  {
+    public ConcurrentHashMap<Integer,OrderData> execute(OrderData request)  {
             return ServiceFactory.getInstance().getOrderService().findAllByDateOfCompletionAndStatus(request);
     }
 }

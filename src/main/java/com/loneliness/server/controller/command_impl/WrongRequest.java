@@ -5,6 +5,6 @@ import com.loneliness.server.controller.Command;
 public class WrongRequest implements Command {
     @Override
     public Object execute(Object request) {
-        return false;
+        return null;
     }
 }

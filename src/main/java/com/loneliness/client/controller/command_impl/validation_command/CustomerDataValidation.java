@@ -5,9 +5,9 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.DataValidationFactory;
 import com.loneliness.entity.CustomerData;
 
-public class CustomerDataValidation implements Command {
+public class CustomerDataValidation implements Command<CustomerData> {
     @Override
-    public Object execute(Object request) throws ControllerException {
-        return DataValidationFactory.getValidatorFactory().validate((CustomerData) request);
+    public Object execute(CustomerData request) throws ControllerException {
+        return DataValidationFactory.getValidatorFactory().validate(request);
     }
 }

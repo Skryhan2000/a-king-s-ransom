@@ -7,9 +7,11 @@ import com.loneliness.entity.CustomerData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData, ConcurrentHashMap<Integer,CustomerData>> {
     @Override
-    public Object execute(CustomerData request)  {
+    public ConcurrentHashMap<Integer,CustomerData>  execute(CustomerData request)  {
             return ServiceFactory.getInstance().getCustomerDataService().findAllByNameAndNumberOfOrders(request);
     }
 }
