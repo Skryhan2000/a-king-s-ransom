@@ -1,4 +1,4 @@
-package com.loneliness.entity;
+package com.loneliness.entity.orders;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -44,7 +44,7 @@ public class OrderData implements Serializable {
     }
 
     public enum Status{
-        ОФОРМЛЁН, СБОР_КОМПЛЕКТУЮЩИХ, ВЫПОЛНЕН, ДОСТАВЛЕН, ОТМЕНЕН, ОЖИДАНИЕ_ОПЛАТЫ, ВЫДАН, ВОЗВРАТ
+        ОФОРМЛЁН, СБОР_КОМПЛЕКТУЮЩИХ, ВЫПОЛНЕН, ДОСТАВЛЕН, ОТМЕНЕН, ОЖИДАНИЕ_ОПЛАТЫ, ВЫДАН, ВОЗВРАТ,
     }
 
     public OrderData(int id, @Positive(message = "Id клиента должно быть больше 0") @NotNull(message = "Должен быть задан сушествующий id клиента") int customerId, @NotNull(message = "Должен быть задано имя заказа. ") String orderName, @PastOrPresent(message = "Дата получения заказа должна быть в прошлом. ") @NotNull(message = "Должна быть задана дата получения заказа. ") LocalDate dateOfReceiving, @Future(message = "Дата выполнения должна быть в будующем. ") @NotNull(message = "Долна быть задана дата выполнения. ") LocalDate dateOfCompletion, @NotNull(message = "Должен быть задан статус. ") Status status, @NotNull(message = "Должен быть задан статус. ") Payment payment, StringProperty dateOfCompletionString, StringProperty statusString) {

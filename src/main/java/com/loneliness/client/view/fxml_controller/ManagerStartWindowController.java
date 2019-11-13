@@ -1,5 +1,4 @@
 package com.loneliness.client.view.fxml_controller;
-
 import com.loneliness.client.PathManager;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
@@ -20,32 +19,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-
-
-public class AdminStartWindowController implements CRUD_Controller {
+public class ManagerStartWindowController {
 
     @FXML
     private Stage dialogStage;
-    private int[] indexOfCurrentValue = {0, 20};
     private String dataType;
 
 
-    @FXML private Label providerEmailLabel;
-    @FXML private TableView<UserData> usersTable;
-    @FXML private TableColumn<UserData, String> usersLoginColumn;
-    @FXML private TableColumn<UserData, String> usersTypeColumn;
-    @FXML private Text userLogin;
-    @FXML private Text userPassword;
-    @FXML private Text userQuestion;
-    @FXML private Text userAnswer;
-    @FXML private Text type;
-    private ObservableList<UserData> usersData = FXCollections.observableArrayList();
-
-
-
+    @FXML private Text providerEmailLabel;
     @FXML private TableView<ProviderData> providerTable;
     @FXML private TableColumn<ProviderData, String> providerLocationColumn;
     @FXML private TableColumn<ProviderData, Integer> providerRatingColumn;
@@ -85,25 +68,12 @@ public class AdminStartWindowController implements CRUD_Controller {
     @FXML private TableColumn<CustomerData, Integer> customerQuantityColumn;
     private ObservableList<CustomerData> customersData = FXCollections.observableArrayList();
 
-    @FXML
-    private void setDataTypeUsers() {
-        if (dataType != null) {
-            if (!dataType.equals("users")) {
-                dataType = "users";
-                indexOfCurrentValue[0] = 0;
-                indexOfCurrentValue[1] = 20;
-                initialize();
-            }
-        }
-    }
 
     @FXML
     private void setDataTypeProviders() {
         if(dataType!=null) {
             if (!dataType.equals("providers")) {
                 dataType = "providers";
-                indexOfCurrentValue[0] = 0;
-                indexOfCurrentValue[1] = 20;
                 initialize();
             }
         }
@@ -114,8 +84,6 @@ public class AdminStartWindowController implements CRUD_Controller {
         if(dataType!=null) {
             if (!dataType.equals("product_in_stock")) {
                 dataType = "product_in_stock";
-                indexOfCurrentValue[0] = 0;
-                indexOfCurrentValue[1] = 20;
                 initialize();
             }
         }
@@ -126,8 +94,6 @@ public class AdminStartWindowController implements CRUD_Controller {
         if(dataType!=null) {
             if (!dataType.equals("orders")) {
                 dataType = "orders";
-                indexOfCurrentValue[0] = 0;
-                indexOfCurrentValue[1] = 20;
                 initialize();
             }
         }
@@ -138,35 +104,12 @@ public class AdminStartWindowController implements CRUD_Controller {
         if(dataType!=null) {
             if (!dataType.equals("customers")) {
                 dataType = "customers";
-                indexOfCurrentValue[0] = 0;
-                indexOfCurrentValue[1] = 20;
                 initialize();
             }
         }
     }
 
-    @FXML
-    private void addTwentyNode() {
-        indexOfCurrentValue[0] += 20;
-        indexOfCurrentValue[1] += 20;
-        update();
-    }
 
-    @FXML
-    private void removeTwentyNode() {
-        indexOfCurrentValue[0] -= 20;
-        indexOfCurrentValue[1] -= 20;
-        if (indexOfCurrentValue[0] < 0) {
-            indexOfCurrentValue[0] = 0;
-            indexOfCurrentValue[1] = 20;
-        }
-        update();
-    }
-
-    public ObservableList<UserData> setAndGetUsersData(ConcurrentHashMap<Integer, UserData> map) {
-        usersData.addAll(map.values());
-        return usersData;
-    }
     public ObservableList<ProviderData> setAndGetProvidersData(ConcurrentHashMap<Integer, ProviderData> map) {
         providersData.addAll(map.values());
         return providersData;
@@ -184,35 +127,20 @@ public class AdminStartWindowController implements CRUD_Controller {
         return customersData;
     }
 
-    private void fillText(UserData userData) {
-        if (userData == null) {
-            userLogin.setText("");
-            userPassword.setText("");
-            userQuestion.setText("");
-            userAnswer.setText("");
-            type.setText("");
-        } else {
-            userLogin.setText(userData.getLogin());
-            userPassword.setText(userData.getPassword());
-            userQuestion.setText(userData.getSecretQuestion());
-            userAnswer.setText(userData.getSecretAnswer());
-            type.setText(userData.getType().toString());
-        }
-    }
     private void fillText(ProviderData providerData) {
-            if (providerData == null) {
-                providerName.setText("");
-                providerLocation.setText("");
-                providerRating.setText("");
-                providerEmailLabel.setText("");
-            } else {
-                providerName.setText(providerData.getName());
-                providerLocation.setText(providerData.getLocation());
-                providerRating.setText(String.valueOf(providerData.getRating()));
-                providerEmailLabel.setText(providerData.getEmail());
-            }
-
+        if (providerData == null) {
+            providerName.setText("");
+            providerLocation.setText("");
+            providerRating.setText("");
+            providerEmailLabel.setText("");
+        } else {
+            providerName.setText(providerData.getName());
+            providerLocation.setText(providerData.getLocation());
+            providerRating.setText(String.valueOf(providerData.getRating()));
+            providerEmailLabel.setText(providerData.getEmail());
         }
+
+    }
     private void fillText(OrderData orderData) {
         if (orderData == null) {
             orderCustomerId.setText("");
@@ -259,57 +187,46 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
     }
 
-    @Override
+    @FXML
     public boolean update() {
         try {
             Transmission transmission = new Transmission();
-            transmission.setFirstIndex(indexOfCurrentValue[0]);
-            transmission.setLastIndex(indexOfCurrentValue[1]);
             if(dataType==null){
                 dataType="users";
             }
             switch (dataType) {
-                case "users":
-                    usersData.clear();
-                    transmission.setCommand("RECEIVE_ALL_USERS_IN_LIMIT");
-                    setAndGetUsersData((ConcurrentHashMap<Integer, UserData>) CommandProvider.
-                            getCommandProvider().getCommand("RECEIVE_ALL_USERS_IN_LIMIT")
-                            .execute(transmission));
-                    usersTable.refresh();
-                    usersTable.setItems(usersData);
-                    return true;
                 case "providers":
                     providersData.clear();
-                    transmission.setCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT");
+                    transmission.setCommand("RECEIVE_ALL_PROVIDERS");
                     setAndGetProvidersData((ConcurrentHashMap<Integer, ProviderData>)CommandProvider.
-                            getCommandProvider().getCommand("RECEIVE_ALL_PROVIDERS_IN_LIMIT")
+                            getCommandProvider().getCommand("RECEIVE_ALL_PROVIDERS")
                             .execute(transmission));
                     providerTable.refresh();
                     providerTable.setItems(providersData);
                     return true;
                 case "orders":
                     ordersData.clear();
-                    transmission.setCommand("RECEIVE_ALL_ORDERS_IN_LIMIT");
+                    transmission.setCommand("RECEIVE_ALL_ORDERS");
                     setAndGetOrdersData((ConcurrentHashMap<Integer, OrderData>)CommandProvider.
-                            getCommandProvider().getCommand("RECEIVE_ALL_ORDERS_IN_LIMIT")
+                            getCommandProvider().getCommand("RECEIVE_ALL_ORDERS")
                             .execute(transmission));
                     orderTable.refresh();
                     orderTable.setItems(ordersData);
                     return true;
                 case "product_in_stock":
                     productsInStockData.clear();
-                    transmission.setCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT");
+                    transmission.setCommand("RECEIVE_ALL_PRODUCT_IN_STOCK");
                     setAndGetProductsInStock((ConcurrentHashMap<Integer, ProductInStock>)CommandProvider.
-                            getCommandProvider().getCommand("RECEIVE_ALL_PRODUCT_IN_STOCK_IN_LIMIT")
+                            getCommandProvider().getCommand("RECEIVE_ALL_PRODUCT_IN_STOCK")
                             .execute(transmission));
                     productInStockTable.refresh();
                     productInStockTable.setItems( productsInStockData);
                     return true;
                 case "customers":
                     customersData.clear();
-                    transmission.setCommand("RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT");
+                    transmission.setCommand("RECEIVE_ALL_CUSTOMERS_DATA");
                     setAndGetCustomerData((ConcurrentHashMap<Integer, CustomerData>)CommandProvider.
-                            getCommandProvider().getCommand("RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT")
+                            getCommandProvider().getCommand("RECEIVE_ALL_CUSTOMERS_DATA")
                             .execute(transmission));
                     customerTable.refresh();
                     customerTable.setItems(customersData);
@@ -328,20 +245,9 @@ public class AdminStartWindowController implements CRUD_Controller {
     @FXML
     private void initialize() {
         if(dataType==null){
-            dataType="users";
+            dataType="providers";
         }
         switch (dataType) {
-            case "users":
-                usersTable.getSelectionModel().selectedItemProperty().addListener((
-                        (observableValue, userData, newUserData) -> fillText(newUserData)));
-
-                usersLoginColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
-                        getValue().loginPropertyProperty());
-                usersTypeColumn.setCellValueFactory(userDataStringCellDataFeatures -> userDataStringCellDataFeatures.
-                        getValue().typePropertyProperty());
-                UserData userData = null;
-                fillText(userData);
-                break;
             case "providers":
                 providerTable.getSelectionModel().selectedItemProperty().addListener((
                         (observableValue, providerData, newProviderData) -> fillText(newProviderData)));
@@ -358,7 +264,7 @@ public class AdminStartWindowController implements CRUD_Controller {
                         (observableValue, OrderData, newOrderData) -> fillText(newOrderData)));
 
                 orderDateOfCompletionColumn.setCellValueFactory(orderDataStringCellDataFeatures ->
-                       orderDataStringCellDataFeatures.getValue().dateOfCompletionStringProperty());
+                        orderDataStringCellDataFeatures.getValue().dateOfCompletionStringProperty());
                 orderStatusColumn.setCellValueFactory(orderDataStringCellDataFeatures ->
                         orderDataStringCellDataFeatures.getValue().statusStringProperty());
                 OrderData orderData = null;
@@ -389,37 +295,32 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
         update();
     }
-
-    @Override
+    @FXML
     public boolean searchHandler() {
         Stage dialogStage = null;
         try {
-                    dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                            getSearchUserData(), "Поиск данных");
-                    SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-                    switch (dataType) {
-                        case "users":
-                            controller.setDialogStageUser(dialogStage, usersTable, usersData, dataType);
-                            dialogStage.showAndWait();
-                            return controller.isOkClicked();
-                        case "providers":
-                            controller.setDialogStageProviders(dialogStage, providerTable, providersData, dataType);
-                            dialogStage.showAndWait();
-                            return controller.isOkClicked();
-                        case "orders":
-                            controller.setDialogStageOrders(dialogStage, orderTable, ordersData, dataType);
-                            dialogStage.showAndWait();
-                            return controller.isOkClicked();
-                        case "product_in_stock":
-                            controller.setDialogStageProductInStock(dialogStage, productInStockTable, productsInStockData, dataType);
-                            dialogStage.showAndWait();
-                            return controller.isOkClicked();
-                        case "customers":
-                            controller.setDialogCustomerData(dialogStage, customerTable, customersData, dataType);
-                            dialogStage.showAndWait();
-                            return controller.isOkClicked();
+            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getSearchUserData(), "Поиск данных");
+            SearchWindowController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            switch (dataType) {
+                case "providers":
+                    controller.setDialogStageProviders(dialogStage, providerTable, providersData, dataType);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
+                case "orders":
+                    controller.setDialogStageOrders(dialogStage, orderTable, ordersData, dataType);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
+                case "product_in_stock":
+                    controller.setDialogStageProductInStock(dialogStage, productInStockTable, productsInStockData, dataType);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
+                case "customers":
+                    controller.setDialogCustomerData(dialogStage, customerTable, customersData, dataType);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
 
-                    }
+            }
         } catch (ViewException e) {
             WorkWithAlert.getInstance().showAlert("Поиск данных",
                     "Поиск невозможен", "Что то пошло не так",
@@ -427,8 +328,7 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
         return false;
     }
-
-    @Override
+    @FXML
     public boolean addHandler() {
         Stage dialogStage = null;
         try {
@@ -482,39 +382,10 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
         return false;
     }
-
-    @Override
+    @FXML
     public boolean deleteHandler() {
         int selectedIndex;
         switch (dataType) {
-            case "users":
-                selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        UserData userData = new UserData();
-                        userData.setId(usersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
-                            usersTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
-                                this.dialogStage, "ERROR");
-                    }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
             case "providers":
                 selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
                 if (selectedIndex >= 0) {
@@ -522,7 +393,7 @@ public class AdminStartWindowController implements CRUD_Controller {
                         ProviderData providerData=new ProviderData();
                         providerData.setId(providersData.get(selectedIndex).getId());
                         if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData)) {
-                           providerTable.getItems().remove(selectedIndex);
+                            providerTable.getItems().remove(selectedIndex);
                             WorkWithAlert.getInstance().showAlert("Удаление поставщика",
                                     "Успех", "Данные сохранены", dialogStage, "INFORMATION");
                         } else {
@@ -603,7 +474,7 @@ public class AdminStartWindowController implements CRUD_Controller {
                 selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
                 if (selectedIndex >= 0) {
                     try {
-                       CustomerData customerData=new CustomerData();
+                        CustomerData customerData=new CustomerData();
                         customerData.setId(customersData.get(selectedIndex).getId());
                         if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData)) {
                             customerTable.getItems().remove(selectedIndex);
@@ -630,25 +501,10 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
         return false;
     }
-
-    @Override
+    @FXML
     public boolean changeHandler() {
         try {
             switch (dataType) {
-                case "users":
-                    UserData userData = getSelectedUserModel();
-                    if (userData != null) {
-                        Stage dialogStage = null;
-
-                        dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                                getChangeUSerData(), "Добавления пользователя");
-                        ChangeUserDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
-                        controller.setDialogStage(dialogStage, "update");
-                        controller.setData(userData);
-                        dialogStage.showAndWait();
-                        return controller.isOkClicked();
-                    }
-                    return false;
                 case "providers":
                     ProviderData providerData = getSelectedProvidersModel();
                     if (providerData != null) {
@@ -674,7 +530,7 @@ public class AdminStartWindowController implements CRUD_Controller {
                     }
                     return false;
                 case "product_in_stock":
-                   ProductInStock productInStock= getSelectedProductInStockModel();
+                    ProductInStock productInStock= getSelectedProductInStockModel();
                     if (productInStock != null) {
                         dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
                                 getChangeProductInStock(), "Добавления данных");
@@ -706,8 +562,7 @@ public class AdminStartWindowController implements CRUD_Controller {
         }
         return false;
     }
-
-    @Override
+    @FXML
     public boolean goBack() {
         try {
             PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
@@ -719,18 +574,6 @@ public class AdminStartWindowController implements CRUD_Controller {
                     this.dialogStage, "ERROR");
         }
         return false;
-    }
-
-    private UserData getSelectedUserModel() {
-        UserData selectedUser=usersTable.getSelectionModel().getSelectedItem();
-        if (selectedUser == null) {
-            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
-                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
-                    this.dialogStage, "ERROR");
-            return null;
-        } else {
-            return selectedUser;
-        }
     }
 
     private ProviderData getSelectedProvidersModel() {

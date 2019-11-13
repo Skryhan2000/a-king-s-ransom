@@ -12,7 +12,8 @@ public class Window extends Application {
         try {
             //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAuthorisationFormController()));
             //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAdminStartWindow()));
-            Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getClientStartWindow()));
+            //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getClientStartWindow()));
+            Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getManagerStartWindow()));
             PrimaryStage.getInstance().changeStage(root);
         } catch (Exception e) {
             e.printStackTrace();

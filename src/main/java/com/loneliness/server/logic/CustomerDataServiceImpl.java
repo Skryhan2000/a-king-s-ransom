@@ -1,7 +1,6 @@
 package com.loneliness.server.logic;
 
 import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 

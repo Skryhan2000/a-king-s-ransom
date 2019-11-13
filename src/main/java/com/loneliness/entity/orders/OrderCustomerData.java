@@ -1,11 +1,9 @@
-package com.loneliness.entity;
+package com.loneliness.entity.orders;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class OrderCustomerData extends OrderData{
     private static final long serialVersionUID=6L;

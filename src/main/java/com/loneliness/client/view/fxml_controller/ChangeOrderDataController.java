@@ -2,8 +2,7 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
-import com.loneliness.entity.OrderData;
-import com.loneliness.entity.ProviderData;
+import com.loneliness.entity.orders.OrderData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

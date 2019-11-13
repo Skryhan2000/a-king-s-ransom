@@ -2,6 +2,8 @@ package com.loneliness.entity.transmission;
 
 
 import com.loneliness.entity.*;
+import com.loneliness.entity.orders.OrderCustomerData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.user.UserData;
 
 import java.io.Serializable;

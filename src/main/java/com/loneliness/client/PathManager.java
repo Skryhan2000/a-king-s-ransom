@@ -20,7 +20,7 @@ public class PathManager {
         return "/AdminStartWindow.fxml";
     }
     public String getManagerStartWindow(){
-        return "";
+        return "/ManagerStartMenu.fxml";
     }
     public String getForgetYourPasswordCase(){
         return "/ForgetPasswordCase.fxml";

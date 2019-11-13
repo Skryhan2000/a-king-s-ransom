@@ -1,7 +1,7 @@
 package com.loneliness.client.service;
 
 import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.OrderData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
@@ -10,7 +10,6 @@ import com.loneliness.entity.user.UserPrivateData;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Set;
 
 public class DataValidationFactory {

@@ -1,12 +1,10 @@
 package com.loneliness.server.dao;
 
-import com.loneliness.entity.OrderCustomerData;
-import com.loneliness.entity.OrderData;
-import com.loneliness.entity.ProviderData;
+import com.loneliness.entity.orders.OrderCustomerData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.sql.*;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SQLOrderDAO implements CRUD{

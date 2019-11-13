@@ -3,7 +3,7 @@ package com.loneliness.client.view.fxml_controller;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.OrderData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;

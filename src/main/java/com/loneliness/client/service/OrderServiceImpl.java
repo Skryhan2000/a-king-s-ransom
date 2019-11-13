@@ -2,9 +2,7 @@ package com.loneliness.client.service;
 
 import com.loneliness.client.dao.DAOException;
 import com.loneliness.client.dao.DAOFactory;
-import com.loneliness.entity.OrderCustomerData;
-import com.loneliness.entity.OrderData;
-import com.loneliness.entity.ProviderData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 public class OrderServiceImpl implements Service{

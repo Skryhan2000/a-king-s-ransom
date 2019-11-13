@@ -1,7 +1,6 @@
 package com.loneliness.server.dao;
 
 import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.sql.*;

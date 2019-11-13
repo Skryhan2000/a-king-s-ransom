@@ -1,8 +1,8 @@
 package com.loneliness.client.dao;
 
 import com.loneliness.client.launcher.Client;
-import com.loneliness.entity.OrderCustomerData;
-import com.loneliness.entity.OrderData;
+import com.loneliness.entity.orders.OrderCustomerData;
+import com.loneliness.entity.orders.OrderData;
 
 import com.loneliness.entity.transmission.Transmission;
 

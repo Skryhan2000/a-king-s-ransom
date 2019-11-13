@@ -1,8 +1,7 @@
 package com.loneliness.server.logic;
 
-import com.loneliness.entity.OrderData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
-import com.loneliness.entity.user.UserData;
 import com.loneliness.server.dao.DAOFactory;
 
 public class OrderServiceImpl implements Service{

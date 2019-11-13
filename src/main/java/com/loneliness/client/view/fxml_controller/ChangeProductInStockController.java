@@ -2,16 +2,13 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
-import com.loneliness.entity.OrderData;
 import com.loneliness.entity.ProductInStock;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.validation.ConstraintViolation;
-import java.awt.*;
 import java.time.DateTimeException;
 import java.util.Set;
 
