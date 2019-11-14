@@ -8,15 +8,15 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerProductInStockRequest implements CRUD<ProductInStock,Transmission>{
+public class ServerProductInStockRequest implements CRUD<ProductInStock,Transmission,String,ConcurrentHashMap<Integer,ProductInStock>>{
     @Override
-    public boolean create(ProductInStock productInStock) throws DAOException {
+    public String create(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_PRODUCT_IN_STOCK");
             transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProductInStockRequest " + e.getMessage());
         }
@@ -36,26 +36,26 @@ public class ServerProductInStockRequest implements CRUD<ProductInStock,Transmis
     }
 
     @Override
-    public boolean update(ProductInStock productInStock) throws DAOException {
+    public String update(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_PRODUCT_IN_STOCK");
             transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProductInStockRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(ProductInStock productInStock) throws DAOException {
+    public String delete(ProductInStock productInStock) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_PRODUCT_IN_STOCK");
             transmission.setProductInStock(productInStock);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProductInStockRequest " + e.getMessage());
         }

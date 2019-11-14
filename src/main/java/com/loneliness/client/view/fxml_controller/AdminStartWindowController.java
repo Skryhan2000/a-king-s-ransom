@@ -486,148 +486,91 @@ public class AdminStartWindowController implements CRUD_Controller {
     @Override
     public boolean deleteHandler() {
         int selectedIndex;
-        switch (dataType) {
-            case "users":
-                selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
+        String answer = "";
+        String title = "";
+        try {
+            switch (dataType) {
+
+                case "users":
+                    selectedIndex = usersTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
                         UserData userData = new UserData();
                         userData.setId(usersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData)) {
-                            usersTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_USER").execute(userData);
+                        title = "Удаление пользователя";
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление пользователя",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление пользователя",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "providers":
-                selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        ProviderData providerData=new ProviderData();
+                    break;
+                case "providers":
+                    selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        ProviderData providerData = new ProviderData();
                         providerData.setId(providersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData)) {
-                           providerTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData);
+                        title = "Удаление поставщика";
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
+                    break;
+                case "orders":
+                    selectedIndex = orderTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
 
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "orders":
-                selectedIndex = orderTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        OrderData orderData=new OrderData();
+                        OrderData orderData = new OrderData();
                         orderData.setId(providersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_ORDER").execute(orderData)) {
-                            orderTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_ORDER").execute(orderData);
+                        title = "Удаление заказа";
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "product_in_stock":
-                selectedIndex = productInStockTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        ProductInStock productInStock=new ProductInStock();
+                    break;
+                case "product_in_stock":
+                    selectedIndex = productInStockTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        ProductInStock productInStock = new ProductInStock();
                         productInStock.setId(productsInStockData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PRODUCT_IN_STOCK").execute(productInStock)) {
-                            productInStockTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_PRODUCT_IN_STOCK").execute(productInStock);
+                        title = "Удаление товара на складе";
+
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
+                                "Удаление невозможно", "Выберите товар со склада для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                            "Удаление невозможно", "Выберите товар со склада для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "customers":
-                selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                       CustomerData customerData=new CustomerData();
+                    break;
+                case "customers":
+                    selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        CustomerData customerData = new CustomerData();
                         customerData.setId(customersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData)) {
-                            customerTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData);
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
+                    break;
+            }
+            WorkWithAlert.getInstance().showAnswer(answer, dialogStage, title);
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                    "Нет корректного ответа от сервера", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
         }
+
+
         return false;
     }
 

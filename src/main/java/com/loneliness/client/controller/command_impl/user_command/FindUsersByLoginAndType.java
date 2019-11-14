@@ -6,9 +6,11 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.user.UserData;
 
-public class FindUsersByLoginAndType implements Command <UserData>{
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindUsersByLoginAndType implements Command <UserData, ConcurrentHashMap<Integer,UserData>>{
     @Override
-    public Object execute(UserData request) throws ControllerException {
+    public ConcurrentHashMap<Integer,UserData>  execute(UserData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getUserService().findByLoginAndType(request);
         } catch (ServiceException e) {

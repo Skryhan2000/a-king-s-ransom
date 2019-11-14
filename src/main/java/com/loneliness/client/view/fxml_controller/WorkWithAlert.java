@@ -43,4 +43,15 @@ public class WorkWithAlert {
         alert.setContentText(errMessage.toString());
         alert.showAndWait();
     }
+    public boolean showAnswer(String answer, Stage dialogStage,String title){
+        if(answer.startsWith("ERROR")){
+            answer=answer.replace("ERROR","");
+            showAlert(title, title+" успех", answer, dialogStage, "ERROR");
+            return false;
+        }
+        else {
+           showAlert(title, title+" ошибка", answer, dialogStage, "INFORMATION");
+            return true;
+        }
+    }
 }

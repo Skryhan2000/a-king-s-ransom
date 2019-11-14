@@ -8,55 +8,55 @@ import com.loneliness.client.launcher.Client;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerUserRequest implements CRUD<UserData,Transmission> {
+public class ServerUserRequest implements CRUD<UserData,Transmission,String,ConcurrentHashMap<Integer,UserData>> {
     @Override
-    public boolean create(UserData user) throws DAOException {
+    public String create(UserData user) throws DAOException {
         try {
 
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_USER");
             transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
 
     @Override
-    public Object read(UserData user) throws DAOException {
+    public UserData read(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("RECEIVE_USER");
             transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
-            return Client.getInObject().readObject();
+            return (UserData)Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean update(UserData user) throws DAOException {
+    public String update(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_USER");
             transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(UserData user) throws DAOException {
+    public String delete(UserData user) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_USER");
             transmission.setUserData(user);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerUserRequest " + e.getMessage());
         }

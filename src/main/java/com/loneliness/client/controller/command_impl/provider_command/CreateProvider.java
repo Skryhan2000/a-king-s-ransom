@@ -8,9 +8,9 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.user.UserData;
 
 
-public class CreateProvider implements Command <ProviderData>{
+public class CreateProvider implements Command <ProviderData,String>{
     @Override
-    public Object execute(ProviderData request) throws  ControllerException {
+    public String execute(ProviderData request) throws  ControllerException {
         try {
             return  ServiceFactory.getInstance().getProviderService().create(request);
         } catch ( ServiceException e) {

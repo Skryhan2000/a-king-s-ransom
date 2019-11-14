@@ -10,7 +10,7 @@ import com.loneliness.entity.user.UserData;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ReceiveAllUsers implements Command<Transmission> {
+public class ReceiveAllUsers implements Command<Transmission,ConcurrentHashMap<Integer,UserData> > {
     @Override
     public ConcurrentHashMap<Integer, UserData> execute(Transmission request) throws  ControllerException {
         try {

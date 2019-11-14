@@ -8,15 +8,15 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerCustomerDataRequest implements CRUD<CustomerData,Transmission>{
+public class ServerCustomerDataRequest implements CRUD<CustomerData,Transmission,String,ConcurrentHashMap<Integer,CustomerData>>{
     @Override
-    public boolean create(CustomerData customerData) throws DAOException {
+    public String create(CustomerData customerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_CUSTOMER_DATA");
             transmission.setCustomerData(customerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
@@ -36,26 +36,26 @@ public class ServerCustomerDataRequest implements CRUD<CustomerData,Transmission
     }
 
     @Override
-    public boolean update(CustomerData customerData) throws DAOException {
+    public String update(CustomerData customerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_CUSTOMER_DATA");
             transmission.setCustomerData(customerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(CustomerData customerData) throws DAOException {
+    public String delete(CustomerData customerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_CUSTOMER_DATA");
             transmission.setCustomerData(customerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }

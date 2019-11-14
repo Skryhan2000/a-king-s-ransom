@@ -6,9 +6,9 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.ProductInStock;
 
-public class ReceiveProductInStock implements Command<ProductInStock> {
+public class ReceiveProductInStock implements Command<ProductInStock,ProductInStock> {
     @Override
-    public Object execute(ProductInStock request) throws ControllerException {
+    public ProductInStock execute(ProductInStock request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getProductInStockService().receive(request);
         } catch (ServiceException e) {

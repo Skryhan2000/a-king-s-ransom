@@ -4,11 +4,14 @@ import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
-public class ReceiveAllOrdersInLimit implements Command<Transmission> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ReceiveAllOrdersInLimit implements Command<Transmission, ConcurrentHashMap<Integer, OrderData>> {
     @Override
-    public Object execute(Transmission request) throws ControllerException {
+    public ConcurrentHashMap<Integer,OrderData>  execute(Transmission request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getOrderService().receiveAllElemInLimit(request);
         } catch (ServiceException e) {

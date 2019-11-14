@@ -210,30 +210,19 @@ public class ChangeOrderDataController implements Handler {
 
     @Override
     public void finishWork() {
-        boolean err=false;
         if (isInputValid()) {
             try {
+                String answer="";
                 switch (action) {
                     case "create":
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("CREATE_ORDER").execute(orderData)) {
-                            WorkWithAlert.getInstance().showAlert("Обновления данных",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                            goBack();
-                        }
-                        else err=true;
+                        answer=(String)CommandProvider.getCommandProvider().getCommand("CREATE_ORDER").execute(orderData);
                         break;
                     case "update":
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_ORDER").execute(orderData)) {
-                            WorkWithAlert.getInstance().showAlert("Обновления данных",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                            goBack();
-                        }
-                        else err=true;
+                        answer=(String)CommandProvider.getCommandProvider().getCommand("UPDATE_ORDER").execute(orderData);
                         break;
                 }
-                if(err) {
-                    WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                            "Неизвестная ошибка", "Короче что то случилось на сервере", dialogStage, "ERROR");
+                if(WorkWithAlert.getInstance().showAnswer(answer,dialogStage,"Обновления данных" )){
+                    goBack();
                 }
             } catch (ControllerException e) {
                 WorkWithAlert.getInstance().showAlert("Сбой программы", "Целостность нарушена",

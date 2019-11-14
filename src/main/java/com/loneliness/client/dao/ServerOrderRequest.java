@@ -9,15 +9,15 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerOrderRequest implements CRUD<OrderData,Transmission>{
+public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,ConcurrentHashMap<Integer,OrderData>>{
     @Override
-    public boolean create(OrderData orderData) throws DAOException {
+    public String create(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_ORDER");
             transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
@@ -37,26 +37,26 @@ public class ServerOrderRequest implements CRUD<OrderData,Transmission>{
     }
 
     @Override
-    public boolean update(OrderData orderData) throws DAOException {
+    public String update(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_ORDER");
             transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(OrderData orderData) throws DAOException {
+    public String delete(OrderData orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_ORDER");
             transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }

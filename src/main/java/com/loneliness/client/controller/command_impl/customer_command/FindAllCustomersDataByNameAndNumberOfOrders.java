@@ -7,9 +7,11 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.CustomerData;
 
-public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllCustomersDataByNameAndNumberOfOrders implements Command<CustomerData, ConcurrentHashMap<Integer,CustomerData>> {
     @Override
-    public Object execute(CustomerData request) throws ControllerException {
+    public  ConcurrentHashMap<Integer,CustomerData>   execute(CustomerData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getCustomerDataService().findAllCustomersDataByNameAndNumberOfOrders(request);
         } catch (ServiceException e) {

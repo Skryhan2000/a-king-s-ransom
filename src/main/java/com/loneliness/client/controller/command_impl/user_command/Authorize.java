@@ -12,9 +12,9 @@ import com.loneliness.entity.user.UserData;
 
 
 
-public class Authorize implements Command<UserData> {
+public class Authorize implements Command<UserData,UserData.Type> {
     @Override
-    public Object execute(UserData request) throws ControllerException {
+    public UserData.Type execute(UserData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getUserService().authorization(request);
         } catch ( ServiceException e) {

@@ -6,9 +6,11 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.orders.OrderData;
 
-public class FindAllOrdersByDateOfCompletionAndStatus implements Command<OrderData> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllOrdersByDateOfCompletionAndStatus implements Command<OrderData, ConcurrentHashMap<Integer,OrderData>> {
     @Override
-    public Object execute(OrderData request) throws ControllerException {
+    public  ConcurrentHashMap<Integer,OrderData>  execute(OrderData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getOrderService().findAllOrdersByDateOfCompletionAndStatus(request);
         } catch (ServiceException e) {

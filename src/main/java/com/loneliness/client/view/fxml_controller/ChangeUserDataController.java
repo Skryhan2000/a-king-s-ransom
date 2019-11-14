@@ -2,7 +2,6 @@ package com.loneliness.client.view.fxml_controller;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
-import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -62,7 +61,7 @@ public class ChangeUserDataController implements Handler {
             return "MANAGER";
         } else if (noType.isSelected()) {
             return "NO_TYPE";
-        } else return "err";
+        } else return "";
     }
 
     @Override
@@ -104,29 +103,17 @@ public class ChangeUserDataController implements Handler {
                 userData.setType(getType());
                 userData.setSecretQuestion(questionField.getText());
                 userData.setSecretAnswer(answerField.getText());
+                String answer = "";
                 if (action.equals("update")) {
-
-                    if ((Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_USER").execute(userData)) {
-                        WorkWithAlert.getInstance().showAlert("Обновления данных",
-                                "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                    } else {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                                "Неизвестная ошибка", "короче что то сломалось на сервере", dialogStage, "ERROR");
-
-                    }
+                    answer = (String) CommandProvider.getCommandProvider().getCommand("UPDATE_USER").execute(userData);
                 } else if (action.equals("create")) {
-
-                    if ((Boolean) CommandProvider.getCommandProvider().getCommand("CREATE_USER").execute(userData)) {
-                        WorkWithAlert.getInstance().showAlert("Обновления данных",
-                                "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                    } else {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                                "Неизвестная ошибка", "короче что то сломалось на сервере", dialogStage, "ERROR");
-
-                    }
+                    answer = (String) CommandProvider.getCommandProvider().getCommand("CREATE_USER").execute(userData);
                 }
-                goBack();
+                if (WorkWithAlert.getInstance().showAnswer(answer, dialogStage,"Обновления данных")) {
+                    goBack();
+                }
             }
+
         } catch (ControllerException e) {
             WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
                     "Неизвестная ошибка", e.getExceptionMessage().toString(), dialogStage, "ERROR");
@@ -149,27 +136,27 @@ public class ChangeUserDataController implements Handler {
     @FXML
     private void setType() {
         if (admin.isSelected()) {
-            type = "admin";
+            type = "ADMIN";
         } else if (client.isSelected()) {
-            type = "client";
+            type = "CLIENT";
         } else if (manager.isSelected()) {
-            type = "manager";
+            type = "MANAGER";
         } else if (noType.isSelected()) {
-            type = "noType";
+            type = "NO_TYPE";
         }
     }
     private void setSelectedType(String type){
         switch (type){
-            case "admin":
+            case "ADMIN":
                 admin.setSelected(true);
                 break;
-            case "client":
+            case "CLIENT":
                 client.setSelected(true);
                 break;
-            case "manager":
+            case "MANAGER":
                 manager.setSelected(true);
                 break;
-            case "noType":
+            case "NO_TYPE":
                 noType.setSelected(true);
                 break;
         }

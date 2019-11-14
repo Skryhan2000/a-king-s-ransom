@@ -23,12 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 public class ManagerStartWindowController {
-
-
-
-
-    @FXML
-    private Stage dialogStage;
+    @FXML private Stage dialogStage;
     private String dataType;
 
 

@@ -7,9 +7,9 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.CustomerData;
 
-public class CreateCustomerData implements Command<CustomerData> {
+public class CreateCustomerData implements Command<CustomerData,String> {
     @Override
-    public Object execute(CustomerData request) throws ControllerException {
+    public String execute(CustomerData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getCustomerDataService().create(request);
         } catch (ServiceException e) {

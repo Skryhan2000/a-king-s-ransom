@@ -5,10 +5,13 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.transmission.Transmission;
+import com.loneliness.entity.user.UserData;
 
-public class ReceiveAllUsersInLimit implements Command<Transmission> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ReceiveAllUsersInLimit implements Command<Transmission, ConcurrentHashMap<Integer, UserData>> {
     @Override
-    public Object execute(Transmission request) throws ControllerException {
+    public ConcurrentHashMap<Integer,UserData>  execute(Transmission request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getUserService().receiveAllElemInLimit(request);
         } catch (ServiceException e) {

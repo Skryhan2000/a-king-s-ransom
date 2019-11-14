@@ -1,16 +1,13 @@
 package com.loneliness.server.view;
 
 import com.loneliness.entity.transmission.Transmission;
-import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.CommandProvider;
-
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
+
 
 public class ClientWorkingThread implements Runnable{
     private ArrayBlockingQueue<ClientWorkingThread> serverList;
@@ -31,7 +28,7 @@ public class ClientWorkingThread implements Runnable{
     @Override
     public void run() {
         Transmission transmission;
-        Object response = null;
+        Object response ;
         try {
             while (true) {
                 transmission=(Transmission) inObject.readObject();
@@ -63,13 +60,13 @@ public class ClientWorkingThread implements Runnable{
             e.printStackTrace();
             killOneClient();
         } catch (IOException e) {
+            e.printStackTrace();
            // System.out.println("Количество людей на сервере "+(--Server.qwantity));
            // synchronized (StartWindowController.class){StartWindowController.updateQuantity(-1);}
             killOneClient();
         }
-
-
     }
+
     private void killOneClient() {
         try {
             inObject.close();

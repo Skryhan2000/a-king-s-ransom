@@ -5,9 +5,12 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.DataValidationFactory;
 import com.loneliness.entity.ProviderData;
 
-public class ProviderValidation implements Command<ProviderData> {
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+public class ProviderValidation implements Command<ProviderData, Set<ConstraintViolation<ProviderData>>> {
     @Override
-    public Object execute(ProviderData request) throws ControllerException {
+    public Set<ConstraintViolation<ProviderData>>  execute(ProviderData request) throws ControllerException {
         return DataValidationFactory.getValidatorFactory().validate(request);
     }
 }

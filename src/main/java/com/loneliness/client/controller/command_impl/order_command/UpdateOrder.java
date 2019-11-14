@@ -6,9 +6,9 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.orders.OrderData;
 
-public class UpdateOrder implements Command<OrderData> {
+public class UpdateOrder implements Command<OrderData,String> {
     @Override
-    public Object execute(OrderData request) throws ControllerException {
+    public String execute(OrderData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getOrderService().update(request);
         } catch (ServiceException e) {

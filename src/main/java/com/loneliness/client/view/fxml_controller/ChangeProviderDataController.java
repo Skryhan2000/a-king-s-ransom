@@ -26,12 +26,7 @@ public class ChangeProviderDataController implements Handler{
         ratingField.setText(String.valueOf(providerData.getRating()));
         locationField.setText(providerData.getLocation());
         emailField.setText(providerData.getEmail());
-        if(providerData!=null){
-            this.providerData=providerData;
-        }
-        else {
-            this.providerData=new ProviderData();
-        }
+        this.providerData=providerData;
     }
     public void setDialogStage(Stage dialogStage, String action) {
         this.dialogStage = dialogStage;
@@ -78,32 +73,22 @@ public class ChangeProviderDataController implements Handler{
     public void finishWork() {
         if (isInputValid()) {
             try {
+                String answer = "";
                 switch (action) {
                     case "update":
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_PROVIDER").execute(providerData)) {
-                            WorkWithAlert.getInstance().showAlert("Обновления данных",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                            goBack();
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                                    "Неизвестная ошибка", "короче что то сломалось на сервере", dialogStage, "ERROR");
-                        }
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("UPDATE_PROVIDER").execute(providerData);
                         break;
                     case "create":
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("CREATE_PROVIDER").execute(providerData)) {
-                            WorkWithAlert.getInstance().showAlert("Создание поставщика",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                            goBack();
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                                    "Неизвестная ошибка", "короче что то сломалось на сервере", dialogStage, "ERROR");
-                        }
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("CREATE_PROVIDER").execute(providerData);
                         break;
+                }
+                if (WorkWithAlert.getInstance().showAnswer(answer, dialogStage,"Обновления данных")) {
+                    goBack();
                 }
 
             } catch (ControllerException e) {
-                WorkWithAlert.getInstance().showAlert("Сбой программы","Целостность нарушена",
-                        e.getExceptionMessage().toString() , dialogStage, "ERROR");
+                WorkWithAlert.getInstance().showAlert("Сбой программы", "Целостность нарушена",
+                        e.getExceptionMessage().toString(), dialogStage, "ERROR");
             }
         }
     }

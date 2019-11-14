@@ -9,9 +9,9 @@ import com.loneliness.entity.user.UserData;
 
 import java.io.IOException;
 
-public class UpdateUser implements Command<UserData> {
+public class UpdateUser implements Command<UserData,String> {
     @Override
-    public Object execute(UserData request) throws ControllerException {
+    public String execute(UserData request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getUserService().update(request);
         } catch (ServiceException e) {

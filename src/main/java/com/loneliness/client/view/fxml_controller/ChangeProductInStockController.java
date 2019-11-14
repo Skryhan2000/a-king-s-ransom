@@ -68,28 +68,19 @@ public class ChangeProductInStockController implements Handler{
 
     @Override
     public void finishWork() {
-        boolean err=false;
         if (isInputValid()) {
             try {
+                String answer="";
                 switch (action) {
                     case "create":
-                        if (!(Boolean) CommandProvider.getCommandProvider().getCommand("CREATE_PRODUCT_IN_STOCK").execute(productInStock)) {
-                            err=true;
-                        }
+                        answer=(String)CommandProvider.getCommandProvider().getCommand("CREATE_PRODUCT_IN_STOCK").execute(productInStock);
                         break;
                     case "update":
-                        if (!(Boolean) CommandProvider.getCommandProvider().getCommand("UPDATE_PRODUCT_IN_STOCK").execute(productInStock)) {
-                            err=true;
-                        }
+                        answer=(String)CommandProvider.getCommandProvider().getCommand("UPDATE_PRODUCT_IN_STOCK").execute(productInStock);
+
                         break;
                 }
-                if(err) {
-                    WorkWithAlert.getInstance().showAlert("Ошибка обновления данных",
-                            "Неизвестная ошибка", "Короче что то случилось на сервере", dialogStage, "ERROR");
-                }
-                else {
-                    WorkWithAlert.getInstance().showAlert("Обновления данных",
-                            "Успех", "Данные сохранены", dialogStage, "INFORMATION");
+                if(WorkWithAlert.getInstance().showAnswer(answer,dialogStage,"Обновления данных")){
                     goBack();
                 }
             } catch (ControllerException e) {

@@ -6,15 +6,15 @@ import com.loneliness.entity.transmission.Transmission;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerProviderRequest implements CRUD<ProviderData,Transmission>{
+public class ServerProviderRequest implements CRUD<ProviderData,Transmission,String,ConcurrentHashMap<Integer,ProviderData>>{
     @Override
-    public boolean create(ProviderData providerData) throws DAOException {
+    public String create(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_PROVIDER");
             transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
@@ -34,26 +34,26 @@ public class ServerProviderRequest implements CRUD<ProviderData,Transmission>{
     }
 
     @Override
-    public boolean update(ProviderData providerData) throws DAOException {
+    public String update(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("UPDATE_PROVIDER");
             transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(ProviderData providerData) throws DAOException {
+    public String delete(ProviderData providerData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
             transmission.setCommand("DELETE_PROVIDER");
             transmission.setProviderData(providerData);
             Client.getOutObject().writeObject(transmission);
-            return (Boolean) Client.getInObject().readObject();
+            return (String) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerProviderRequest " + e.getMessage());
         }

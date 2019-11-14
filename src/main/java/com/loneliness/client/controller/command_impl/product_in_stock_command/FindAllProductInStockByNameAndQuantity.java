@@ -6,9 +6,11 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.ProductInStock;
 
-public class FindAllProductInStockByNameAndQuantity implements Command<ProductInStock> {
+import java.util.concurrent.ConcurrentHashMap;
+
+public class FindAllProductInStockByNameAndQuantity implements Command<ProductInStock, ConcurrentHashMap<Integer, ProductInStock>> {
     @Override
-    public Object execute(ProductInStock request) throws ControllerException {
+    public ConcurrentHashMap<Integer, ProductInStock>  execute(ProductInStock request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getProductInStockService().findAllProductInStockByNameAndQuantity(request);
         } catch (ServiceException e) {

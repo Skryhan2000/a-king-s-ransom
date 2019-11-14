@@ -6,9 +6,9 @@ import com.loneliness.client.service.ServiceException;
 import com.loneliness.client.service.ServiceFactory;
 import com.loneliness.entity.ProductInStock;
 
-public class DeleteProductInStock implements Command<ProductInStock> {
+public class DeleteProductInStock implements Command<ProductInStock,String> {
     @Override
-    public Object execute(ProductInStock request) throws ControllerException {
+    public String execute(ProductInStock request) throws ControllerException {
         try {
             return ServiceFactory.getInstance().getProductInStockService().delete(request);
         } catch (ServiceException e) {

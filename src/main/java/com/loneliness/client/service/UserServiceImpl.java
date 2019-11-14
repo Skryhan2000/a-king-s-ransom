@@ -8,7 +8,7 @@ import com.loneliness.client.dao.DAOFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class UserServiceImpl implements Service<UserData,Transmission> {
+public class UserServiceImpl implements Service<UserData,Transmission,String,ConcurrentHashMap<Integer,UserData>> {
     @Override
     public ConcurrentHashMap<Integer,UserData> receiveAllElem(Transmission obj) throws ServiceException {
         try {
@@ -19,7 +19,7 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
     }
 
     @Override
-    public Object receiveAllElemInLimit(Transmission obj) throws ServiceException {
+    public ConcurrentHashMap<Integer,UserData> receiveAllElemInLimit(Transmission obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().receiveAllInInterval(obj);
         } catch (DAOException e) {
@@ -28,7 +28,7 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
     }
 
 
-    public Object authorization(UserData obj) throws  ServiceException {
+    public UserData.Type authorization(UserData obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().authorize(obj);
         } catch (DAOException e) {
@@ -37,7 +37,7 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
     }
 
     @Override
-    public Object create(UserData obj) throws ServiceException {
+    public String create(UserData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().create(obj);
         } catch (DAOException e) {
@@ -46,7 +46,7 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
     }
 
     @Override
-    public Object receive(UserData obj) throws  ServiceException {
+    public UserData receive(UserData obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().read(obj);
         } catch (DAOException e) {
@@ -56,7 +56,7 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
 
 
     @Override
-    public Object update(UserData obj) throws   ServiceException {
+    public String update(UserData obj) throws   ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().update(obj);
         } catch (DAOException e) {
@@ -65,14 +65,14 @@ public class UserServiceImpl implements Service<UserData,Transmission> {
     }
 
     @Override
-    public Object delete(UserData obj) throws  ServiceException {
+    public String delete(UserData obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().delete(obj);
         } catch (DAOException e) {
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }
     }
-    public Object findByLoginAndType(UserData obj) throws ServiceException {
+    public ConcurrentHashMap<Integer,UserData>  findByLoginAndType(UserData obj) throws ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().findByLoginAndType(obj);
         } catch (DAOException e) {

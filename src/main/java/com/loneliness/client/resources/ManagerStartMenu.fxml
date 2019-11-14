@@ -27,8 +27,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Заказы">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Поиск оптимального заказа" />
-                        <MenuItem mnemonicParsing="false" text="Поиск горящих заказов" />
+                        <MenuItem mnemonicParsing="false" onAction="#searchForBurningOrders" text="Поиск горящих заказов" />
                         <MenuItem mnemonicParsing="false" text="Подсчёт стоимости заказа" />
                   </items>
                 </Menu>
@@ -39,7 +38,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Поставщики">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Поиск наиболее выгодного" />
+                    <MenuItem mnemonicParsing="false" text="Поиск наиболее оптимального поставщика" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Отчёт">

@@ -11,11 +11,11 @@ import com.loneliness.entity.user.UserData;
 import java.io.IOException;
 
 
-public class CreateUser implements Command<UserData> {
+public class CreateUser implements Command<UserData,String> {
     @Override
-    public Boolean execute(UserData request) throws  ControllerException {
+    public String execute(UserData request) throws  ControllerException {
         try {
-            return (Boolean) ServiceFactory.getInstance().getUserService().create(request);
+            return ServiceFactory.getInstance().getUserService().create(request);
         } catch (ServiceException e) {
             throw new ControllerException(e.getExceptionMessage().toString(),e.getException().toString());
         }

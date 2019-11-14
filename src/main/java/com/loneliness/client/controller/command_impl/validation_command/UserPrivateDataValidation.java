@@ -5,9 +5,12 @@ import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.service.DataValidationFactory;
 import com.loneliness.entity.user.UserPrivateData;
 
-public class UserPrivateDataValidation implements Command<UserPrivateData> {
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+public class UserPrivateDataValidation implements Command<UserPrivateData, Set<ConstraintViolation<UserPrivateData>>> {
     @Override
-    public Object execute(UserPrivateData request) throws ControllerException {
+    public Set<ConstraintViolation<UserPrivateData>> execute(UserPrivateData request) throws ControllerException {
         return DataValidationFactory.getValidatorFactory().validate(request);
     }
 }
