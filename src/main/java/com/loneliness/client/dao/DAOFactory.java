@@ -9,6 +9,7 @@ public class DAOFactory {
     private final ServerOrderRequest orderRequest=new ServerOrderRequest();
     private final ServerProductInStockRequest productInStockRequest=new ServerProductInStockRequest();
     private final ServerCustomerDataRequest customerDataRequest=new ServerCustomerDataRequest();
+    private final ReportDAO report=new ReportDAO();
     public static DAOFactory getInstance() {
         return instance;
     }
@@ -31,5 +32,9 @@ public class DAOFactory {
 
     public ServerOrderRequest getOrderRequest() {
         return orderRequest;
+    }
+
+    public ReportDAO getReport() {
+        return report;
     }
 }

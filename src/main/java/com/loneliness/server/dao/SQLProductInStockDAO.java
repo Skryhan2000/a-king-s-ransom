@@ -27,19 +27,19 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
     @Override
     public String create(ProductInStock productInStock) {
         try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
-        String sql = "BEGIN; INSERT `a-king-s-ransom`.products (name , quantity , unit_price) "+
+        String sql = "INSERT products (name , quantity , unit_price) \n"+
                 "VALUES ('"+
-                productInStock.getName()+"','"+
-                productInStock.getQuantity()+"', "+
+                productInStock.getName()+"', "+
+                productInStock.getQuantity()+" , "+
                 productInStock.getUnitPrice()+
-                " ); ";
+                " );\n ";
             PreparedStatement preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-             sql="INSERT `a-king-s-ransom`.product_in_stock (product_in_stock_ID ,provider_ID,receipt_date) "+
+             sql=" INSERT product_in_stock (product_in_stock_ID ,provider_ID,receipt_date)\n "+
                 "VALUES (last_insert_id(),"+
                 productInStock.getProvider_ID()+",'"+
                 productInStock.getReceipt_date().toString()+
-                "');COMMIT;";
+                "');";
             preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";

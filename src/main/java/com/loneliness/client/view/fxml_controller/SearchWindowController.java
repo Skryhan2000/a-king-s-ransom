@@ -75,8 +75,14 @@ public class SearchWindowController implements Handler{
         this.ordersTable=ordersTable;
         this.ordersData=ordersData;
         this.type=type;
-        name1.setText("Статус");
-        name.setText("Дедлайн");
+        if(type.equals("orders")){
+            name1.setText("Статус");
+            name.setText("Дедлайн");
+        }
+        else if(type.equals("order_id")){
+            name.setText("Статус");
+            name1.setText("id");
+        }
     }
     public void setDialogStageProductInStock(Stage dialogStage, TableView<ProductInStock> productInStockTable, ObservableList<ProductInStock> productsInStockData, String type){
         this.dialogStage = dialogStage;
@@ -128,6 +134,23 @@ public class SearchWindowController implements Handler{
                     } catch (DateTimeException e) {
                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
                                 "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
+                                dialogStage, "ERROR");
+                    }
+                    break;
+                case "order_id":
+                    try {
+                        orderData.setId(Integer.parseInt(textField1.getText()));
+                        if ( orderData.getId() >= 0) {
+                            valid = true;
+                        } else {
+                            WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                    "Ошибка проверки введеных данных", "В поле id должно быть не отрицательное число",
+                                    dialogStage, "ERROR");
+                        }
+                    } catch (NumberFormatException e) {
+                        valid = false;
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле id должно быть число",
                                 dialogStage, "ERROR");
                     }
                     break;
@@ -247,6 +270,18 @@ public class SearchWindowController implements Handler{
                         if(orderMap.size()!=0) {
                             ordersData.clear();
                             ordersData.addAll(orderMap.values());
+                            ordersTable.refresh();
+                            ordersTable.setItems(ordersData);
+                        }
+                        else noData=true;
+                        break;
+                    case "order_id":
+                        setData(orderData);
+                        ConcurrentHashMap<Integer, OrderData> order_idMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
+                                getCommandProvider().getCommand("RECEIVE_ORDER_DATA").execute(orderData);
+                        if(order_idMap.size()!=0) {
+                            ordersData.clear();
+                            ordersData.addAll(order_idMap.values());
                             ordersTable.refresh();
                             ordersTable.setItems(ordersData);
                         }

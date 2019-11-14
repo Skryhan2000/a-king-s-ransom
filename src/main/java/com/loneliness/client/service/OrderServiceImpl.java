@@ -78,4 +78,11 @@ public class OrderServiceImpl implements Service<OrderData,Transmission,String, 
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }
     }
+    public ConcurrentHashMap<Integer,OrderData> searchForBurningOrders(OrderData obj) throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getOrderRequest().searchForBurningOrders(obj);
+        } catch (DAOException e) {
+            throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
+        }
+    }
 }

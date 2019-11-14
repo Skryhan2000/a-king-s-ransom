@@ -34,4 +34,7 @@ public class PathManager {
     public String getChangeOrderData(){return "/ChangeOrderData.fxml";}
     public String getChangeProductInStock(){return "/ChangeProductInStock.fxml";}
     public String getChangeCustomerData(){return "/ChangeCustomerData.fxml";}
+    public String getSupplierRatingChart(){return "/SupplierRatingChart.fxml";}
+    public String getProductChart(){return "/ProductChart.fxml";}
+
 }

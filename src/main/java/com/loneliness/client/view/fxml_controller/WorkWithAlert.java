@@ -46,11 +46,12 @@ public class WorkWithAlert {
     public boolean showAnswer(String answer, Stage dialogStage,String title){
         if(answer.startsWith("ERROR")){
             answer=answer.replace("ERROR","");
-            showAlert(title, title+" успех", answer, dialogStage, "ERROR");
+            showAlert(title, title+"ошибка ", answer, dialogStage, "ERROR");
             return false;
         }
         else {
-           showAlert(title, title+" ошибка", answer, dialogStage, "INFORMATION");
+            answer=answer.replace("ERROR","");
+           showAlert(title, title+" успех", answer, dialogStage, "INFORMATION");
             return true;
         }
     }

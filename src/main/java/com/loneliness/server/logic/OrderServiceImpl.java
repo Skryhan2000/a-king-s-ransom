@@ -43,5 +43,9 @@ public class OrderServiceImpl implements Service<OrderData,ConcurrentHashMap<Int
     }
 
     public ConcurrentHashMap<Integer, OrderCustomerData> receiveAllCustomerOrderInLimit(Transmission obj){
-        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit(obj);}
+        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit(obj);
+    }
+    public  ConcurrentHashMap<Integer, OrderData> searchForBurningOrders(OrderData orderData){
+        return DAOFactory.getInstance().getOrderDAO().searchForBurningOrders(orderData);
+    }
 }

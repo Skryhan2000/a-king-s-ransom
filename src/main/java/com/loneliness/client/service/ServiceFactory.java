@@ -10,6 +10,7 @@ public class ServiceFactory {
     private final OrderServiceImpl orderService=new OrderServiceImpl();
     private final ProductInStockServiceImpl productInStockService = new ProductInStockServiceImpl();
     private final CustomerDataServiceImpl customerDataService=new CustomerDataServiceImpl();
+    private final ReportLogic reportLogic=new ReportLogic();
     public static ServiceFactory getInstance() {
         return instance;
     }
@@ -31,5 +32,9 @@ public class ServiceFactory {
 
     public CustomerDataServiceImpl getCustomerDataService() {
         return customerDataService;
+    }
+
+    public ReportLogic getReportLogic() {
+        return reportLogic;
     }
 }

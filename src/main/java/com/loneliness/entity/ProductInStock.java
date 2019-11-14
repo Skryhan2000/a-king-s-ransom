@@ -9,6 +9,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -29,6 +30,7 @@ public class ProductInStock implements Serializable {
     @NotNull(message = "Задайте дату поступления. ")
     @PastOrPresent(message = "Дата поступления не может быть в будующем. ")
     private LocalDate receipt_date;
+    private Date DATA=new Date();
     private transient SimpleStringProperty nameString;
     private transient SimpleIntegerProperty quantityInteger;
 
@@ -72,6 +74,14 @@ public class ProductInStock implements Serializable {
     }
 
     public ProductInStock() {
+    }
+
+    public Date getDATA() {
+        return java.sql.Date.valueOf(receipt_date);
+    }
+
+    public void setDATA(Date DATA) {
+        this.DATA = DATA;
     }
 
     public int getId() {
@@ -122,6 +132,7 @@ public class ProductInStock implements Serializable {
 
     public void setReceipt_date(LocalDate receipt_date) {
         this.receipt_date = receipt_date;
+        DATA.setTime(receipt_date.toEpochDay());
     }
 
     public String getNameString() {

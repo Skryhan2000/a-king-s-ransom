@@ -1,7 +1,9 @@
-package com.loneliness.client.view.fxml_controller;
+package com.loneliness.client.view.fxml_controller.change_data;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
+import com.loneliness.client.view.fxml_controller.Handler;
+import com.loneliness.client.view.fxml_controller.WorkWithAlert;
 import com.loneliness.entity.ProductInStock;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -12,7 +14,7 @@ import javax.validation.ConstraintViolation;
 import java.time.DateTimeException;
 import java.util.Set;
 
-public class ChangeProductInStockController implements Handler{
+public class ChangeProductInStockController implements Handler {
     @FXML private Stage dialogStage;
     private String action;
     private boolean okClicked=false;

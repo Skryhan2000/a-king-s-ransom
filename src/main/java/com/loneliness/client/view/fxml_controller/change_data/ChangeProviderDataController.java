@@ -1,7 +1,9 @@
-package com.loneliness.client.view.fxml_controller;
+package com.loneliness.client.view.fxml_controller.change_data;
 
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
+import com.loneliness.client.view.fxml_controller.Handler;
+import com.loneliness.client.view.fxml_controller.WorkWithAlert;
 import com.loneliness.entity.ProviderData;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -11,7 +13,7 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 
-public class ChangeProviderDataController implements Handler{
+public class ChangeProviderDataController implements Handler {
     @FXML private TextField nameField;
     @FXML private TextField ratingField;
     @FXML private TextField locationField;

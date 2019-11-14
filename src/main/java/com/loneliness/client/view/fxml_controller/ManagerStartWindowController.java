@@ -4,6 +4,7 @@ import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.client.view.ViewException;
+import com.loneliness.client.view.fxml_controller.change_data.*;
 import com.loneliness.entity.CustomerData;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.ProductInStock;
@@ -14,13 +15,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 public class ManagerStartWindowController {
     @FXML private Stage dialogStage;
@@ -31,7 +31,7 @@ public class ManagerStartWindowController {
     @FXML private TableView<ProviderData> providerTable;
     @FXML private TableColumn<ProviderData, String> providerLocationColumn;
     @FXML private TableColumn<ProviderData, Integer> providerRatingColumn;
-    private ObservableList<ProviderData> providersData = FXCollections.observableArrayList();
+    private  ObservableList<ProviderData> providersData = FXCollections.observableArrayList();
     @FXML private Text providerName;
     @FXML private Text providerLocation;
     @FXML private Text providerRating;
@@ -67,8 +67,35 @@ public class ManagerStartWindowController {
     @FXML private TableColumn<CustomerData, Integer> customerQuantityColumn;
     private ObservableList<CustomerData> customersData = FXCollections.observableArrayList();
 
+
+    @FXML private void searchOrder(){
+        String buf= dataType;
+        dataType="order_id";
+        searchHandler();
+        dataType=buf;
+    }
+
     @FXML private void searchForBurningOrders(){
-        // TODO: 13.11.2019 вывод заказов о окошке дата сдачи которых меньше 1 недели
+        OrderData orderData=new OrderData();
+        orderData.setDateOfReceiving(LocalDate.now());
+        orderData.setDateOfCompletion(LocalDate.now().plusWeeks(1));
+        ConcurrentHashMap<Integer, OrderData> order_idMap = null;
+        try {
+            order_idMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
+                    getCommandProvider().getCommand("RECEIVE_ORDER_DATA").execute(orderData);
+            if(order_idMap.size()!=0) {
+                ordersData.clear();
+                ordersData.addAll(order_idMap.values());
+                orderTable.refresh();
+                orderTable.setItems(ordersData);
+            }
+            else {
+                WorkWithAlert.getInstance().showAlert("Поиск данных",
+                        "Отчет о поиске", "Данных нет", dialogStage, "INFORMATION");
+            }
+        } catch (ControllerException e) {
+            e.printStackTrace();
+        }
     }
     @FXML private void orderCostCalculation(){
         // TODO: 13.11.2019 открытие окна со всеми задазами с подсчетом суммы каждого заказчика, заказа и общей суммы всех заказов
@@ -80,7 +107,18 @@ public class ManagerStartWindowController {
         // TODO: 13.11.2019 поиск поставшика на основе рейтинга и локации, реализовать выбор весов
     }
     @FXML private void generateReport(){
-        // TODO: 13.11.2019 генерация отчета в текстовый файл/exel и кладем его в заранее заданную папку
+        String answer="";
+        String title="";
+        try {
+            answer = (String)CommandProvider.getCommandProvider().getCommand("CREATE_REPORT").execute("QUARTERLY_REPORT");
+            title = "Создание отчёта";
+            WorkWithAlert.getInstance().showAnswer(answer, dialogStage, title);
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
+                    this.dialogStage, "ERROR");
+        }
     }
 
     @FXML private void printReport(){
@@ -88,11 +126,39 @@ public class ManagerStartWindowController {
     }
 
     @FXML private void productChart(){
-        // TODO: 13.11.2019 открытие в отдельном окне с возможностью работать с приложением парралельно графика товаров
+        String buf= dataType;
+        dataType="product_in_stock";
+        try {
+
+            update();
+            Stage dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getProductChart(), "График данных товаров на складе");
+            ProductChartController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setData(productsInStockData);
+            dialogStage.show();
+        } catch (ViewException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
+                    this.dialogStage, "ERROR");
+        }
+        dataType=buf;
     }
 
     @FXML private void supplierRatingChart(){
-        // TODO: 13.11.2019 открытие в отдельном окне с возможностью работать с приложением парралельно графика поставщиков
+        try {
+            update();
+            Stage dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getSupplierRatingChart(), "График данных рейтинга поставщиков");
+            SupplierRatingChartController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+            controller.setData(providersData);
+            dialogStage.show();
+        } catch (ViewException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
+                    this.dialogStage, "ERROR");
+        }
     }
 
     @FXML
@@ -345,6 +411,10 @@ public class ManagerStartWindowController {
                     controller.setDialogCustomerData(dialogStage, customerTable, customersData, dataType);
                     dialogStage.showAndWait();
                     return controller.isOkClicked();
+                case "order_id":
+                    controller.setDialogStageOrders(dialogStage, orderTable, ordersData, dataType);
+                    dialogStage.showAndWait();
+                    return controller.isOkClicked();
 
             }
         } catch (ViewException e) {
@@ -411,126 +481,83 @@ public class ManagerStartWindowController {
     @FXML
     public boolean deleteHandler() {
         int selectedIndex;
-        switch (dataType) {
-            case "providers":
-                selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        ProviderData providerData=new ProviderData();
+        String answer = "";
+        String title = "";
+        try {
+            switch (dataType) {
+                case "providers":
+                    selectedIndex = providerTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        ProviderData providerData = new ProviderData();
                         providerData.setId(providersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData)) {
-                            providerTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_PROVIDER").execute(providerData);
+                        title = "Удаление поставщика";
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
+                    break;
+                case "orders":
+                    selectedIndex = orderTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
 
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "orders":
-                selectedIndex = orderTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        OrderData orderData=new OrderData();
+                        OrderData orderData = new OrderData();
                         orderData.setId(providersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_ORDER").execute(orderData)) {
-                            orderTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_ORDER").execute(orderData);
+                        title = "Удаление заказа";
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "product_in_stock":
-                selectedIndex = productInStockTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        ProductInStock productInStock=new ProductInStock();
+                    break;
+                case "product_in_stock":
+                    selectedIndex = productInStockTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        ProductInStock productInStock = new ProductInStock();
                         productInStock.setId(productsInStockData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_PRODUCT_IN_STOCK").execute(productInStock)) {
-                            productInStockTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_PRODUCT_IN_STOCK").execute(productInStock);
+                        title = "Удаление товара на складе";
+
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
+                                "Удаление невозможно", "Выберите товар со склада для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление товара со склада",
-                            "Удаление невозможно", "Выберите товар со склада для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
-            case "customers":
-                selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
-                if (selectedIndex >= 0) {
-                    try {
-                        CustomerData customerData=new CustomerData();
+                    break;
+                case "customers":
+                    selectedIndex = customerTable.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex >= 0) {
+                        CustomerData customerData = new CustomerData();
                         customerData.setId(customersData.get(selectedIndex).getId());
-                        if ((Boolean) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData)) {
-                            customerTable.getItems().remove(selectedIndex);
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Успех", "Данные сохранены", dialogStage, "INFORMATION");
-                        } else {
-                            WorkWithAlert.getInstance().showAlert("Удаление заказы",
-                                    "Удаление невозможен", "Что то пошло не так",
-                                    this.dialogStage, "ERROR");
-                        }
-                    } catch (ControllerException e) {
-                        WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
-                                "Неизвестная ошибка", "Попробуйте повторить действие позже",
+                        answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_CUSTOMER_DATA").execute(customerData);
+                    } else {
+                        // Ничего не выбрано.
+                        WorkWithAlert.getInstance().showAlert("Удаление поставщика",
+                                "Удаление невозможно", "Выберите пользователя для удаления",
                                 this.dialogStage, "ERROR");
                     }
-
-                } else {
-                    // Ничего не выбрано.
-                    WorkWithAlert.getInstance().showAlert("Удаление поставщика",
-                            "Удаление невозможно", "Выберите пользователя для удаления",
-                            this.dialogStage, "ERROR");
-                }
-                break;
+                    break;
+            }
+            WorkWithAlert.getInstance().showAnswer(answer, dialogStage, title);
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
+                    "Нет корректного ответа от сервера", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
         }
+
+
         return false;
     }
     @FXML
     public boolean changeHandler() {
         try {
             switch (dataType) {
+
                 case "providers":
                     ProviderData providerData = getSelectedProvidersModel();
                     if (providerData != null) {

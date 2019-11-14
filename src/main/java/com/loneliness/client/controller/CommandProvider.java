@@ -4,6 +4,7 @@ package com.loneliness.client.controller;
 
 import com.loneliness.client.controller.command_impl.customer_command.*;
 import com.loneliness.client.controller.command_impl.product_in_stock_command.*;
+import com.loneliness.client.controller.command_impl.report_command.CreateReport;
 import com.loneliness.client.controller.command_impl.validation_command.*;
 import com.loneliness.client.controller.command_impl.WrongRequest;
 import com.loneliness.client.controller.command_impl.order_command.*;
@@ -51,6 +52,7 @@ public class CommandProvider {
         repository.put(CommandName.UPDATE_ORDER,new UpdateOrder());
         repository.put(CommandName.ORDER_DATA_VALIDATION,new OrderDataValidation());
         repository.put(CommandName.RECEIVE_ALL_CUSTOMER_ORDER_IN_LIMIT,new ReceiveAllCustomerOrderInLimit());
+        repository.put(CommandName.SEARCH_FOR_BURNING_ORDERS,new SearchForBurningOrders());
 
 
         repository.put(CommandName.CREATE_PRODUCT_IN_STOCK,new CreateProductInStock());
@@ -70,6 +72,8 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT,new ReceiveAllCustomersDataInLimit());
         repository.put(CommandName.RECEIVE_CUSTOMER_DATA,new ReceiveCustomerData());
         repository.put(CommandName.UPDATE_CUSTOMER_DATA,new UpdateCustomerData());
+
+        repository.put(CommandName.CREATE_REPORT,new CreateReport());
     }
 
     public Map<CommandName, Command> getRepository() {

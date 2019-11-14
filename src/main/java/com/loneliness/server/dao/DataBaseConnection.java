@@ -23,19 +23,15 @@ public class DataBaseConnection {
     }
 
     private DataBaseConnection() {
-        try {
 
-            properties = new Properties();
-            properties.setProperty("user","root");
-            properties.setProperty("password", "con2Egor");
-            properties.setProperty("useUnicode","true");
-            properties.setProperty("characterEncoding","UTF-8");
-            url = "jdbc:mysql://localhost/a-king-s-ransom?serverTimezone=Europe/Moscow&useSSL=false&useUnicode=true&characterEncoding=UTF-8";
-            //connection = DriverManager.getConnection(url, properties);//(url, username, password);
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-        } catch ( ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        properties = new Properties();
+        properties.setProperty("user","root");
+        properties.setProperty("password", "con2Egor");
+        properties.setProperty("useUnicode","true");
+        properties.setProperty("characterEncoding","UTF-8");
+        url = "jdbc:mysql://localhost/a-king-s-ransom?serverTimezone=Europe/Moscow&useSSL=false&useUnicode=true&characterEncoding=UTF-8";
+        //connection = DriverManager.getConnection(url, properties);//(url, username, password);
+        //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
     }
 
     public Connection getConnection() throws SQLException {

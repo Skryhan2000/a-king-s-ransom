@@ -13,6 +13,7 @@ import java.io.IOException;
 public class WorkWithFXMLLoader {
     private static final WorkWithFXMLLoader instance=new WorkWithFXMLLoader();
     private volatile static  FXMLLoader loader = new FXMLLoader();
+    private volatile BorderPane page;
     private WorkWithFXMLLoader(){}
 
     public static WorkWithFXMLLoader getInstance() {
@@ -23,7 +24,7 @@ public class WorkWithFXMLLoader {
         try {
             loader = new FXMLLoader();
             loader.setLocation(getClass().getResource(resource));
-            BorderPane page = loader.load();
+            page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);
             dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -32,6 +33,7 @@ public class WorkWithFXMLLoader {
             dialogStage.setScene(scene);
             return dialogStage;
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ViewException("Нарушена целостность программы",e.getMessage());
         }
     }
@@ -42,5 +44,8 @@ public class WorkWithFXMLLoader {
 
     public void setLoader(String resource){
         loader.setLocation(getClass().getResource(resource));
+    }
+    public BorderPane getPane(){
+        return page;
     }
 }

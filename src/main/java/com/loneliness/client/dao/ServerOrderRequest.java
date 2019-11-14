@@ -108,4 +108,15 @@ public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,Co
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
     }
+    public ConcurrentHashMap<Integer,OrderData> searchForBurningOrders(OrderData orderData) throws DAOException {
+        Transmission transmission=new Transmission();
+        transmission.setOrderData(orderData);
+        transmission.setCommand("SEARCH_FOR_BURNING_ORDERS");
+        try {
+            Client.getOutObject().writeObject(transmission);
+            return (ConcurrentHashMap<Integer, OrderData>) Client.getInObject().readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
+        }
+    }
 }

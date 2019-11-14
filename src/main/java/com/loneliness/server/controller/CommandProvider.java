@@ -49,6 +49,7 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ORDER_DATA,new ReceiveOrderData());
         repository.put(CommandName.UPDATE_ORDER,new UpdateOrder());
         repository.put(CommandName.RECEIVE_ALL_CUSTOMER_ORDER_IN_LIMIT,new ReceiveAllCustomerOrderInLimit());
+        repository.put(CommandName.SEARCH_FOR_BURNING_ORDERS,new SearchForBurningOrders());
 
         repository.put(CommandName.CREATE_PRODUCT_IN_STOCK,new CreateProductInStock());
         repository.put(CommandName.DELETE_PRODUCT_IN_STOCK,new DeleteProductInStock());

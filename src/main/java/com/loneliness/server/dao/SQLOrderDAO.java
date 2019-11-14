@@ -225,4 +225,25 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
         }
         return data;
     }
+
+    public ConcurrentHashMap<Integer,OrderData> searchForBurningOrders(OrderData orderData) {
+        ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            ResultSet resultSet;
+            Statement statement;
+           String sql="SELECT * FROM `a-king-s-ransom`.orders\n" +
+                    "where date_of_completion between '"+orderData.getDateOfReceiving()+"' and '"+orderData.getDateOfCompletion()+"';";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            OrderData order;
+            while (resultSet.next()) {
+                order=getDataFromResultSet(resultSet);
+                data.put(order.getId(),order);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 }

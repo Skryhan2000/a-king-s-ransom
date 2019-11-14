@@ -3,10 +3,10 @@ package com.loneliness.server.server;
 import com.loneliness.server.view.GUI;
 
 public class ServerLauncher {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         Server server = new Server(8000);
         GUI gui=new GUI();
-        gui.run();
+        gui.start();
         while (true){
             if(server.applyConnection()==1)
                 break;
