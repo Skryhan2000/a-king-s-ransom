@@ -25,5 +25,8 @@ public class ReportLogic {
             throw new ServiceException(e.getExceptionMessage().toString(), e.getException().toString());
         }
     }
+    public String printReport(String report){
+        return DAOFactory.getInstance().getReport().printReport(report);
+    }
 
 }

@@ -122,7 +122,18 @@ public class ManagerStartWindowController {
     }
 
     @FXML private void printReport(){
-        // TODO: 13.11.2019 открытие базового средства обзора принтеров
+        String answer="";
+        String title="";
+        try {
+            answer = (String)CommandProvider.getCommandProvider().getCommand("PRINT_REPORT").execute("QUARTERLY_REPORT");
+            title = "Создание отчёта";
+            WorkWithAlert.getInstance().showAnswer(answer, dialogStage, title);
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
+                    this.dialogStage, "ERROR");
+        }
     }
 
     @FXML private void productChart(){

@@ -5,6 +5,7 @@ package com.loneliness.client.controller;
 import com.loneliness.client.controller.command_impl.customer_command.*;
 import com.loneliness.client.controller.command_impl.product_in_stock_command.*;
 import com.loneliness.client.controller.command_impl.report_command.CreateReport;
+import com.loneliness.client.controller.command_impl.report_command.PrintReport;
 import com.loneliness.client.controller.command_impl.validation_command.*;
 import com.loneliness.client.controller.command_impl.WrongRequest;
 import com.loneliness.client.controller.command_impl.order_command.*;
@@ -74,6 +75,7 @@ public class CommandProvider {
         repository.put(CommandName.UPDATE_CUSTOMER_DATA,new UpdateCustomerData());
 
         repository.put(CommandName.CREATE_REPORT,new CreateReport());
+        repository.put(CommandName.PRINT_REPORT,new PrintReport());
     }
 
     public Map<CommandName, Command> getRepository() {

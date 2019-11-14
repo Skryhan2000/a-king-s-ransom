@@ -36,5 +36,7 @@ public class PathManager {
     public String getChangeCustomerData(){return "/ChangeCustomerData.fxml";}
     public String getSupplierRatingChart(){return "/SupplierRatingChart.fxml";}
     public String getProductChart(){return "/ProductChart.fxml";}
+    public String getPathForSavingProductInStockReport(){return "Data\\TestResult.pdf";}
+    public String getPathForPatternProductInStockReport(){return "Data\\report.jrxml";}
 
 }

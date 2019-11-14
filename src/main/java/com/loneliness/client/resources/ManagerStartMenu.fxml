@@ -45,7 +45,7 @@
                   <Menu mnemonicParsing="false" text="Отчёт">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#generateReport" text="Сформировать отчёт" />
-                        <MenuItem mnemonicParsing="false" text="Печать отчёта" />
+                        <MenuItem mnemonicParsing="false" onAction="#printReport" text="Печать отчёта" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Графики">
