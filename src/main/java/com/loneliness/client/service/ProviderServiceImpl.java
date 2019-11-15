@@ -70,4 +70,12 @@ public class ProviderServiceImpl implements Service<ProviderData, Transmission,S
             throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
         }
     }
+    public ConcurrentHashMap<Integer,ProviderData>  findProviderByLocationRatingAndValue(ProviderData obj) throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getProviderDAO().findProviderByLocationRatingAndValue(obj);
+        } catch (DAOException e) {
+            throw new ServiceException(e.getExceptionMessage().toString(),e.getException().toString());
+        }
+    }
+
 }

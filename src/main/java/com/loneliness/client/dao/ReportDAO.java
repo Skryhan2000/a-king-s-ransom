@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ReportDAO {
-
+enum Report{
+    QUARTERLY_REPORT
+}
     public String create(ConcurrentHashMap<Integer, ProductInStock> data) throws DAOException {
         try {
             JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(data.values());
@@ -38,23 +40,32 @@ public class ReportDAO {
             throw new DAOException("Ошибка создание отчета по товаром на складе ", "ReportDAO " + e.getMessage());
         }
     }
-    public String printReport(String report){
+    public String printReport(String report) {
         // TODO: 14.11.2019 протестить
-        PrintService printer=choosePrinter();
-        if(printer==null){
-            return "Принтер не выбран";
-        }
-        else {
-            try {
+        try {
+            PDDocument pdf;
+            switch (report) {
+                case "QUARTERLY_REPORT":
+                    pdf = PDDocument.load(new File(PathManager.getInstance().getPathForSavingProductInStockReport()));
+                    break;
+                default:return "ERROR Неизвестный тип оичета";
+            }
+
+            PrintService printer = choosePrinter();
+            if (printer == null) {
+                return "Принтер не выбран";
+            } else {
+
                 PrinterJob job = PrinterJob.getPrinterJob();
                 job.setPrintService(printer);
-                PDDocument pdf = PDDocument.load(new File(PathManager.getInstance().getPathForSavingProductInStockReport()));
+
                 job.setPageable(new PDFPageable(pdf));
                 job.print();
                 return "Файл ушел в печать";
-            } catch (PrinterException | IOException e) {
-                e.printStackTrace();
+
             }
+        } catch (PrinterException | IOException e) {
+            e.printStackTrace();
         }
         return "ERROR";
     }

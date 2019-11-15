@@ -176,4 +176,37 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
         }
         return data;
     }
+    public ConcurrentHashMap<Integer,ProviderData> findProviderByLocationRatingAndValue(ProviderData providerDataToFind){
+        ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
+        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
+            ResultSet resultSet;
+            Statement statement;
+            String sql = "SELECT * FROM providers ";
+            boolean whereIsNotUsed=true;
+            if(providerDataToFind.getLocation()!=null){
+                sql+="WHERE location = '" + providerDataToFind.getLocation() + "' ";
+                whereIsNotUsed=false;
+            }
+            if(providerDataToFind.getRating()!=0){
+                if(whereIsNotUsed) {
+                    sql+="WHERE rating = " + providerDataToFind.getRating() + " ";
+                }
+                else {
+                    sql += "AND rating > " +providerDataToFind.getRating() + " ";
+                }
+            }
+            sql+=" order by rating desc ;";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            ProviderData providerData;
+            while ( resultSet.next()){
+                providerData=getDataFromResultSet(resultSet);
+                data.put(providerData.getId(),providerData);
+            }
+            return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 }

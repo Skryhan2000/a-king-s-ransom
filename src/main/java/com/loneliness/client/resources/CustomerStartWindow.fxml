@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.Hyperlink?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loneliness.client.view.fxml_controller.ClientStartWindowController">
    <center>
       <SplitPane dividerPositions="0.34615384615384615" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -57,7 +58,7 @@
                         <Text fx:id="orderStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Text fx:id="orderPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email менеджера" GridPane.rowIndex="6" />
-                        <Text fx:id="orderManagerEmail" onMouseClicked="#openEmail" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Hyperlink fx:id="orderManagerEmail" onMouseClicked="#openEmail"  text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                      </children>
                   </GridPane>
                </children>

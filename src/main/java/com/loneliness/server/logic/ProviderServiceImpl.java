@@ -39,4 +39,7 @@ public class ProviderServiceImpl implements Service<ProviderData, ConcurrentHash
     public ConcurrentHashMap<Integer,ProviderData> findAllByLocationAndRating(ProviderData obj) {
         return DAOFactory.getInstance().getProviderDAO().findAllByLocationAndRating( obj);
     }
+    public ConcurrentHashMap<Integer,ProviderData> findProviderByLocationRatingAndValue (ProviderData obj){
+        return DAOFactory.getInstance().getProviderDAO().findProviderByLocationRatingAndValue(obj);
+    }
 }

@@ -21,6 +21,7 @@ public class ProviderData implements Serializable {
     @NotNull(message = "Введите эл.почту ")
     @Email(message = "Почта введена неверно ")
     private String email;
+    private String balance;
     private transient StringProperty locationString;
     private transient IntegerProperty ratingInteger;
 
@@ -54,6 +55,14 @@ public class ProviderData implements Serializable {
             ratingInteger=new SimpleIntegerProperty(rating);
         }
         return ratingInteger;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = balance;
     }
 
     public void setRatingInteger(int ratingInteger) {

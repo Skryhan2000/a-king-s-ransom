@@ -42,7 +42,7 @@ public class CommandProvider {
         repository.put(CommandName.UPDATE_PROVIDER,new UpdateProvider());
         repository.put(CommandName.FIND_PROVIDER_BY_LOCATION_AND_RATING,new FindProviderByLocationAndRating());
         repository.put(CommandName.PROVIDER_VALIDATION,new ProviderValidation());
-
+        repository.put(CommandName.FIND_PROVIDER_BY_LOCATION_RATING_AND_VALUE,new FindProviderByLocationRatingAndValue());
 
         repository.put(CommandName.CREATE_ORDER,new CreateOrder());
         repository.put(CommandName.DELETE_ORDER,new DeleteOrder());

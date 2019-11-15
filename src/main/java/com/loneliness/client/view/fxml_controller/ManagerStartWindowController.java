@@ -15,11 +15,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 public class ManagerStartWindowController {
@@ -27,7 +32,7 @@ public class ManagerStartWindowController {
     private String dataType;
 
 
-    @FXML private Text providerEmailLabel;
+    @FXML private Hyperlink providerEmailLabel;
     @FXML private TableView<ProviderData> providerTable;
     @FXML private TableColumn<ProviderData, String> providerLocationColumn;
     @FXML private TableColumn<ProviderData, Integer> providerRatingColumn;
@@ -61,7 +66,7 @@ public class ManagerStartWindowController {
     @FXML private Text customerName;
     @FXML private Text customerQuantityOfOrders;
     @FXML private Text customerLocation;
-    @FXML private Text customerEmail;
+    @FXML private Hyperlink customerEmail;
     @FXML private TableView<CustomerData> customerTable;
     @FXML private TableColumn<CustomerData, String> customerNameColumn;
     @FXML private TableColumn<CustomerData, Integer> customerQuantityColumn;
@@ -101,10 +106,34 @@ public class ManagerStartWindowController {
         // TODO: 13.11.2019 открытие окна со всеми задазами с подсчетом суммы каждого заказчика, заказа и общей суммы всех заказов
     }
     @FXML private void takeInventory(){
+        String answer="";
+        String title="";
+        try {
+            answer = (String)CommandProvider.getCommandProvider().getCommand("CREATE_REPORT").execute("QUARTERLY_REPORT");
+            title = "Инвентаризация";
+            WorkWithAlert.getInstance().showAnswer(answer, dialogStage, title);
+        } catch (ControllerException e) {
+            WorkWithAlert.getInstance().showAlert("Ошибка инвентаризации",
+                    "Неизвестная ошибка на сервере", "Попробуйте повторить действие позже",
+                    this.dialogStage, "ERROR");
+        }
+
+
         // TODO: 13.11.2019 придумать норм функционал, как вариант писмо админу о просьбе о инвентаризации
     }
     @FXML private void searchForTheBestSupplier(){
-        // TODO: 13.11.2019 поиск поставшика на основе рейтинга и локации, реализовать выбор весов
+
+        Stage dialogStage = null;
+        try {
+            dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                    getSearchForTheBestSupplier(), "Поиск лучшего поставщика");
+            dialogStage.showAndWait();
+        } catch (ViewException e) {
+            WorkWithAlert.getInstance().showAlert("Неизвестная ошибка",
+                    "Нарушение целостности программы", "Попробуйте повторить действие позже" +
+                            " или принудительно закройте программу",
+                    this.dialogStage, "ERROR");
+        }
     }
     @FXML private void generateReport(){
         String answer="";
@@ -122,6 +151,7 @@ public class ManagerStartWindowController {
     }
 
     @FXML private void printReport(){
+
         String answer="";
         String title="";
         try {
@@ -154,6 +184,39 @@ public class ManagerStartWindowController {
                     this.dialogStage, "ERROR");
         }
         dataType=buf;
+    }
+
+    @FXML
+    private void openEmail(){
+        Desktop desktop;
+        if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
+            try {
+                String email;
+                URI mailto = null;
+                switch (dataType){
+                    case "providers":
+                        email=providerEmailLabel.getText();
+                        break;
+                    case "customers":
+                        email=customerEmail.getText();
+                        break;
+                    default: email="";
+                }
+                mailto = new URI("mailto:"+email+"?subject=Запрос%20информации%20о%20заказе%20"+
+                        orderName.getText());
+                desktop.mail(mailto);
+            } catch (URISyntaxException e) {
+                WorkWithAlert.getInstance().showAlert("Открытие почтового приложения", "Ошибка",
+                        "Ошибка формирования сообщения. Отправка email невозможна", dialogStage, "ERROR");
+            } catch (IOException e) {
+                WorkWithAlert.getInstance().showAlert("Открытие почтового приложения", "Ошибка",
+                        "Что то пошло не по плану", dialogStage, "ERROR");
+            }
+
+        } else {
+            WorkWithAlert.getInstance().showAlert("Открытие почтового приложения", "Ошибка",
+                    "Ваша система не поддерживает mailto. Отправка email невозможна", dialogStage, "ERROR");
+        }
     }
 
     @FXML private void supplierRatingChart(){
