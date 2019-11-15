@@ -3,9 +3,11 @@ package com.loneliness.client.dao;
 import com.loneliness.client.launcher.Client;
 import com.loneliness.entity.CustomerData;
 
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerCustomerDataRequest implements CRUD<CustomerData,Transmission,String,ConcurrentHashMap<Integer,CustomerData>>{
@@ -94,4 +96,5 @@ public class ServerCustomerDataRequest implements CRUD<CustomerData,Transmission
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }
     }
+
 }

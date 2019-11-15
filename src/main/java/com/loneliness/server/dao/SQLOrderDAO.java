@@ -5,6 +5,7 @@ import com.loneliness.entity.orders.OrderCustomerData;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,6 +62,28 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             e.printStackTrace();
         }
         return orderData;
+    }
+    public BigDecimal calculateSumOfOrder(OrderData orderData){
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            ResultSet resultSet;
+            Statement statement;
+            String sql;
+            sql="SELECT\n" +
+                    "sum(unit_price*quantity) as price \n" +
+                    "FROM `a-king-s-ransom`.product_in_orders\n" +
+                    "join `a-king-s-ransom`.products\n" +
+                    "on `a-king-s-ransom`.product_in_orders.product_ID=`a-king-s-ransom`.products.ID\n" +
+                    "where `a-king-s-ransom`.product_in_orders.order_ID="+orderData.getId()+"\n" +
+                    "GROUP BY order_ID;";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getBigDecimal("price");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new BigDecimal(0);
     }
 
     @Override

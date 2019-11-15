@@ -7,6 +7,7 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,ConcurrentHashMap<Integer,OrderData>>{
@@ -115,6 +116,17 @@ public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,Co
         try {
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, OrderData>) Client.getInObject().readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
+        }
+    }
+    public BigDecimal calculateSumOfOrder(OrderData orderData)throws DAOException {
+        Transmission transmission = new Transmission();
+        transmission.setOrderData(orderData);
+        transmission.setCommand("FIND_ALL_CUSTOMERS_DATA_BY_NAME_AND_NUMBER_OF_ORDERS");
+        try {
+            Client.getOutObject().writeObject(transmission);
+            return (BigDecimal) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new DAOException("Ошибка получения данных", "ServerOrderRequest " + e.getMessage());
         }

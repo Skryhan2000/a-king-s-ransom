@@ -5,6 +5,7 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.dao.DAOFactory;
 
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OrderServiceImpl implements Service<OrderData,ConcurrentHashMap<Integer,OrderData>,String,Transmission>{
@@ -47,5 +48,8 @@ public class OrderServiceImpl implements Service<OrderData,ConcurrentHashMap<Int
     }
     public  ConcurrentHashMap<Integer, OrderData> searchForBurningOrders(OrderData orderData){
         return DAOFactory.getInstance().getOrderDAO().searchForBurningOrders(orderData);
+    }
+    public BigDecimal calculateSumOfOrder(OrderData orderData){
+        return DAOFactory.getInstance().getOrderDAO().calculateSumOfOrder(orderData);
     }
 }

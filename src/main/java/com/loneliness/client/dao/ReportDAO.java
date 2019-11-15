@@ -41,7 +41,6 @@ enum Report{
         }
     }
     public String printReport(String report) {
-        // TODO: 14.11.2019 протестить
         try {
             PDDocument pdf;
             switch (report) {

@@ -11,12 +11,15 @@ public class ServiceFactory {
     private final ProductInStockServiceImpl productInStockService = new ProductInStockServiceImpl();
     private final CustomerDataServiceImpl customerDataService=new CustomerDataServiceImpl();
     private final ReportLogic reportLogic=new ReportLogic();
+
     public static ServiceFactory getInstance() {
         return instance;
     }
     public ProviderServiceImpl getProviderService(){
         return providerService;
     }
+
+
 
     public ProductInStockServiceImpl getProductInStockService() {
         return productInStockService;

@@ -54,6 +54,7 @@ public class CommandProvider {
         repository.put(CommandName.ORDER_DATA_VALIDATION,new OrderDataValidation());
         repository.put(CommandName.RECEIVE_ALL_CUSTOMER_ORDER_IN_LIMIT,new ReceiveAllCustomerOrderInLimit());
         repository.put(CommandName.SEARCH_FOR_BURNING_ORDERS,new SearchForBurningOrders());
+        repository.put(CommandName.CALCULATE_SUM_OF_ORDER,new CalculateSumOfOrder());
 
 
         repository.put(CommandName.CREATE_PRODUCT_IN_STOCK,new CreateProductInStock());
@@ -76,6 +77,7 @@ public class CommandProvider {
 
         repository.put(CommandName.CREATE_REPORT,new CreateReport());
         repository.put(CommandName.PRINT_REPORT,new PrintReport());
+
     }
 
     public Map<CommandName, Command> getRepository() {
