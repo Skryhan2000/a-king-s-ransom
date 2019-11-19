@@ -20,9 +20,9 @@ public class Client extends Thread {
         try {
             socket = new Socket(ipAdr, port);
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 
@@ -70,16 +70,18 @@ public class Client extends Thread {
     public void run(){
 
         try {
-
-
+//
+//
             outObject = new ObjectOutputStream(socket.getOutputStream());
             inObject=new ObjectInputStream(socket.getInputStream());
-            Window window=new Window();
-            window.begin();
-
+//            Window window=new Window();
+//            window.begin();
+//
         } catch (IOException  e) {
             e.printStackTrace();
         }
+        Window window=new Window();
+            window.begin();
     }
 
 
@@ -100,9 +102,9 @@ public class Client extends Thread {
             inObject=new ObjectInputStream(socket.getInputStream());
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
+
 
     }
 

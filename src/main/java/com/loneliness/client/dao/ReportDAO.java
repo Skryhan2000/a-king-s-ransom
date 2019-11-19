@@ -35,7 +35,7 @@ enum Report{
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,
                     parameters, beanColDataSource);
             JasperExportManager.exportReportToPdfFile(jasperPrint, PathManager.getInstance().getPathForSavingProductInStockReport());
-            return "Отчёт успешно создан";
+            return "Отчёт успешно создан ";
         } catch (JRException e) {
             throw new DAOException("Ошибка создание отчета по товаром на складе ", "ReportDAO " + e.getMessage());
         }
@@ -66,7 +66,7 @@ enum Report{
         } catch (PrinterException | IOException e) {
             e.printStackTrace();
         }
-        return "ERROR";
+        return "ERROR ";
     }
     private  PrintService choosePrinter() {
         PrinterJob printJob = PrinterJob.getPrinterJob();

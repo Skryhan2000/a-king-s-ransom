@@ -28,7 +28,7 @@ public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,Co
     public OrderData read(OrderData  orderData) throws DAOException {
         try {
             Transmission transmission = new Transmission();
-            transmission.setCommand("RECEIVE_ORDER");
+            transmission.setCommand("RECEIVE_ORDER_DATA");
             transmission.setOrderData(orderData);
             Client.getOutObject().writeObject(transmission);
             return (OrderData) Client.getInObject().readObject();
@@ -123,7 +123,7 @@ public class ServerOrderRequest implements CRUD<OrderData,Transmission,String,Co
     public BigDecimal calculateSumOfOrder(OrderData orderData)throws DAOException {
         Transmission transmission = new Transmission();
         transmission.setOrderData(orderData);
-        transmission.setCommand("FIND_ALL_CUSTOMERS_DATA_BY_NAME_AND_NUMBER_OF_ORDERS");
+        transmission.setCommand("CALCULATE_SUM_OF_ORDER");
         try {
             Client.getOutObject().writeObject(transmission);
             return (BigDecimal) Client.getInObject().readObject();

@@ -73,8 +73,8 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button mnemonicParsing="false" onMouseClicked="#update" text="Обновить" />
-          <Button mnemonicParsing="false" onMouseClicked="#goBack" text="Выйти" />
+            <Button mnemonicParsing="false" onAction="#update" onMouseClicked="#update" text="Обновить" />
+          <Button mnemonicParsing="false" onAction="#goBack" onMouseClicked="#goBack" text="Выйти" />
         </buttons>
          <padding>
             <Insets right="10.0" />

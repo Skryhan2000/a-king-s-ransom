@@ -183,16 +183,16 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             Statement statement;
             String sql = "SELECT * FROM providers ";
             boolean whereIsNotUsed=true;
-            if(providerDataToFind.getLocation()!=null){
+            if(providerDataToFind.getLocation()!=null&&providerDataToFind.getLocation().length()!=0){
                 sql+="WHERE location = '" + providerDataToFind.getLocation() + "' ";
                 whereIsNotUsed=false;
             }
             if(providerDataToFind.getRating()!=0){
                 if(whereIsNotUsed) {
-                    sql+="WHERE rating = " + providerDataToFind.getRating() + " ";
+                    sql+="WHERE rating >= " + providerDataToFind.getRating() + " ";
                 }
                 else {
-                    sql += "AND rating > " +providerDataToFind.getRating() + " ";
+                    sql += "AND rating >= " +providerDataToFind.getRating() + " ";
                 }
             }
             sql+=" order by rating desc ;";

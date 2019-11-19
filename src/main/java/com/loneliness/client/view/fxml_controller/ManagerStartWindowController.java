@@ -1,5 +1,6 @@
 package com.loneliness.client.view.fxml_controller;
 import com.loneliness.client.PathManager;
+import com.loneliness.client.controller.Command;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
@@ -42,7 +43,7 @@ public class ManagerStartWindowController {
     @FXML private Text providerLocation;
     @FXML private Text providerRating;
 
-    @FXML private Text orderID;
+    @FXML private Text orderID=new Text();
     @FXML private Text orderCustomerId;
     @FXML private Text orderName;
     @FXML private Text orderDateOfReceiving;
@@ -89,7 +90,7 @@ public class ManagerStartWindowController {
         ConcurrentHashMap<Integer, OrderData> order_idMap = null;
         try {
             order_idMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
-                    getCommandProvider().getCommand("RECEIVE_ORDER_DATA").execute(orderData);
+                    getCommandProvider().getCommand("SEARCH_FOR_BURNING_ORDERS").execute(orderData);
             if(order_idMap.size()!=0) {
                 ordersData.clear();
                 ordersData.addAll(order_idMap.values());
@@ -232,7 +233,9 @@ public class ManagerStartWindowController {
         try {
             OrderData orderData=new OrderData();
             orderData.setId(Integer.parseInt(orderID.getText()));
-            orderSumOfOrder.setText(((BigDecimal)CommandProvider.getCommandProvider().getCommand("CALCULATE_SUM_OF_ORDER").execute(orderData)).toString());
+            Command command=CommandProvider.getCommandProvider().getCommand("CALCULATE_SUM_OF_ORDER");
+            BigDecimal des=(BigDecimal)(command.execute(orderData));
+            orderSumOfOrder.setText((des).toString());
         } catch (ControllerException e) {
             WorkWithAlert.getInstance().showAlert("Ошибка обновленя",
                     "Нет корректного ответа от сервера", "Попробуйте повторить действие позже",
@@ -321,6 +324,7 @@ public class ManagerStartWindowController {
             orderStatus.setText("");
             orderPayment.setText("");
             orderID.setText("");
+            orderSumOfOrder.setText("");
         } else {
             orderCustomerId.setText(String.valueOf(orderData.getCustomerId()));
             orderName.setText(orderData.getOrderName());
@@ -329,6 +333,7 @@ public class ManagerStartWindowController {
             orderStatus.setText(orderData.getStatus().toString());
             orderPayment.setText(orderData.getPayment().toString());
             orderID.setText(String.valueOf(orderData.getId()));
+            orderSumOfOrder.setText("Нажмите кнопку для подсчета");
         }
     }
     private void fillText(ProductInStock productInStock) {

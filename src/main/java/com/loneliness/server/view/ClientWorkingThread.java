@@ -2,6 +2,8 @@ package com.loneliness.server.view;
 
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.controller.CommandProvider;
+import com.loneliness.server.server.Server;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -56,13 +58,7 @@ public class ClientWorkingThread implements Runnable{
                 outObject.reset();
             }
 
-        }  catch ( ClassNotFoundException e) {
-            e.printStackTrace();
-            killOneClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-           // System.out.println("Количество людей на сервере "+(--Server.qwantity));
-           // synchronized (StartWindowController.class){StartWindowController.updateQuantity(-1);}
+        }  catch ( ClassNotFoundException | IOException e) {
             killOneClient();
         }
     }
@@ -72,6 +68,7 @@ public class ClientWorkingThread implements Runnable{
             inObject.close();
             outObject.close();
             userSocket.close();
+            Server.getQuantity().decrementAndGet();
             for (ClientWorkingThread clientsList  : serverList) {
                 if (clientsList.equals(this))
                     serverList.remove(this);

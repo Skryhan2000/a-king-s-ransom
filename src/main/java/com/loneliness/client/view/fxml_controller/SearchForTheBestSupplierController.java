@@ -61,6 +61,8 @@ public class SearchForTheBestSupplierController {
 
     @FXML
     private void update() {
+        locationToFind.setText("");
+        ratingToFind.setText("");
         Transmission transmission = new Transmission();
         providersData.clear();
         transmission.setCommand("RECEIVE_ALL_PROVIDERS");
@@ -132,20 +134,22 @@ public class SearchForTheBestSupplierController {
             valid=true;
         }
         try {
-            providerData.setRating(Integer.parseInt(ratingToFind.getText()));
-            if (providerData.getRating() >= 0) {
-                valid = true;
-            } else {
+            if (ratingToFind.getText() != null && ratingToFind.getText().length() != 0) {
+                providerData.setRating(Integer.parseInt(ratingToFind.getText()));
+                if (providerData.getRating() >= 0) {
+                    valid = true;
+                } else {
+                    WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                            "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                            dialogStage, "ERROR");
+                }
+            }
+            } catch(NumberFormatException e){
+                valid = false;
                 WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                        "Ошибка проверки введеных данных", "В поле количество должно быть не отрицательное число",
+                        "Ошибка проверки введеных данных", "В поле количество должно быть число",
                         dialogStage, "ERROR");
             }
-        } catch (NumberFormatException e) {
-            valid = false;
-            WorkWithAlert.getInstance().showAlert("Неверный ввод",
-                    "Ошибка проверки введеных данных", "В поле количество должно быть число",
-                    dialogStage, "ERROR");
-        }
         if(valid){
             if(locationMoreImportant.isSelected()){
                 providerData.setBalance("location");

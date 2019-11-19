@@ -81,15 +81,15 @@ public class AuthorisationFormController implements Handler {
             }
         });
     }
-
-    public boolean init() {
-        if (Client.getInObject() == null || Client.getOutObject() == null) {
+@FXML
+    public void initialize() {
+    Reconnect.getInstance().reconnect();
+        while (Reconnect.getInstance().getCancel().get()) {
             WorkWithAlert.getInstance().showAlert("Ошибка подключения",
                     "Подключение к серверу отсутствует",
                     "Нажмите ок для переподключения", dialogStage, "ERROR");
-            return Client.reconnect();
+            Reconnect.getInstance().reconnect();
         }
-        return true;
     }
 
 

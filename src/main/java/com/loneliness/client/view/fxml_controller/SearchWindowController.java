@@ -76,11 +76,13 @@ public class SearchWindowController implements Handler{
         this.ordersData=ordersData;
         this.type=type;
         if(type.equals("orders")){
-            name1.setText("Статус");
-            name.setText("Дедлайн");
+            name1.setText("Дедлайн");
+            name.setText("Статус");
         }
         else if(type.equals("order_id")){
             name.setText("Статус");
+            name.setVisible(false);
+            textField.setVisible(false);
             name1.setText("id");
         }
     }
@@ -131,6 +133,7 @@ public class SearchWindowController implements Handler{
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
                         orderData.setDateOfCompletion(LocalDate.parse(textField1.getText(), formatter));
+                        valid=true;
                     } catch (DateTimeException e) {
                         WorkWithAlert.getInstance().showAlert("Неверный ввод",
                                 "Ошибка проверки введеных данных", "В воле дедлайн должна быть дата",
@@ -211,7 +214,7 @@ public class SearchWindowController implements Handler{
         }
         else  providerData.setRating(-1);
     }
-    private void setData(OrderData orderData){
+    private void setData(OrderData orderData)throws java.lang.IllegalArgumentException{
         if(textField.getText()!=null&& textField.getText().length()!=0){
             orderData.setStatus(textField.getText());
         }
@@ -277,9 +280,11 @@ public class SearchWindowController implements Handler{
                         break;
                     case "order_id":
                         setData(orderData);
-                        ConcurrentHashMap<Integer, OrderData> order_idMap = (ConcurrentHashMap<Integer, OrderData>) CommandProvider.
+                        OrderData orderData1= ( OrderData) CommandProvider.
                                 getCommandProvider().getCommand("RECEIVE_ORDER_DATA").execute(orderData);
-                        if(order_idMap.size()!=0) {
+                        if(orderData1.getId()>0) {
+                            ConcurrentHashMap<Integer, OrderData> order_idMap=new ConcurrentHashMap<>();
+                            order_idMap.put(orderData1.getId(),orderData1);
                             ordersData.clear();
                             ordersData.addAll(order_idMap.values());
                             ordersTable.refresh();
@@ -323,6 +328,9 @@ public class SearchWindowController implements Handler{
             } catch (ControllerException e) {
                 WorkWithAlert.getInstance().showAlert("Ошибка", e.getExceptionMessage().toString(),
                         "Повторите попыткку позже" , dialogStage, "ERROR");
+            } catch (java.lang.IllegalArgumentException e){
+                WorkWithAlert.getInstance().showAlert("Ошибка", "Ошибочное задание статуса",
+                        "Введите допустимые статусы" , dialogStage, "ERROR");
             }
         }else {
             WorkWithAlert.getInstance().showAlert("Неверный ввод",

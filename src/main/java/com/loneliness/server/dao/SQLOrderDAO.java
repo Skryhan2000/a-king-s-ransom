@@ -52,15 +52,18 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             ResultSet resultSet;
             Statement statement;
             String sql;
-            sql = "SELECT * FROM orders WHERE id = '" + orderData.getId() + "';";
+            sql = "SELECT * FROM orders WHERE ID = '" + orderData.getId() + "';";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 return getDataFromResultSet(resultSet);
             }
+            else  orderData.setId(-1);
         } catch (SQLException e) {
             e.printStackTrace();
+            orderData.setId(-1);
         }
+
         return orderData;
     }
     public BigDecimal calculateSumOfOrder(OrderData orderData){

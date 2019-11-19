@@ -29,7 +29,6 @@
                 <Menu mnemonicParsing="false" text="Заказы">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#searchForBurningOrders" text="Поиск горящих заказов" />
-                        <MenuItem mnemonicParsing="false" text="Подсчёт стоимости заказа" />
                         <MenuItem mnemonicParsing="false" onAction="#searchOrder" text="Поиск по id" />
                   </items>
                 </Menu>

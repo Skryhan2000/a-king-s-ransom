@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
-    private final Map<CommandName, Command> repository = new HashMap();
+    private final Map<CommandName, Command> repository = new HashMap<>();
     private static final CommandProvider commandProvider=new CommandProvider();
     private CommandProvider(){
         repository.put(CommandName.WRONG_REQUEST,new WrongRequest());

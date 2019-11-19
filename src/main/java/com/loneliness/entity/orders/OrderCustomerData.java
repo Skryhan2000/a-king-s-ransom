@@ -4,6 +4,7 @@ import javafx.beans.property.StringProperty;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class OrderCustomerData extends OrderData{
     private static final long serialVersionUID=6L;
@@ -35,5 +36,26 @@ public class OrderCustomerData extends OrderData{
 
     public void setManagerEmail(String managerEmail) {
         this.managerEmail = managerEmail;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        OrderCustomerData that = (OrderCustomerData) o;
+        return managerEmail.equals(that.managerEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), managerEmail);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderCustomerData{" +
+                "managerEmail='" + managerEmail + '\'' +
+                '}';
     }
 }
