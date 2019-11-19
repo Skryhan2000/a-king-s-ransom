@@ -5,7 +5,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.util.Duration;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,16 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Reconnect {
     private final static Reconnect instance =new Reconnect();
     private AtomicBoolean cancel = new AtomicBoolean(false);
+    private final ReconnectService service = new ReconnectService();
     private Reconnect(){
-        ReconnectService service = new ReconnectService();
-        service.setPeriod(Duration.seconds(2));
-        service.setOnSucceeded(t -> {
-            if((Boolean) t.getSource().getValue()){
-                cancel.set(service.cancel());
-            }
-
-        });
-        service.start();}
+    }
 
     public AtomicBoolean getCancel() {
         return cancel;
@@ -32,8 +24,17 @@ public class Reconnect {
         return instance;
     }
     public void reconnect(){
-
-
+        service.setPeriod(Duration.seconds(5));
+        service.createTask();
+        service.setOnSucceeded(t -> {
+            if((Boolean) t.getSource().getValue()){
+                cancel.set(true);
+                service.cancel();
+            }
+        });
+        if(!service.isRunning()){
+            service.start();
+        }
 
     }
     private static class ReconnectService extends ScheduledService<Boolean> {
@@ -56,7 +57,7 @@ public class Reconnect {
         }
 
         protected Task<Boolean> createTask() {
-            return new Task<Boolean>() {
+            return new Task<>() {
                 protected Boolean call() {
                     connection.set(Client.reconnect());
                     return getConnection();

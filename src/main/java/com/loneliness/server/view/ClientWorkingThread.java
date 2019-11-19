@@ -24,7 +24,7 @@ public class ClientWorkingThread implements Runnable{
             outObject = new ObjectOutputStream(userSocket.getOutputStream());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Server.getQuantity().decrementAndGet();
         }
     }
     @Override

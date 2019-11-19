@@ -3,12 +3,14 @@ package com.loneliness.client.view.fxml_controller;
 import com.loneliness.entity.ProviderData;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.validation.ConstraintViolation;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 public class WorkWithAlert {
@@ -21,13 +23,23 @@ public class WorkWithAlert {
         return instance;
     }
 
-    public void showAlert(String title, String headerText, String contentText, Stage dialogStage, String type) {
+    public boolean showAlert(String title, String headerText, String contentText, Stage dialogStage, String type) {
         Alert alert = new Alert(Alert.AlertType.valueOf(type));
         alert.initOwner(dialogStage);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
-        alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isEmpty()) {
+            return false;
+        }
+        else if (result.get() == ButtonType.OK) {
+            return true;
+        }
+        else if (result.get() == ButtonType.CANCEL) {
+            return false;
+        }
+        return false;
     }
     public void showAlert(String title, String headerText, Set<ConstraintViolation<Object>> errors,
                           Stage dialogStage, String type){

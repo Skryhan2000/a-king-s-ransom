@@ -77,18 +77,19 @@ public class AuthorisationFormController implements Handler {
         PrimaryStage.getInstance().getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                     finishWork();
-
             }
         });
     }
 @FXML
     public void initialize() {
-    Reconnect.getInstance().reconnect();
-        while (Reconnect.getInstance().getCancel().get()) {
-            WorkWithAlert.getInstance().showAlert("Ошибка подключения",
+
+        WorkWithAlert.getInstance().showAlert("a-king-s-ransom","Добро пожаловать в a-king-s-ransom","Сдесь должна быть заставка, но ее съели мыши",dialogStage,"INFORMATION");
+        while (!Reconnect.getInstance().getCancel().get()) {
+            if (!WorkWithAlert.getInstance().showAlert("Ошибка подключения",
                     "Подключение к серверу отсутствует",
-                    "Нажмите ок для переподключения", dialogStage, "ERROR");
-            Reconnect.getInstance().reconnect();
+                    "Нажмите ок для переподключения", dialogStage, "ERROR")) {
+                System.exit(0);
+            }
         }
     }
 

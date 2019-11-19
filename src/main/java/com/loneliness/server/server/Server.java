@@ -49,6 +49,7 @@ public class Server extends Thread {
              //   StartWindowController.updateQuantity(+1);
                 executorService.submit(clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
             } catch(IOException e){
+                quantity.decrementAndGet();
                 e.printStackTrace();
                 break;
             }

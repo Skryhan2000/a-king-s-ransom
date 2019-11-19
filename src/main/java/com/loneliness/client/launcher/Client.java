@@ -1,6 +1,7 @@
 package com.loneliness.client.launcher;
 
 import com.loneliness.client.view.Window;
+import com.loneliness.client.view.fxml_controller.Reconnect;
 
 import java.io.*;
 import java.net.Socket;
@@ -69,19 +70,19 @@ public class Client extends Thread {
 
     public void run(){
 
-        try {
-//
-//
-            outObject = new ObjectOutputStream(socket.getOutputStream());
-            inObject=new ObjectInputStream(socket.getInputStream());
-//            Window window=new Window();
-//            window.begin();
-//
-        } catch (IOException  e) {
-            e.printStackTrace();
-        }
+//        try {
+////
+////
+//            outObject = new ObjectOutputStream(socket.getOutputStream());
+//            inObject=new ObjectInputStream(socket.getInputStream());
+////            Window window=new Window();
+////            window.begin();
+////
+//        } catch (IOException  e) {
+//            e.printStackTrace();
+//        }
         Window window=new Window();
-            window.begin();
+        window.begin();
     }
 
 
