@@ -28,7 +28,7 @@ public class UserServiceImpl implements Service<UserData,Transmission,String,Con
     }
 
 
-    public UserData.Type authorization(UserData obj) throws  ServiceException {
+    public String authorization(UserData obj) throws  ServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().authorize(obj);
         } catch (DAOException e) {

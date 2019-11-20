@@ -4,9 +4,9 @@ import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.Command;
 import com.loneliness.server.logic.ServiceFactory;
 
-public class AuthorizationUser implements Command<UserData,UserData.Type> {
+public class AuthorizationUser implements Command<UserData,String> {
     @Override
-    public UserData.Type execute(UserData request) {
+    public String execute(UserData request) {
         return ServiceFactory.getInstance().getUserService().authorization(request);
     }
 }

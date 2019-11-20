@@ -1,7 +1,6 @@
 package com.loneliness.server.dao;
 
 import com.loneliness.entity.CustomerData;
-import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.sql.*;
@@ -177,4 +176,5 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
         }
         return data;
     }
+
 }

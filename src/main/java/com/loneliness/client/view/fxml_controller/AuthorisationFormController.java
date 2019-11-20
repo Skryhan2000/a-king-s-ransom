@@ -3,7 +3,6 @@ package com.loneliness.client.view.fxml_controller;
 import com.loneliness.client.PathManager;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
-import com.loneliness.client.launcher.Client;
 import com.loneliness.client.view.PrimaryStage;
 import com.loneliness.client.view.ViewException;
 import com.loneliness.entity.user.UserData;
@@ -36,7 +35,10 @@ public class AuthorisationFormController implements Handler {
             userData.setLogin(loginField.getText());
             userData.setPassword(passwordField.getText());
             try {
-                UserData.Type type=(UserData.Type) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData);
+                String st=(String) CommandProvider.getCommandProvider().getCommand("AUTHORIZE").execute(userData);
+                String strings[]=st.split(" ");
+                UserData.Type type =UserData.Type.valueOf(strings[0]);
+                type.setID(Integer.parseInt(strings[1]));
                 switch (type) {
                     case ADMIN:
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
@@ -47,9 +49,10 @@ public class AuthorisationFormController implements Handler {
                                 getInstance().getManagerStartWindow())));
                         break;
                     case CLIENT:
+                        ClientStartWindowController.setData(type.getID());
                         PrimaryStage.getInstance().changeStage(FXMLLoader.load(getClass().getResource(PathManager.
                                 getInstance().getClientStartWindow())));
-                        ClientStartWindowController.setData(type.getCompanyID());
+
                         break;
                     case NO_TYPE:
                         WorkWithAlert.getInstance().showAlert("Ошибка авторизации",

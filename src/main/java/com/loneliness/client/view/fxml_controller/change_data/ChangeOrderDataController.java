@@ -20,7 +20,8 @@ public class ChangeOrderDataController implements Handler {
     private boolean okClicked = false;
     private OrderData orderData = new OrderData();
 
-
+    @FXML
+    private TextField orderManagerID;
     @FXML
     private TextField customerIDTextField;
     @FXML
@@ -189,6 +190,7 @@ public class ChangeOrderDataController implements Handler {
             orderData.setDateOfCompletion(dateOfCompletionDatePicker.getValue());
             orderData.setPayment(getPayment());
             orderData.setStatus(getStatus());
+            orderData.setManagerID(Integer.parseInt(orderManagerID.getText()));
             errors = (Set<ConstraintViolation<Object>>)
                     CommandProvider.getCommandProvider().getCommand("ORDER_DATA_VALIDATION").execute(orderData);
             if (errors.size() == 0) {
@@ -200,6 +202,11 @@ public class ChangeOrderDataController implements Handler {
         } catch (ControllerException e) {
             WorkWithAlert.getInstance().showAlert("Сбой программы", "Целостность нарушена",
                     e.getExceptionMessage().toString(), dialogStage, "ERROR");
+            return false;
+        }
+        catch (NumberFormatException ex){
+            WorkWithAlert.getInstance().showAlert("Ошибка", "введены не верные данные",
+                    "Была введена строка вместо числа", dialogStage, "ERROR");
             return false;
         }
     }

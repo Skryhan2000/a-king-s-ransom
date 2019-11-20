@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientStartWindowController implements CRUD_Controller{
-    private static int companyID=2;
+    private static int companyID;
     private int  indexOfCurrentValue[]={0,20};
     @FXML private Stage dialogStage;
     @FXML private TableView<OrderCustomerData> orderTable;

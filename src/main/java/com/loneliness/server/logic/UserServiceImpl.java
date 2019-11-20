@@ -23,7 +23,7 @@ public class UserServiceImpl implements Service<UserData, ConcurrentHashMap<Inte
     }
 
 
-    public UserData.Type authorization(UserData obj) {
+    public String authorization(UserData obj) {
         return DAOFactory.getInstance().getUserDAO().receiveUserType(obj);
     }
 

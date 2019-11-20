@@ -5,7 +5,6 @@ import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
 import java.sql.*;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, UserData>,String>{
@@ -33,7 +32,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                     user.getSecretAnswer() + "','" +
                     user.getSecretQuestion() + "'); " +
                     "INSERT INTO customer_representative (customer_id,user_id) VALUES(" +
-                    user.getType().getCompanyID() +
+                    user.getType().getID() +
                     ",LAST_INSERT_ID()); COMMIT;";
         } else {
             sql = "INSERT Users (login , password , type, secret_answer, secret_question) " +
@@ -134,7 +133,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
 
     }
 
-    public UserData.Type receiveUserType(UserData userData){
+    public String receiveUserType(UserData userData){
         ResultSet resultSet;
         Statement statement;
         try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
@@ -143,12 +142,14 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             if( resultSet.next()){
-                return UserData.Type.valueOf(resultSet.getString("type"));
+                UserData.Type type=UserData.Type.valueOf(resultSet.getString("type"));
+                type.setID(resultSet.getInt("id"));
+                return type.toString()+" "+type.getID();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return UserData.Type.valueOf("NO_TYPE");
+        return UserData.Type.valueOf("NO_TYPE").getDeclaringClass().getName();
     }
 
     @Override

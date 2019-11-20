@@ -160,17 +160,24 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
     }
 
 
-    public ConcurrentHashMap<Integer,OrderCustomerData> receiveAllCustomerOrderInLimit(Transmission transmission) {
+    public ConcurrentHashMap<Integer,OrderCustomerData> receiveAllCustomerOrderInLimitByClientId(Transmission transmission) {
         ConcurrentHashMap<Integer, OrderCustomerData> data = new ConcurrentHashMap<>();
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT id,customer_ID,order_name,date_of_receiving,date_of_completion,\n" +
+            String sql;
+            sql="SELECT customer_id FROM customer_representative WHERE user_id= "+
+                    transmission.getOrderCustomerData().getCustomerId()+" ;";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            int customer_id=resultSet.getInt("customer_id");
+            sql = "SELECT id,customer_ID,order_name,date_of_receiving,date_of_completion,\n" +
                     "\t\tstatus,payment,`a-king-s-ransom`.orders.manager_ID,`a-king-s-ransom`.manager_data.email \n" +
                     "FROM `a-king-s-ransom`.orders \n" +
                     "inner join `a-king-s-ransom`.manager_data \n" +
                     "on `a-king-s-ransom`.orders.manager_ID = `a-king-s-ransom`.manager_data.manager_id " +
-                    "WHERE customer_id=" + transmission.getOrderCustomerData().getCustomerId()+
+                    "WHERE customer_id=" + customer_id+
                     " LIMIT " +
                     transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
             statement = connection.createStatement();
@@ -272,4 +279,5 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
         }
         return data;
     }
+
 }

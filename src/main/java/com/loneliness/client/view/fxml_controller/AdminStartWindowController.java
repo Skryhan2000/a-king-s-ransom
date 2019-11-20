@@ -525,7 +525,7 @@ public class AdminStartWindowController implements CRUD_Controller {
                     if (selectedIndex >= 0) {
 
                         OrderData orderData = new OrderData();
-                        orderData.setId(providersData.get(selectedIndex).getId());
+                        orderData.setId(ordersData.get(selectedIndex).getId());
                         answer = (String) CommandProvider.getCommandProvider().getCommand("DELETE_ORDER").execute(orderData);
                         title = "Удаление заказа";
                     } else {

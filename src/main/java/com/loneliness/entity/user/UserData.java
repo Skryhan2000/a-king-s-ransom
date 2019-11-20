@@ -21,17 +21,17 @@ public class UserData extends UserPrivateData implements Serializable {
     public enum Type{
         ADMIN,CLIENT,MANAGER, NO_TYPE;
         private Type(){}
-        private Type(int companyID){
-        this.companyID=companyID;
+        private Type(int ID){
+        this.ID =ID;
         }
-        private int companyID;
+        private int ID;
 
-        public int getCompanyID() {
-            return companyID;
+        public int getID() {
+            return ID;
         }
 
-        public void setCompanyID(int companyID) {
-            this.companyID = companyID;
+        public void setID(int ID) {
+            this.ID = ID;
         }
     }
 

@@ -90,7 +90,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
                         "provider_ID='" + productInStock.getProvider_ID() + "'," +
                         "receipt_date='" + productInStock.getReceipt_date() + "' " +
                         "WHERE ID=" + productInStock.getId() + ";";
-                if (statement.executeUpdate(sql) == 1) {
+                if (statement.executeUpdate(sql) >= 1) {
                     return "Данные обновлен";
                 } else return "ERROR Такие данные уже существует";
             } else {
@@ -107,7 +107,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM product_in_stock WHERE product_in_stock_ID = '"+ productInStock.getId()+"';";
             Statement statement = connection.createStatement();
-            if(statement.executeUpdate(sql) == 1) {
+            if(statement.executeUpdate(sql) >= 1) {
                 return "Данные удалены";
             }
 

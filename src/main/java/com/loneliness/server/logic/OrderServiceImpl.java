@@ -44,7 +44,7 @@ public class OrderServiceImpl implements Service<OrderData,ConcurrentHashMap<Int
     }
 
     public ConcurrentHashMap<Integer, OrderCustomerData> receiveAllCustomerOrderInLimit(Transmission obj){
-        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimit(obj);
+        return DAOFactory.getInstance().getOrderDAO().receiveAllCustomerOrderInLimitByClientId(obj);
     }
     public  ConcurrentHashMap<Integer, OrderData> searchForBurningOrders(OrderData orderData){
         return DAOFactory.getInstance().getOrderDAO().searchForBurningOrders(orderData);
@@ -52,4 +52,5 @@ public class OrderServiceImpl implements Service<OrderData,ConcurrentHashMap<Int
     public BigDecimal calculateSumOfOrder(OrderData orderData){
         return DAOFactory.getInstance().getOrderDAO().calculateSumOfOrder(orderData);
     }
+
 }

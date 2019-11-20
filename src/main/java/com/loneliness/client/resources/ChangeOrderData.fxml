@@ -36,6 +36,7 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,15 +44,15 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="id клиента" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Имя заказа" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата получения заказа" GridPane.rowIndex="2" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата выполнения заказа" GridPane.rowIndex="3" />
-                  <TextField fx:id="customerIDTextField" GridPane.columnIndex="1" />
-                  <TextField fx:id="orderNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <DatePicker fx:id="dateOfReceivingDatePicker" prefHeight="26.0" prefWidth="326.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <DatePicker fx:id="dateOfCompletionDatePicker" prefHeight="26.0" prefWidth="321.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="290.0" text="Статус заказа" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="id клиента" GridPane.rowIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Имя заказа" GridPane.rowIndex="2" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата получения заказа" GridPane.rowIndex="3" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата выполнения заказа" GridPane.rowIndex="4" />
+                  <TextField fx:id="customerIDTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="orderNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="dateOfReceivingDatePicker" prefHeight="26.0" prefWidth="326.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <DatePicker fx:id="dateOfCompletionDatePicker" prefHeight="26.0" prefWidth="321.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="290.0" text="Статус заказа" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <items>
                         <RadioMenuItem fx:id="decorated" mnemonicParsing="false" text="Оформлён" />
                         <RadioMenuItem fx:id="componentCollection" mnemonicParsing="false" text="Сбор комплектующих" />
@@ -66,7 +67,7 @@
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </MenuButton>
-                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="274.0" text="Оплата" GridPane.rowIndex="4">
+                  <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="274.0" text="Оплата" GridPane.rowIndex="5">
                     <items>
                         <Menu mnemonicParsing="false" text="Оплата по получению">
                            <items>
@@ -87,6 +88,8 @@
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </MenuButton>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="id менеджера" />
+                  <TextField fx:id="orderManagerID" GridPane.columnIndex="1" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
