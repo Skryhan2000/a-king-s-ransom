@@ -77,6 +77,7 @@ public class UserData extends UserPrivateData implements Serializable {
     }
 
     public void setType(String type) {
+        type=type.replace(" ","_");
         this.type = Type.valueOf(type);
         typeProperty =new SimpleStringProperty(type);
     }

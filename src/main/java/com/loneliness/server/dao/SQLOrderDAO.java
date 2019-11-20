@@ -231,10 +231,10 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             if(orderDataToFind.getStatus()!=null){
                 if(whereIsNotUsed) {
-                    sql+="WHERE status = " + orderDataToFind.getStatus() + " ";
+                    sql+="WHERE status = '" + orderDataToFind.getStatus() + "' ";
                 }
                 else {
-                    sql += "AND status = " +orderDataToFind.getStatus() + " ";
+                    sql += "AND status = '" +orderDataToFind.getStatus() + "' ";
                 }
 
             }

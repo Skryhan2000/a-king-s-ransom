@@ -74,6 +74,7 @@ public class OrderData implements Serializable {
     public OrderData() { }
 
     public void setPayment(String payment){
+        payment=payment.replace(" ","_");
         this.payment=Payment.valueOf(payment);
     }
 
@@ -131,6 +132,7 @@ public class OrderData implements Serializable {
     }
 
     public void setStatus(String status) {
+        status=status.replace(" ","_");
         this.status = Status.valueOf(status);
         statusString=new SimpleStringProperty(status);
     }

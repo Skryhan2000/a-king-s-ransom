@@ -2,6 +2,7 @@ package com.loneliness.server.server;
 
 import com.loneliness.server.view.GUI;
 
+
 public class ServerLauncher {
     public static void main(String[] args)  {
         Server server = new Server(8000);

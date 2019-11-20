@@ -108,10 +108,33 @@ public class SearchWindowController implements Handler{
     public boolean isInputValid() {
         boolean valid = false;
         if (textField.getText() != null && textField.getText().length() != 0) {
-            valid = true;
+            switch (type){
+                case "orders":
+                    try {
+                        orderData.setStatus(textField.getText());
+                        valid=true;
+                    } catch (IllegalArgumentException er){
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле статус должны быть допустимые значения",
+                                dialogStage, "ERROR");
+                    }
+                   break;
+                default: valid = true;
+            }
+
         }
         if (textField1.getText() != null && textField1.getText().length() != 0) {
             switch (type) {
+                case "users":
+                    try {
+                        userData.setType(textField1.getText());
+                        valid=true;
+                    } catch (IllegalArgumentException er){
+                        WorkWithAlert.getInstance().showAlert("Неверный ввод",
+                                "Ошибка проверки введеных данных", "В поле права доступа должны быть допустимые значения",
+                                dialogStage, "ERROR");
+                    }
+                    break;
                 case "providers":
                     try {
 
