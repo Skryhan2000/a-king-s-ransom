@@ -760,4 +760,22 @@ public class ManagerStartWindowController {
             return selectedCustomer;
         }
     }
+    @FXML
+    private boolean openProducts() {
+        OrderData orderData = getSelectedOrdersModel();
+        if (orderData != null) {
+            try {
+                dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                        getProductData(), "Просмотр товаров");
+                ProductDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                controller.setData("CLIENT", orderData.getId());
+                controller.setDialogStage(dialogStage);
+                dialogStage.showAndWait();
+                return true;
+            } catch (ViewException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 }

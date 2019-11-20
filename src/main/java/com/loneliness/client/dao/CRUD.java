@@ -1,10 +1,10 @@
 package com.loneliness.client.dao;
 
-public interface CRUD <DataType,TransferType,returnType,collectionType>{
-    returnType create(DataType user) throws  DAOException;
-    DataType read(DataType user) throws  DAOException;
-    returnType update(DataType user) throws  DAOException;
-    returnType delete(DataType user) throws  DAOException;
-    collectionType receiveAll() throws  DAOException;
-    collectionType receiveAllInInterval(TransferType transmission) throws DAOException;
+public interface CRUD <D, T, R, C>{
+    R create(D user) throws  DAOException;
+    D read(D user) throws  DAOException;
+    R update(D user) throws  DAOException;
+    R delete(D user) throws  DAOException;
+    C receiveAll() throws  DAOException;
+    C receiveAllInInterval(T transmission) throws DAOException;
 }

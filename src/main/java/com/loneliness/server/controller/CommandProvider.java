@@ -4,9 +4,13 @@ package com.loneliness.server.controller;
 
 
 
+import com.loneliness.client.controller.command_impl.product_command.ReceiveAllProducts;
+import com.loneliness.client.controller.command_impl.product_command.ReceiveAllProductsInLimit;
+import com.loneliness.client.controller.command_impl.product_command.ReceiveProductGoods;
 import com.loneliness.server.controller.command_impl.customer_command.*;
 import com.loneliness.server.controller.command_impl.order_command.*;
 import com.loneliness.server.controller.command_impl.order_command.UpdateOrder;
+import com.loneliness.server.controller.command_impl.product_command.*;
 import com.loneliness.server.controller.command_impl.product_in_stock_command.*;
 import com.loneliness.server.controller.command_impl.provider_command.*;
 import com.loneliness.server.controller.command_impl.server_command.ShutDown;
@@ -67,6 +71,14 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_ALL_CUSTOMERS_DATA_IN_LIMIT,new ReceiveAllCustomersDataInLimit());
         repository.put(CommandName.RECEIVE_CUSTOMER_DATA,new ReceiveCustomerData());
         repository.put(CommandName.UPDATE_CUSTOMER_DATA,new UpdateCustomerData());
+
+        repository.put(CommandName.CREATE_PRODUCT,new CreateProduct());
+        repository.put(CommandName.DELETE_PRODUCT,new DeleteProduct());
+        repository.put(CommandName.RECEIVE_ALL_PRODUCTS,new ReceiveAllProduct());
+        repository.put(CommandName.RECEIVE_ALL_PRODUCTS_IN_LIMIT,new ReceiveAllProductInLimit());
+        repository.put(CommandName.RECEIVE_PRODUCT,new ReceiveProduct());
+        repository.put(CommandName.UPDATE_PRODUCT,new UpdateProduct());
+        repository.put(CommandName.RECEIVE_PRODUCT_GOODS,new ReceiveAllProductInSetOrderId());
     }
 
 

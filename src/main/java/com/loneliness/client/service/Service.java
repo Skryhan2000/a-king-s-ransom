@@ -1,12 +1,10 @@
 package com.loneliness.client.service;
 
-import java.io.IOException;
-
-public interface Service<DataType,TransferType,String,collectionType> {
-    String create(DataType obj) throws  ServiceException;
-    DataType receive(DataType obj) throws  ServiceException;
-    String update(DataType obj) throws  ServiceException;
-    String delete(DataType obj) throws  ServiceException;
-    collectionType receiveAllElem(TransferType obj) throws  ServiceException;
-    collectionType receiveAllElemInLimit(TransferType obj) throws  ServiceException;
+public interface Service<D, T, S, C> {
+    S create(D obj) throws  ServiceException;
+    D receive(D obj) throws  ServiceException;
+    S update(D obj) throws  ServiceException;
+    S delete(D obj) throws  ServiceException;
+    C receiveAllElem(T obj) throws  ServiceException;
+    C receiveAllElemInLimit(T obj) throws  ServiceException;
 }

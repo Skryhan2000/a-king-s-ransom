@@ -7,12 +7,14 @@ public class DAOFactory {
     private final SQLOrderDAO orderDAO;
     private final SQLProductInStockDAO productInStockDAO;
     private final SQLCustomerDataDAO customerDataDAO;
+    private final SQLProductDAO productDAO;
     private DAOFactory() {
         userDAO= new SQLUserDAO();
         providerDAO=new SQLProviderDAO();
         orderDAO=new SQLOrderDAO();
         productInStockDAO=new SQLProductInStockDAO();
         customerDataDAO=new SQLCustomerDataDAO();
+        productDAO=new SQLProductDAO();
     }
 
     public static DAOFactory getInstance() {
@@ -37,5 +39,9 @@ public class DAOFactory {
 
     public SQLProductInStockDAO getProductInStockDAO() {
         return productInStockDAO;
+    }
+
+    public SQLProductDAO getProductDAO() {
+        return productDAO;
     }
 }

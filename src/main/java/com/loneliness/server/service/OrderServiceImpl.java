@@ -1,4 +1,4 @@
-package com.loneliness.server.logic;
+package com.loneliness.server.service;
 
 import com.loneliness.entity.orders.OrderCustomerData;
 import com.loneliness.entity.orders.OrderData;

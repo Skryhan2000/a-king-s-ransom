@@ -1,4 +1,4 @@
-package com.loneliness.server.logic;
+package com.loneliness.server.service;
 
 public interface Service <DataType,CollectionType,InfoType,Transfer>{
     InfoType create(DataType obj);

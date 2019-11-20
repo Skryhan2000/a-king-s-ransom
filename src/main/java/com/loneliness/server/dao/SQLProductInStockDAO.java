@@ -166,6 +166,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
         }
         return data;
     }
+
     public ConcurrentHashMap<Integer, ProductInStock> findAllByNameAndQuantity(ProductInStock productInStockToFind){
         ConcurrentHashMap<Integer,ProductInStock> data=new ConcurrentHashMap<>();
         String sql;

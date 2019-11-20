@@ -4,7 +4,9 @@ import com.loneliness.client.PathManager;
 import com.loneliness.client.controller.CommandProvider;
 import com.loneliness.client.controller.ControllerException;
 import com.loneliness.client.view.PrimaryStage;
+import com.loneliness.client.view.ViewException;
 import com.loneliness.entity.orders.OrderCustomerData;
+import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -179,5 +181,34 @@ public class ClientStartWindowController implements CRUD_Controller{
             indexOfCurrentValue[1] = 20;
         }
         update();
+    }
+    @FXML
+    private boolean openProducts() {
+        OrderData orderData = getSelectedOrdersModel();
+        if (orderData != null) {
+            try {
+                dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
+                        getProductData(), "Просмотр товаров");
+                ProductDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
+                controller.setData("CLIENT", orderData.getId());
+                controller.setDialogStage(dialogStage);
+                dialogStage.showAndWait();
+                return true;
+            } catch (ViewException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    private OrderData getSelectedOrdersModel() {
+        OrderData selectedOrder = orderTable.getSelectionModel().getSelectedItem();
+        if (selectedOrder == null) {
+            WorkWithAlert.getInstance().showAlert("Отсутствие выбора",
+                    "Данные не выбраны", "Пожалуйста выберите данные в таблице.",
+                    this.dialogStage, "ERROR");
+            return null;
+        } else {
+            return selectedOrder;
+        }
     }
 }

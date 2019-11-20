@@ -1,4 +1,4 @@
-package com.loneliness.server.logic;
+package com.loneliness.server.service;
 
 public class LogicException {
     private StringBuilder exceptionMessage=new StringBuilder();

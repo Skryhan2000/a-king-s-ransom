@@ -7,6 +7,7 @@ import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.user.UserData;
 
 import java.io.Serializable;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Transmission implements Serializable {
@@ -20,6 +21,9 @@ public class Transmission implements Serializable {
     private CustomerData customerData;
     private ProductInStock productInStock;
     private OrderCustomerData orderCustomerData;
+    private Product productData;
+    private ConcurrentHashMap<Integer, Product> productDataConcurrentHashMap;
+    private Set<Integer> integerSet;
     private ConcurrentHashMap<Integer, OrderCustomerData> orderCustomerDataConcurrentHashMap;
     private ConcurrentHashMap<Integer, ProductInStock> productInStockConcurrentHashMap;
     private ConcurrentHashMap<Integer,CustomerData> customerDataConcurrentHashMap;
@@ -167,5 +171,29 @@ public class Transmission implements Serializable {
 
     public void setCustomerDataConcurrentHashMap(ConcurrentHashMap<Integer, CustomerData> customerDataConcurrentHashMap) {
         this.customerDataConcurrentHashMap = customerDataConcurrentHashMap;
+    }
+
+    public Product getProductData() {
+        return productData;
+    }
+
+    public void setProductData(Product productData) {
+        this.productData = productData;
+    }
+
+    public ConcurrentHashMap<Integer, Product> getProductDataConcurrentHashMap() {
+        return productDataConcurrentHashMap;
+    }
+
+    public void setProductDataConcurrentHashMap(ConcurrentHashMap<Integer, Product> productDataConcurrentHashMap) {
+        this.productDataConcurrentHashMap = productDataConcurrentHashMap;
+    }
+
+    public Set<Integer> getIntegerSet() {
+        return integerSet;
+    }
+
+    public void setIntegerSet(Set<Integer> integerSet) {
+        this.integerSet = integerSet;
     }
 }

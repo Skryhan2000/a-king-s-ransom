@@ -135,6 +135,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
                                     <Label text="Имя заказа" GridPane.rowIndex="1" />
@@ -155,6 +156,7 @@
                                        </GridPane.margin>
                                     </Button>
                                     <Text fx:id="orderSumOfOrder" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <Hyperlink onAction="#openProducts" prefHeight="23.0" prefWidth="426.0" text="Товары в заказе" GridPane.rowIndex="7" />
                                  </children>
                               </GridPane>
                            </children>

@@ -1,4 +1,4 @@
-package com.loneliness.server.logic;
+package com.loneliness.server.service;
 
 
 
@@ -10,6 +10,7 @@ public class ServiceFactory {
     private final OrderServiceImpl orderService=new OrderServiceImpl();
     private final ProductInStockServiceImpl productInStockService = new ProductInStockServiceImpl();
     private final CustomerDataServiceImpl customerDataService=new CustomerDataServiceImpl();
+    private final ProductServiceImpl productService=new ProductServiceImpl();
 
     public static ServiceFactory getInstance() {
         return instance;
@@ -29,6 +30,10 @@ public class ServiceFactory {
 
     public ProductInStockServiceImpl getProductInStockService() {
         return productInStockService;
+    }
+
+    public ProductServiceImpl getProductService() {
+        return productService;
     }
 
     public CustomerDataServiceImpl getCustomerDataService() {

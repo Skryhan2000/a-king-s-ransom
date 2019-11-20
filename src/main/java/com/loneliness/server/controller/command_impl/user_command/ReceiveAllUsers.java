@@ -3,8 +3,7 @@ package com.loneliness.server.controller.command_impl.user_command;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.server.controller.Command;
-import com.loneliness.server.dao.DAOFactory;
-import com.loneliness.server.logic.ServiceFactory;
+import com.loneliness.server.service.ServiceFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 
