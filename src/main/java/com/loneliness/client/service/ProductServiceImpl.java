@@ -82,7 +82,7 @@ public class ProductServiceImpl implements Service<Product, Transmission,String,
             }
             return sum;
     }
-    public ConcurrentHashMap<Integer, Product> receiveProductGoods(String command) throws ServiceException {
+    public ConcurrentHashMap<Integer, Product> receiveProductGoods(Set<Integer> command) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductRequest().receiveProductGoods(command);
         } catch (DAOException e) {

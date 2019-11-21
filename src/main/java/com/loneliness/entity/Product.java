@@ -7,9 +7,10 @@ import javafx.beans.property.StringProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Product {
+public class Product implements Serializable {
     private static final long serialVersionUID = 7L;
     private int id;
     @NotNull(message = "Должно быть задано имя")

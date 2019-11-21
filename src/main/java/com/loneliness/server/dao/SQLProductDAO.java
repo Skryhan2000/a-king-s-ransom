@@ -13,7 +13,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
     private Product getDataFromResultSet(ResultSet resultSet) throws SQLException {
         Product product=new Product();
-        product.setId(resultSet.getInt("ID"));
+        product.setId(resultSet.getInt("product_ID"));
         product.setName(resultSet.getString("name"));
         product.setQuantity(resultSet.getInt("quantity"));
         product.setUnit_price(resultSet.getInt("unit_price"));
@@ -25,16 +25,16 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
         try (Connection connection= DataBaseConnection.getInstance().getConnection()){
         String sql = "INSERT products (name , quantity, unit_price ) " +
                 "VALUES ('" +
-                product.getName()+ "','" +
-                product.getQuantity()+"','" +
+                product.getName()+ "'," +
+                product.getQuantity()+"," +
                 product.getUnitPrice()+
-                "');";
+                ");";
             PreparedStatement preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             sql="INSERT product_in_orders (product_ID, order_ID ) " +
-                    "VALUES (' last_insert_id()," +
+                    "VALUES ( last_insert_id()," +
                     product.getOrderId()+
-                    "');";
+                    ");";
             preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
@@ -72,15 +72,15 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
             statement = connection.createStatement();
 
-            String sql = "SELECT * FROM product_in_orders WHERE ID = " + product.getId() + ";";
+            String sql = "SELECT * FROM product_in_orders WHERE product_ID= " + product.getId() + ";";
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
-                sql = "UPDATE `a-king-s-ransom`.products , `a-king-s-ransom`.product_in_orders SET " +
-                        "order_ID='" + product.getOrderId() + "'," +
+                sql = "UPDATE `a-king-s-ransom`.products " +
+                        "SET " +
                         "name='" + product.getName() + "'," +
                         "unit_price='" + product.getUnitPrice() + "'," +
-                        "quantity='" + product.getQuantity() + "'," +
-                        "WHERE `a-king-s-ransom`.products.ID =" + product.getId() + ";";
+                        "quantity='" + product.getQuantity() + "' " +
+                        "WHERE ID =" + product.getId() + ";";
                 if (statement.executeUpdate(sql) >= 1) {
                     return "Данные обновлен";
                 } else return "ERROR Такие данные уже существует";
@@ -96,7 +96,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
     @Override
     public String delete(Product product) {
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
-            String sql="DELETE FROM product_in_orders WHERE ID = '"+ product.getId()+"';";
+            String sql="DELETE FROM products WHERE ID = '"+ product.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) >= 1) {
                 return "Данные удалены";

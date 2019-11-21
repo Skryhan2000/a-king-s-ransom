@@ -59,11 +59,11 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button fx:id="addButton" mnemonicParsing="false" text="Добавить" />
-            <Button fx:id="editButton" mnemonicParsing="false" text="Редактировать" />
-            <Button fx:id="deleteButton" mnemonicParsing="false" text="Удалить" />
-            <Button mnemonicParsing="false" text="Обновить" />
-            <Button mnemonicParsing="false" text="Закрыть" />
+            <Button fx:id="addButton" mnemonicParsing="false" onMouseClicked="#addHandler" text="Добавить" />
+            <Button fx:id="editButton" mnemonicParsing="false" onMouseClicked="#changeHandler" text="Редактировать" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onMouseClicked="#deleteHandler" text="Удалить" />
+            <Button mnemonicParsing="false" onMouseClicked="#update" text="Обновить" />
+            <Button mnemonicParsing="false" onMouseClicked="#goBack" text="Закрыть" />
         </buttons>
          <padding>
             <Insets left="10.0" right="10.0" />

@@ -30,37 +30,47 @@ public class ClientWorkingThread implements Runnable{
     @Override
     public void run() {
         Transmission transmission;
-        Object response ;
+        Object response;
         try {
             while (true) {
-                transmission=(Transmission) inObject.readObject();
-                if(transmission.getUserData()!=null) {
+                transmission = (Transmission) inObject.readObject();
+                if (transmission.getUserData() != null) {
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getUserData());
 
-                }else if(transmission.getProviderData()!=null){
+                } else if (transmission.getProviderData() != null) {
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getProviderData());
 
-                }else if(transmission.getOrderData()!=null){
+                } else if (transmission.getOrderData() != null) {
 
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getOrderData());
-                }
-                else if(transmission.getCustomerData()!=null) {
+                } else if (transmission.getCustomerData() != null) {
                     response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
                             execute(transmission.getCustomerData());
-                }else if(transmission.getProductInStock()!=null) {
+                } else if (transmission.getProductInStock() != null) {
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                            execute(transmission.getProductInStock());
+                } else if (transmission.getProductData() != null) {
+                    response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                            execute(transmission.getProductData());
+                } else {
+                    if (transmission.getCommand().equals("RECEIVE_PRODUCT_GOODS")) {
                         response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
-                                execute(transmission.getProductInStock());
-                }else { response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
-                        execute(transmission);}
+                                execute(transmission.getIntegerSet());
+                    } else {
+                        response = CommandProvider.getCommandProvider().getCommand(transmission.getCommand()).
+                                execute(transmission);
+                    }
+                }
                 outObject.writeObject(response);
                 outObject.reset();
             }
 
-        }  catch ( ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             killOneClient();
+           // e.printStackTrace();
         }
     }
 

@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductDataController implements CRUD_Controller {
@@ -73,6 +75,7 @@ public class ProductDataController implements CRUD_Controller {
         }
         this.accessRight = accessRight;
         this.id = id;
+        update();
     }
 
     private void fillText(Product product) {
@@ -99,7 +102,7 @@ public class ProductDataController implements CRUD_Controller {
         Product product = null;
         fillText(product);
 
-        update();
+      //  update();
     }
 
     @Override
@@ -112,10 +115,12 @@ public class ProductDataController implements CRUD_Controller {
     public boolean update() {
         try {
             productsData.clear();
-            String command = "RECEIVE_PRODUCT_GOODS";
+//            String command = "RECEIVE_PRODUCT_GOODS";
+            Set<Integer> ids=new HashSet<>();
+            ids.add(id);
             setAndGetProductsData((ConcurrentHashMap<Integer, Product>) CommandProvider.
                     getCommandProvider().getCommand("RECEIVE_PRODUCT_GOODS")
-                    .execute(command));
+                    .execute(ids));
             productTable.refresh();
             productTable.setItems(productsData);
             allProductPrice.setText(String.valueOf(CommandProvider.getCommandProvider().
@@ -188,7 +193,7 @@ public class ProductDataController implements CRUD_Controller {
 
             try {
                 dialogStage = WorkWithFXMLLoader.getInstance().createStage(PathManager.getInstance().
-                        getChangeUSerData(), "Редактирование товара");
+                        getProductChangeData(), "Редактирование товара");
                 ChangeProductDataController controller = WorkWithFXMLLoader.getInstance().getLoader().getController();
                 controller.setDialogStage(dialogStage, "update",id);
                 controller.setData(product);

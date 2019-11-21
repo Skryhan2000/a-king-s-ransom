@@ -98,10 +98,11 @@ public class ServerProductRequest implements CRUD<Product, Transmission,String, 
         }
     }
 
-    public ConcurrentHashMap<Integer, Product> receiveProductGoods(String command) throws DAOException {
+    public ConcurrentHashMap<Integer, Product> receiveProductGoods(Set<Integer> command) throws DAOException {
         try {
             Transmission transmission = new Transmission();
-            transmission.setCommand(command);
+            transmission.setIntegerSet(command);
+            transmission.setCommand("RECEIVE_PRODUCT_GOODS");
             Client.getOutObject().writeObject(transmission);
             return (ConcurrentHashMap<Integer, Product>) Client.getInObject().readObject();
         } catch (IOException | ClassNotFoundException e) {
