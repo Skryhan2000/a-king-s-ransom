@@ -248,6 +248,7 @@ public class ChangeOrderDataController implements Handler {
         dateOfCompletionDatePicker.setValue(orderData.getDateOfCompletion());
         setStatus(orderData.getStatus());
         setPayment(orderData.getPayment());
+        orderManagerID.setText(String.valueOf(orderData.getManagerID()));
     }
     public boolean isOkClicked() {
         return okClicked;

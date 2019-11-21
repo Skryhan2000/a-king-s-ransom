@@ -5,6 +5,8 @@ import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
 import java.sql.*;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, UserData>,String>{
@@ -24,7 +26,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     public String create(UserData user) {
         String sql;
         if (user.getType() == UserData.Type.CLIENT) {
-            sql = "BEGIN; INSERT Users (login , password , type, secret_answer, secret_question) " +
+            sql = " INSERT Users (login , password , type, secret_answer, secret_question) " +
                     "VALUES ('" +
                     user.getLogin() + "','" +
                     user.getPassword() + "','" +
@@ -33,7 +35,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                     user.getSecretQuestion() + "'); " +
                     "INSERT INTO customer_representative (customer_id,user_id) VALUES(" +
                     user.getType().getID() +
-                    ",LAST_INSERT_ID()); COMMIT;";
+                    ",LAST_INSERT_ID()); ";
         } else {
             sql = "INSERT Users (login , password , type, secret_answer, secret_question) " +
                     "VALUES ('" +
@@ -158,7 +160,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
-            String sql = "SELECT * FROM Users ;";
+            String sql = "SELECT * FROM users ;";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             UserData userData;
@@ -226,5 +228,76 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             e.printStackTrace();
         }
         return data;
+    }
+    public String addManagerEmail(Map<Integer,String> map){
+        StringBuilder sql=new StringBuilder("INSERT manager_data (manager_id,email) VALUES ");
+        for (Iterator<Integer> iterator = map.keySet().iterator(); iterator.hasNext(); ) {
+            Integer next =  iterator.next();
+            sql.append("( ").append(next).append(" ,'").append(map.get(next)).append("')");
+            if(iterator.hasNext()){
+                sql.append(" , ");
+            }
+
+        }
+        sql.append(" ;");
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+            preparedStatement.executeUpdate();
+            return "Успешное создание";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "ERROR Такие данные уже существуют";
+    }
+    public String updateManagerEmail(Map<Integer,String>map){
+        ResultSet resultSet=null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+        int id=map.keySet().iterator().next();
+
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+
+                String sql = "UPDATE manager_data SET " +
+                        "manager_id ='" +id + "'," +
+                        "email ='" + map.get(id) + " " +
+                        "WHERE manager_id = " + id + " ;";
+                statement = connection.createStatement();
+                if (statement.executeUpdate(sql) == 1) {
+                    return "Данные обновлен";
+                } else return "ERROR Такие данные уже существует";
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "ERROR Ошибка обновления";
+    }
+    public String deleteManagerEmail(Map<Integer,String>map){
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            String sql="DELETE FROM manager_data WHERE manager_id = '"+ map.keySet().iterator().next()+"';";
+            Statement statement = connection.createStatement();
+            if(statement.executeUpdate(sql) == 1) {
+                return "Данные удалены";
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "ERROR Ошибка удаления";
+    }
+    public String readManagerEmail(Map<Integer,String>map){
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+            ResultSet resultSet;
+            Statement statement;
+            String sql;
+            sql = "SELECT * FROM manager_data WHERE manager_id = '" + map.keySet().iterator().next() + "';";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("email");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return " ";
     }
 }

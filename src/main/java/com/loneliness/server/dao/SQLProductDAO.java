@@ -1,7 +1,6 @@
 package com.loneliness.server.dao;
 
 import com.loneliness.entity.Product;
-import com.loneliness.entity.ProductInStock;
 import com.loneliness.entity.transmission.Transmission;
 
 import java.sql.*;
@@ -16,7 +15,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
         product.setId(resultSet.getInt("product_ID"));
         product.setName(resultSet.getString("name"));
         product.setQuantity(resultSet.getInt("quantity"));
-        product.setUnit_price(resultSet.getInt("unit_price"));
+        product.setUnitPrice(resultSet.getInt("unit_price"));
         return product;
     }
 

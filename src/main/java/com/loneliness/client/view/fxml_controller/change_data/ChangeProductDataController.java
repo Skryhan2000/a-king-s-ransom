@@ -38,7 +38,7 @@ public class ChangeProductDataController implements Handler {
         try {
             product.setName(nameField.getText());
             product.setQuantity(Integer.parseInt(quantityField.getText()));
-            product.setUnit_price(Double.parseDouble(unitPriceField.getText()));
+            product.setUnitPrice(Double.parseDouble(unitPriceField.getText()));
 
             errors = (Set<ConstraintViolation<Object>>)
                     CommandProvider.getCommandProvider().getCommand("PRODUCT_DATA_VALIDATION").execute(product);

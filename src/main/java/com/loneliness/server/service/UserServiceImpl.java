@@ -4,6 +4,7 @@ import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 import com.loneliness.server.dao.DAOFactory;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -47,5 +48,16 @@ public class UserServiceImpl implements Service<UserData, ConcurrentHashMap<Inte
         return DAOFactory.getInstance().getUserDAO().delete(obj);
     }
 
-
+    public String addManagerEmail(Map<Integer,String> map){
+        return  DAOFactory.getInstance().getUserDAO().addManagerEmail(map);
+    }
+    public String updateManagerEmail(Map<Integer,String> map){
+        return  DAOFactory.getInstance().getUserDAO().updateManagerEmail(map);
+    }
+    public String deleteManagerEmail(Map<Integer,String> map){
+        return  DAOFactory.getInstance().getUserDAO().deleteManagerEmail(map);
+    }
+    public String readManagerEmail(Map<Integer,String> map){
+        return  DAOFactory.getInstance().getUserDAO().readManagerEmail(map);
+    }
 }

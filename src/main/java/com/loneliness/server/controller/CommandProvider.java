@@ -8,6 +8,7 @@ import com.loneliness.client.controller.command_impl.product_command.ReceiveAllP
 import com.loneliness.client.controller.command_impl.product_command.ReceiveAllProductsInLimit;
 import com.loneliness.client.controller.command_impl.product_command.ReceiveProductGoods;
 import com.loneliness.server.controller.command_impl.customer_command.*;
+import com.loneliness.server.controller.command_impl.customer_representative_command.*;
 import com.loneliness.server.controller.command_impl.order_command.*;
 import com.loneliness.server.controller.command_impl.order_command.UpdateOrder;
 import com.loneliness.server.controller.command_impl.product_command.*;
@@ -26,6 +27,7 @@ public class CommandProvider {
     private static final CommandProvider commandProvider=new CommandProvider();
     private CommandProvider(){
         repository.put(CommandName.WRONG_REQUEST,new WrongRequest());
+
         repository.put(CommandName.AUTHORIZATION_USER,new AuthorizationUser());
         repository.put(CommandName.CREATE_USER,new CreateUser());
         repository.put(CommandName.DELETE_USER,new DeleteUser());
@@ -35,6 +37,10 @@ public class CommandProvider {
         repository.put(CommandName.SHUT_DOWN,new ShutDown());
         repository.put(CommandName.FIND_USERS_BY_LOGIN_AND_TYPE,new FindAllByLoginAndType());
         repository.put(CommandName.RECEIVE_ALL_USERS_IN_LIMIT,new ReceiveAllUsersInLimit());
+        repository.put(CommandName.UPDATE_MANAGER_EMAIL,new UpdateManagerEmail());
+        repository.put(CommandName.READ_MANAGER_EMAIL,new ReadManagerEmail());
+        repository.put(CommandName.DELETE_MANAGER_EMAIL,new DeleteManagerEmail());
+        repository.put(CommandName.ADD_MANAGER_EMAIL,new AddManagerEmail());
 
         repository.put(CommandName.CREATE_PROVIDER,new CreateProvider());
         repository.put(CommandName.RECEIVE_ALL_PROVIDERS_IN_LIMIT,new ReceiveAllProvidersInLimit());
@@ -79,6 +85,13 @@ public class CommandProvider {
         repository.put(CommandName.RECEIVE_PRODUCT,new ReceiveProduct());
         repository.put(CommandName.UPDATE_PRODUCT,new UpdateProduct());
         repository.put(CommandName.RECEIVE_PRODUCT_GOODS,new ReceiveAllProductInSetOrderId());
+
+        repository.put(CommandName.CREATE_CUSTOMER_REPRESENTATIVE,new CreateCustomerRepresentative());
+        repository.put(CommandName.DELETE_CUSTOMER_REPRESENTATIVE,new DeleteCustomerRepresentative());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMER_REPRESENTATIVES,new ReceiveAllCustomerRepresentatives());
+        repository.put(CommandName.RECEIVE_ALL_CUSTOMER_REPRESENTATIVES_IN_LIMIT,new ReceiveAllCustomerRepresentativesInLimit());
+        repository.put(CommandName.RECEIVE_CUSTOMER_REPRESENTATIVE_DATA,new ReceiveCustomerRepresentativeData());
+        repository.put(CommandName.UPDATE_CUSTOMER_REPRESENTATIVE,new UpdateCustomerRepresentative());
     }
 
 

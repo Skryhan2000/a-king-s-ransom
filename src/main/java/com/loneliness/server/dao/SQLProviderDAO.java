@@ -22,8 +22,8 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
 
     @Override
     public String create(ProviderData provider) {
-        String sql = "INSERT providers (ID , name , rating, location, email ) " +
-                "VALUES ('" + provider.getId() + "','" + provider.getName() + "','" +
+        String sql = "INSERT providers ( name , rating, location, email ) " +
+                "VALUES ('" + provider.getName() + "','" +
                 (provider.getRating() + "','" + provider.getLocation()+ "','" +
                         provider.getEmail() + "');");
         try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
