@@ -15,9 +15,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Server extends Thread {
     private static ServerSocket socket;
     private static boolean isOpen;
+    private static int capacity=3;
     private static AtomicInteger quantity=new AtomicInteger();
-    private static ExecutorService executorService = Executors.newCachedThreadPool();
-    private static ArrayBlockingQueue<ClientWorkingThread> serverList = new ArrayBlockingQueue<>(10);// список всех нитей
+    private static ExecutorService executorService = Executors.newCachedThreadPool();//кэширующий пул потоков, который создает потоки по мере необходимости, но переиспользует неактивные потоки (и подчищает потоки, которые были неактивные некоторое время)
+    private static ArrayBlockingQueue<ClientWorkingThread> serverList = new ArrayBlockingQueue<>(capacity);// список всех нитей
 
     Server(int port) {
         try {
@@ -40,15 +41,17 @@ public class Server extends Thread {
     public int applyConnection() {
         while (isOpen) {
             try {
+                if(quantity.get()<capacity) {
+                ClientWorkingThread clientWorkingThread = new ClientWorkingThread(socket.accept(), serverList);
+                    quantity.incrementAndGet();
+                    serverList.add(clientWorkingThread);
+                    executorService.submit(clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
+                }
+            }
+            catch (java.lang.IllegalStateException e){
 
-                ClientWorkingThread clientWorkingThread = new ClientWorkingThread(socket.accept(), serverList);// придумать выход не через IOException при команде exit
-                serverList.add(clientWorkingThread);
-                quantity.incrementAndGet();
-                //System.out.println("Количество людей на сервере "+(++quantity));
-               // Platform.runLater(()-> StartWindowController.updateQuantity(+1));
-             //   StartWindowController.updateQuantity(+1);
-                executorService.submit(clientWorkingThread);//исполняет асинхронный код в одном или нескольких потоках
-            } catch(IOException e){
+            }
+            catch(IOException e){
                 quantity.decrementAndGet();
                 e.printStackTrace();
                 break;
