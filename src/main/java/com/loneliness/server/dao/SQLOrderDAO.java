@@ -5,6 +5,7 @@ import com.loneliness.entity.orders.OrderCustomerData;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
+import java.beans.PropertyVetoException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,11 +37,12 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 orderData.getPayment().toString()+"','" +
                 orderData.getManagerID()+
                 "');";
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
@@ -48,7 +50,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
 
     @Override
     public OrderData read(OrderData  orderData) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -59,7 +62,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 return getDataFromResultSet(resultSet);
             }
             else  orderData.setId(-1);
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
             orderData.setId(-1);
         }
@@ -67,7 +70,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
         return orderData;
     }
     public BigDecimal calculateSumOfOrder(OrderData orderData){
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -83,7 +87,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             if (resultSet.next()) {
                 return resultSet.getBigDecimal("price");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return new BigDecimal(0);
@@ -94,7 +98,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
 
             statement = connection.createStatement();
 
@@ -117,7 +122,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 return "ERROR Нет таких данных";
             }
         }
-        catch (SQLException e) {
+        catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Ошибка обновления";
@@ -125,14 +130,15 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
 
     @Override
     public String delete(OrderData orderData) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql="DELETE FROM orders WHERE id = '"+ orderData.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return "Данные удалены";
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Ошибка удаления";
@@ -141,7 +147,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
     @Override
     public ConcurrentHashMap<Integer,OrderData> receiveAll() {
         ConcurrentHashMap<Integer,OrderData> data=new ConcurrentHashMap<>();
-        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders ;";
@@ -153,7 +160,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 data.put(order.getId(),order);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -162,7 +169,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
 
     public ConcurrentHashMap<Integer,OrderCustomerData> receiveAllCustomerOrderInLimitByClientId(Transmission transmission) {
         ConcurrentHashMap<Integer, OrderCustomerData> data = new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -197,7 +205,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 data.put(order.getId(),order);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -205,7 +213,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
 
     public ConcurrentHashMap<Integer,OrderData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
@@ -217,7 +226,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 data.put(order.getId(),order);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -227,7 +236,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
     public  ConcurrentHashMap<Integer,OrderData> findAllByDateOfCompletionAndStatus(OrderData orderDataToFind){
         ConcurrentHashMap<Integer,OrderData> data=new ConcurrentHashMap<>();
         OrderData order;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM orders ";
@@ -253,7 +263,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 data.put(order.getId(),order);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -261,7 +271,8 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
 
     public ConcurrentHashMap<Integer,OrderData> searchForBurningOrders(OrderData orderData) {
         ConcurrentHashMap<Integer, OrderData> data = new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
            String sql="SELECT * FROM `a-king-s-ransom`.orders\n" +
@@ -274,7 +285,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 data.put(order.getId(),order);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;

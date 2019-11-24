@@ -5,7 +5,7 @@ import com.loneliness.server.view.GUI;
 
 public class ServerLauncher {
     public static void main(String[] args)  {
-        Server server = new Server(8000);
+        Server server = new Server(Integer.parseInt(args[0]));
         GUI gui=new GUI();
         gui.start();
         while (true){

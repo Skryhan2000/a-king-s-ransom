@@ -4,6 +4,7 @@ package com.loneliness.server.dao;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.entity.user.UserData;
 
+import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,13 +47,15 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                     user.getSecretQuestion() + "');";
         }
 
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Пользователь успешно создан";
         } catch (SQLException e) {
-            e.printStackTrace();
             return "ERROR Ошибка создания пользователя. Такой пользователь уже существует";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
 
     }
@@ -60,7 +63,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     @Override
     public UserData read(UserData user) {
         UserData userData=new UserData();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -79,6 +83,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         } catch (SQLException e) {
             e.printStackTrace();
 
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
         }
         return userData;
     }
@@ -88,8 +94,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         ResultSet resultSet = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
-
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             statement = connection.createStatement();
 
             String sql = "SELECT * FROM Users WHERE id = " + user.getId() + ";";
@@ -110,7 +116,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             } else {
                 return "ERROR Нет такого пользователя";
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
             return "ERROR Ошибка обновления";
         }
@@ -118,7 +124,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
 
     @Override
     public String delete(UserData user) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql="DELETE FROM Users WHERE id = '"+user.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
@@ -131,6 +138,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         } catch (SQLException e) {
             e.printStackTrace();
             return "ERROR Ошибка удаления";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
 
     }
@@ -138,7 +147,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     public String receiveUserType(UserData userData){
         ResultSet resultSet;
         Statement statement;
-        try(Connection connection= DataBaseConnection.getInstance().getConnection())  {
+        try{
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql = "SELECT * FROM Users WHERE login = '" + userData.getLogin() + "' AND password ='"+
                     userData.getPassword()+"';";
             statement = connection.createStatement();
@@ -148,8 +158,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 type.setID(resultSet.getInt("id"));
                 return type.toString()+" "+type.getID();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | PropertyVetoException e) {
+            return UserData.Type.valueOf("NO_TYPE").getDeclaringClass().getName();
         }
         return UserData.Type.valueOf("NO_TYPE").getDeclaringClass().getName();
     }
@@ -157,7 +167,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     @Override
     public ConcurrentHashMap<Integer, UserData> receiveAll(){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM users ;";
@@ -169,7 +180,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             data.put(userData.getId(),userData);
         }
         return data;
-    } catch (SQLException e) {
+    } catch (SQLException | PropertyVetoException e) {
         e.printStackTrace();
     }
         return data;
@@ -177,8 +188,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     @Override
     public ConcurrentHashMap<Integer, UserData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, UserData> data = new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
-
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
@@ -190,14 +201,15 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 data.put(userData.getId(),userData);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
     }
     public ConcurrentHashMap<Integer, UserData> findAllByLoginAndType(UserData userDataToFind){
         ConcurrentHashMap<Integer,UserData> data=new ConcurrentHashMap<>();
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM Users ";
@@ -224,7 +236,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 data.put(userData.getId(),userData);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -240,14 +252,16 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
 
         }
         sql.append(" ;");
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
             preparedStatement.executeUpdate();
             return "Успешное создание";
         } catch (SQLException e) {
-            e.printStackTrace();
+            return "ERROR Такие данные уже существуют";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
-        return "ERROR Такие данные уже существуют";
     }
     public String updateManagerEmail(Map<Integer,String>map){
         ResultSet resultSet=null;
@@ -255,8 +269,8 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         PreparedStatement preparedStatement = null;
         int id=map.keySet().iterator().next();
 
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
-
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
                 String sql = "UPDATE manager_data SET " +
                         "manager_id ='" +id + "'," +
                         "email ='" + map.get(id) + " " +
@@ -265,14 +279,15 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 if (statement.executeUpdate(sql) == 1) {
                     return "Данные обновлен";
                 } else return "ERROR Такие данные уже существует";
+        } catch (SQLException e) {
+            return "ERROR Ошибка обновления";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return "ERROR Ошибка обновления";
     }
     public String deleteManagerEmail(Map<Integer,String>map){
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql="DELETE FROM manager_data WHERE manager_id = '"+ map.keySet().iterator().next()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
@@ -280,12 +295,15 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            return "ERROR Ошибка удаления";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
         return "ERROR Ошибка удаления";
     }
     public String readManagerEmail(Map<Integer,String>map){
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -297,6 +315,9 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return "ERROR Ошибка чтения данных";
+        } catch (PropertyVetoException e) {
+            return "ERROR Ошибка подключения к данным";
         }
         return " ";
     }

@@ -7,6 +7,7 @@ import com.loneliness.entity.ProviderData;
 import com.loneliness.entity.transmission.Transmission;
 
 
+import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
 
     @Override
     public String create(ProductInStock productInStock) {
-        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
         String sql = "INSERT products (name , quantity , unit_price) \n"+
                 "VALUES ('"+
                 productInStock.getName()+"', "+
@@ -45,13 +47,16 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             return "Успешное создание";
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
     }
 
     @Override
     public ProductInStock read(ProductInStock productInStock) {
-        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -68,6 +73,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
         }
         return productInStock;
     }
@@ -76,7 +83,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
     public String update(ProductInStock productInStock) {
         ResultSet resultSet;
         Statement statement;
-        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
 
             statement = connection.createStatement();
 
@@ -96,7 +104,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             } else {
                 return "ERROR Нет таких данных";
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Ошибка обновления";
@@ -104,7 +112,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
 
     @Override
     public String delete(ProductInStock productInStock) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql="DELETE FROM product_in_stock WHERE product_in_stock_ID = '"+ productInStock.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) >= 1) {
@@ -112,6 +121,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Ошибка удаления";
@@ -121,7 +132,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
     public ConcurrentHashMap<Integer, ProductInStock> receiveAll(){
         ConcurrentHashMap<Integer,ProductInStock> data=new ConcurrentHashMap<>();
         String sql;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             sql = "SELECT * FROM `a-king-s-ransom`.product_in_stock\n" +
@@ -138,6 +150,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             return data;
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
         }
         return data;
     }
@@ -145,7 +159,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
     public ConcurrentHashMap<Integer, ProductInStock> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, ProductInStock> data = new ConcurrentHashMap<>();
         String sql;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
 
             ResultSet resultSet;
             Statement statement;
@@ -161,7 +176,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
                 data.put( product.getId(), product);
             }
             return data;
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;
@@ -170,7 +185,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
     public ConcurrentHashMap<Integer, ProductInStock> findAllByNameAndQuantity(ProductInStock productInStockToFind){
         ConcurrentHashMap<Integer,ProductInStock> data=new ConcurrentHashMap<>();
         String sql;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             ResultSet resultSet;
             Statement statement;
             sql = "SELECT * FROM `a-king-s-ransom`.product_in_stock\n" +
@@ -200,6 +216,8 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
             return data;
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
         return data;

@@ -12,8 +12,8 @@ public class Window extends Application {
     public void start(Stage primaryStage) {
         try {
             Reconnect.getInstance().reconnect();
-            //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAuthorisationFormController()));
-            Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAdminStartWindow()));
+            Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAuthorisationFormController()));
+            //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getAdminStartWindow()));
             //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getClientStartWindow()));
             //Parent root = FXMLLoader.load(getClass().getResource(PathManager.getInstance().getManagerStartWindow()));
             PrimaryStage.getInstance().changeStage(root);
