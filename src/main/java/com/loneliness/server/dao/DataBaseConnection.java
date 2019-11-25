@@ -10,10 +10,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataBaseConnection {
-    //private Connection connection;
     private static DataBaseConnection instance ;
-    private Properties properties;
-    private final ComboPooledDataSource comboPooledDataSource;
+    private final static ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();;
     public static DataBaseConnection getInstance() throws PropertyVetoException {
         if(instance==null){
             synchronized (DataBaseConnection.class){
@@ -26,7 +24,6 @@ public class DataBaseConnection {
     }
 
     private DataBaseConnection() throws PropertyVetoException {
-        comboPooledDataSource = new ComboPooledDataSource();
         comboPooledDataSource.setDriverClass( "com.mysql.cj.jdbc.Driver" ); //loads the jdbc driver
         comboPooledDataSource.setJdbcUrl("jdbc:mysql://localhost/a-king-s-ransom?serverTimezone=Europe/Moscow&useSSL=false&useUnicode=true&characterEncoding=UTF-8");
         comboPooledDataSource.setUser("root");
@@ -37,7 +34,9 @@ public class DataBaseConnection {
         comboPooledDataSource.setMaxPoolSize(50);
     }
 
-    public Connection getConnection() throws SQLException {
-        return comboPooledDataSource.getConnection();
+    Connection getConnection() throws SQLException {
+        synchronized (comboPooledDataSource) {
+            return comboPooledDataSource.getConnection();
+        }
     }
 }

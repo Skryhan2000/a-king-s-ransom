@@ -2,7 +2,7 @@ package com.loneliness.server.server;
 
 import com.loneliness.server.view.GUI;
 
-
+//mvn exec:java -Dexec.mainClass="com.loneliness.server.server.ServerLauncher" -Dexec.args"8000"
 public class ServerLauncher {
     public static void main(String[] args)  {
         int port=8000;
