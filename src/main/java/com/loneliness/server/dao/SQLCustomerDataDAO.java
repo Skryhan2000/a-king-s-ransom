@@ -28,8 +28,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
                 customerData.getLocation() + "','" +
                 customerData.getEmail() +
                 "');";
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
@@ -43,8 +43,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
 
     @Override
     public CustomerData read(CustomerData customerData) {
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -66,8 +66,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
     public String update(CustomerData customerData) {
         ResultSet resultSet=null;
         Statement statement = null;
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
+
 
             statement = connection.createStatement();
 
@@ -96,8 +96,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
 
     @Override
     public String delete(CustomerData customerData) {
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+
             String sql="DELETE FROM customers WHERE id = '"+ customerData.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
@@ -115,8 +115,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
     @Override
     public ConcurrentHashMap<Integer,CustomerData> receiveAll() {
         ConcurrentHashMap<Integer,CustomerData> data=new ConcurrentHashMap<>();
-        try{
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try(Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customers ;";
@@ -137,8 +136,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
     @Override
     public ConcurrentHashMap<Integer,CustomerData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, CustomerData> data = new ConcurrentHashMap<>();
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customers LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
@@ -158,8 +156,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
 
     public  ConcurrentHashMap<Integer,CustomerData> findAllByNameAndNumberOfOrders(CustomerData customerDataToFind){
         ConcurrentHashMap<Integer,CustomerData> data=new ConcurrentHashMap<>();
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customers ";

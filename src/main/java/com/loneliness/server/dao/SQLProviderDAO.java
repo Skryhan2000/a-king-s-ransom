@@ -27,8 +27,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
                 "VALUES ('" + provider.getName() + "','" +
                 (provider.getRating() + "','" + provider.getLocation()+ "','" +
                         provider.getEmail() + "');");
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
@@ -43,8 +42,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
 
     @Override
     public ProviderData read(ProviderData provider) {
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -65,8 +63,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
         ResultSet resultSet = null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             statement = connection.createStatement();
 
             String sql = "SELECT * FROM providers WHERE id = " + provider.getId() + ";";
@@ -93,8 +90,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
 
     @Override
     public String delete(ProviderData provider) {
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             String sql="DELETE FROM providers WHERE id = '"+provider.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
@@ -110,8 +106,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
     @Override
     public ConcurrentHashMap<Integer,ProviderData> receiveAll() {
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers ;";
@@ -132,8 +127,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
     @Override
     public ConcurrentHashMap<Integer,ProviderData> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, ProviderData> data = new ConcurrentHashMap<>();
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
@@ -152,8 +146,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
     }
     public ConcurrentHashMap<Integer,ProviderData> findAllByLocationAndRating(ProviderData providerDataToFind){
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers ";
@@ -187,8 +180,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
     }
     public ConcurrentHashMap<Integer,ProviderData> findProviderByLocationRatingAndValue(ProviderData providerDataToFind){
         ConcurrentHashMap<Integer,ProviderData> data=new ConcurrentHashMap<>();
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM providers ";

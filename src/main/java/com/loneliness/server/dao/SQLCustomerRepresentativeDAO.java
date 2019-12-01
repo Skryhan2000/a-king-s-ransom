@@ -26,8 +26,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 obj.getCustomerID() + " , " +
                 obj.getUserID() +
                 " );";
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
@@ -39,8 +38,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
 
     @Override
     public CustomerRepresentative read(CustomerRepresentative obj) {
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -64,8 +62,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
 
             statement = connection.createStatement();
 
@@ -92,8 +89,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
 
     @Override
     public String delete(CustomerRepresentative obj) {
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             String sql="DELETE FROM customer_representative WHERE customer_representative_ID = '"+ obj.getCustomerRepresentativeID()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
@@ -109,8 +105,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
     @Override
     public ConcurrentHashMap<Integer, CustomerRepresentative> receiveAll() {
         ConcurrentHashMap<Integer,CustomerRepresentative> data=new ConcurrentHashMap<>();
-        try{
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try(Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customer_representative ;";
@@ -131,8 +126,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
     @Override
     public ConcurrentHashMap<Integer, CustomerRepresentative> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, CustomerRepresentative> data = new ConcurrentHashMap<>();
-        try {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customer_representative LIMIT " + transmission.getFirstIndex() + ", " + transmission.getLastIndex() + " ;";
