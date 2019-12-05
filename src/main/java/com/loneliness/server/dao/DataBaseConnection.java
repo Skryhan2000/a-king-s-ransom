@@ -8,17 +8,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DataBaseConnection {
     private static DataBaseConnection instance ;
+    private static final ReentrantLock locker = new ReentrantLock();
     private final static ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();;
     public static DataBaseConnection getInstance() throws PropertyVetoException {
         if(instance==null){
-            synchronized (DataBaseConnection.class){
+            locker.lock();
                 if(instance==null){
                     instance=new DataBaseConnection();
                 }
-            }
+            locker.unlock();
         }
         return instance;
     }
@@ -35,8 +37,9 @@ public class DataBaseConnection {
     }
 
     Connection getConnection() throws SQLException {
-        synchronized (comboPooledDataSource) {
-            return comboPooledDataSource.getConnection();
-        }
+        locker.lock();
+            Connection connection= comboPooledDataSource.getConnection();
+        locker.unlock();
+        return connection;
     }
 }

@@ -62,8 +62,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
     @Override
     public UserData read(UserData user) {
         UserData userData=new UserData();
-        try  {
-            Connection connection= DataBaseConnection.getInstance().getConnection();
+        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             String sql;

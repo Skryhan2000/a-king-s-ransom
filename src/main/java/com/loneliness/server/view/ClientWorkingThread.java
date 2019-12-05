@@ -19,10 +19,9 @@ public class ClientWorkingThread implements Runnable{
     public ClientWorkingThread(Socket userSocket, ArrayBlockingQueue<ClientWorkingThread> serverList) {
         this.userSocket = userSocket;
         try {
-            this.serverList=serverList;
-            inObject=new ObjectInputStream(userSocket.getInputStream());
-            outObject = new ObjectOutputStream(userSocket.getOutputStream());
-
+                this.serverList = serverList;
+                inObject = new ObjectInputStream(userSocket.getInputStream());
+                outObject = new ObjectOutputStream(userSocket.getOutputStream());
         } catch (IOException e) {
             Server.getQuantity().decrementAndGet();
         }

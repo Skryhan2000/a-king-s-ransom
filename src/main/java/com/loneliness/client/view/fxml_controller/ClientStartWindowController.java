@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientStartWindowController implements CRUD_Controller{
     private static int companyID;
-    private int  indexOfCurrentValue[]={0,20};
+    private int[] indexOfCurrentValue ={0,20};
     @FXML private Stage dialogStage;
     @FXML private TableView<OrderCustomerData> orderTable;
     @FXML private TableColumn<OrderCustomerData, String> orderDateOfCompletionColumn;
@@ -54,8 +54,9 @@ public class ClientStartWindowController implements CRUD_Controller{
         if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
             try {
                 URI mailto = null;
+                String name=orderName.getText().replace(" ","_");
                 mailto = new URI("mailto:"+orderManagerEmail.getText()+"?subject=Запрос%20информации%20о%20заказе%20"+
-                        orderName.getText());
+                        name);
                 desktop.mail(mailto);
             } catch (URISyntaxException e) {
                 WorkWithAlert.getInstance().showAlert("Открытие почтового приложения", "Ошибка",
