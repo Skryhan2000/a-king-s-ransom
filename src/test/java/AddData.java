@@ -12,14 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class AddData {
-    private Faker faker=new Faker();
-    private int quantity=5;
+    private Faker faker=new Faker(new Locale("ru"));
+    private int quantity=60;
+
+
     @Test public void addUser(){
         UserData userData;
         int c=0;
         for(int i=0;i<quantity;i++){
             userData=new UserData();
-            userData.setLogin(faker.funnyName().name());
+            userData.setLogin(faker.name().username());
             userData.setPassword(faker.internet().password());
             UserData.Type type;
             switch (faker.number().numberBetween(0,3)){
@@ -50,7 +52,7 @@ public class AddData {
             providerData=new ProviderData();
             providerData.setName(faker.company().name());
             providerData.setRating(faker.number().numberBetween(0,10));
-            providerData.setLocation(faker.rickAndMorty().location());
+            providerData.setLocation(faker.address().city());
             providerData.setEmail(faker.internet().emailAddress());
             if(((String)CommandProvider.getCommandProvider().getCommand("CREATE_PROVIDER").
                     execute(providerData)).equals("Успешное создание")){

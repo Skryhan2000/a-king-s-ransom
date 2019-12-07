@@ -5,6 +5,7 @@ import com.loneliness.entity.CustomerRepresentative;
 import com.loneliness.entity.orders.OrderData;
 import com.loneliness.entity.transmission.Transmission;
 
+import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,12 +26,12 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 obj.getCustomerID() + " , " +
                 obj.getUserID() +
                 " );";
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);// e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
     }
@@ -48,8 +49,8 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 return getDataFromResultSet(resultSet);
             }
             else  obj.setCustomerRepresentativeID(-1);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);//e.printStackTrace();
             obj.setCustomerRepresentativeID(-1);
         }
 
@@ -61,7 +62,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
         ResultSet resultSet=null;
         Statement statement = null;
         PreparedStatement preparedStatement = null;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
 
             statement = connection.createStatement();
 
@@ -80,22 +81,22 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 return "ERROR Нет таких данных";
             }
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+        catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);// e.printStackTrace();
         }
         return "ERROR Ошибка обновления";
     }
 
     @Override
     public String delete(CustomerRepresentative obj) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             String sql="DELETE FROM customer_representative WHERE customer_representative_ID = '"+ obj.getCustomerRepresentativeID()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) == 1) {
                 return "Данные удалены";
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Ошибка удаления";
@@ -104,7 +105,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
     @Override
     public ConcurrentHashMap<Integer, CustomerRepresentative> receiveAll() {
         ConcurrentHashMap<Integer,CustomerRepresentative> data=new ConcurrentHashMap<>();
-        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try(Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql = "SELECT * FROM customer_representative ;";
@@ -116,8 +117,8 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 data.put(representative.getCustomerRepresentativeID(),representative);
             }
             return data;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);// e.printStackTrace();
         }
         return data;
     }
@@ -137,8 +138,8 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
                 data.put(representative.getCustomerRepresentativeID(),representative);
             }
             return data;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);// e.printStackTrace();
         }
         return data;
     }

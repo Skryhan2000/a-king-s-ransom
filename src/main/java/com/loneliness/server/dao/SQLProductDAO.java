@@ -3,6 +3,7 @@ package com.loneliness.server.dao;
 import com.loneliness.entity.Product;
 import com.loneliness.entity.transmission.Transmission;
 
+import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
     @Override
     public String create(Product product) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()){
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
         String sql = "INSERT products (name , quantity, unit_price ) " +
                 "VALUES ('" +
                 product.getName()+ "'," +
@@ -37,7 +38,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             preparedStatement =connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             return "Успешное создание";
-        } catch (SQLException e) {
+        } catch (SQLException | PropertyVetoException e) {
             e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
@@ -45,7 +46,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
     @Override
     public Product read(Product product) {
-        try(Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             String sql;
@@ -58,7 +59,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return product;
     }
@@ -67,8 +70,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
     public String update(Product product) {
         ResultSet resultSet;
         Statement statement;
-        try (Connection connection = DataBaseConnection.getInstance().getConnection()) {
-
+        try  ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             statement = connection.createStatement();
 
             String sql = "SELECT * FROM product_in_orders WHERE product_ID= " + product.getId() + ";";
@@ -87,14 +89,17 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
                 return "ERROR Нет таких данных";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return "ERROR Ошибка обновления";
     }
 
     @Override
     public String delete(Product product) {
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  {
+            Connection connection= DataBaseConnection.getInstance().getConnection();
             String sql="DELETE FROM products WHERE ID = '"+ product.getId()+"';";
             Statement statement = connection.createStatement();
             if(statement.executeUpdate(sql) >= 1) {
@@ -102,7 +107,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return "ERROR Ошибка удаления";
     }
@@ -111,7 +118,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
     public ConcurrentHashMap<Integer, Product> receiveAll() {
         ConcurrentHashMap<Integer, Product> data=new ConcurrentHashMap<>();
         String sql;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             ResultSet resultSet;
             Statement statement;
             sql = "SELECT * FROM `a-king-s-ransom`.product_in_orders\n" +
@@ -127,7 +134,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return data;
     }
@@ -136,8 +145,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
     public ConcurrentHashMap<Integer, Product> receiveAllInLimit(Transmission transmission) {
         ConcurrentHashMap<Integer, Product> data = new ConcurrentHashMap<>();
         String sql;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
-
+        try ( Connection connection= DataBaseConnection.getInstance().getConnection()) {
             ResultSet resultSet;
             Statement statement;
             sql = "SELECT * FROM `a-king-s-ransom`.product_in_orders\n" +
@@ -153,7 +161,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return data;
     }
@@ -161,7 +171,7 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
         ConcurrentHashMap<Integer, Product> data = new ConcurrentHashMap<>();
         ResultSet resultSet;
         Statement statement;
-        try (Connection connection= DataBaseConnection.getInstance().getConnection()) {
+        try  ( Connection connection= DataBaseConnection.getInstance().getConnection()){
             StringBuilder sql= new StringBuilder("SELECT * FROM product_in_orders join `a-king-s-ransom`.products\n" +
                     "on `a-king-s-ransom`.product_in_orders.product_ID=`a-king-s-ransom`.products.ID " +
                     "WHERE order_ID = ");
@@ -183,7 +193,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+        } catch (PropertyVetoException e) {
+            logger.catching(e);
         }
         return data;
     }

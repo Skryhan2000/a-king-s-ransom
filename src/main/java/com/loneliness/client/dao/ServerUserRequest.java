@@ -12,7 +12,6 @@ public class ServerUserRequest implements CRUD<UserData,Transmission,String,Conc
     @Override
     public String create(UserData user) throws DAOException {
         try {
-
             Transmission transmission = new Transmission();
             transmission.setCommand("CREATE_USER");
             transmission.setUserData(user);
