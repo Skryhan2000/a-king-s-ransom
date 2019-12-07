@@ -31,7 +31,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
             preparedStatement.executeUpdate();
             return "Успешное создание";
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
     }
@@ -50,7 +50,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
             }
             else  obj.setCustomerRepresentativeID(-1);
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
             obj.setCustomerRepresentativeID(-1);
         }
 
@@ -82,7 +82,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
             }
         }
         catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return "ERROR Ошибка обновления";
     }
@@ -118,7 +118,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return data;
     }
@@ -139,7 +139,7 @@ public class SQLCustomerRepresentativeDAO implements CRUD <CustomerRepresentativ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return data;
     }

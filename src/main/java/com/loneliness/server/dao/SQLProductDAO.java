@@ -59,9 +59,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return product;
     }
@@ -89,9 +89,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
                 return "ERROR Нет таких данных";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Ошибка обновления";
     }
@@ -107,9 +107,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Ошибка удаления";
     }
@@ -134,9 +134,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -161,9 +161,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -193,9 +193,9 @@ public class SQLProductDAO implements CRUD<Product, ConcurrentHashMap<Integer, P
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }

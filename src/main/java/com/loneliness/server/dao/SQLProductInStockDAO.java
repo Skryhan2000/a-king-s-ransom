@@ -45,9 +45,9 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             preparedStatement.executeUpdate();
             return "Успешное создание";
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Такие данные уже существуют";
     }
@@ -70,9 +70,9 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return productInStock;
     }
@@ -102,7 +102,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
                 return "ERROR Нет таких данных";
             }
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Ошибка обновления";
     }
@@ -117,9 +117,9 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Ошибка удаления";
     }
@@ -144,9 +144,9 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -171,7 +171,7 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -209,9 +209,9 @@ public class SQLProductInStockDAO implements CRUD<ProductInStock,ConcurrentHashM
             }
             return data;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }

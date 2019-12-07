@@ -3,6 +3,8 @@ package com.loneliness.server.view;
 import com.loneliness.entity.transmission.Transmission;
 import com.loneliness.server.controller.CommandProvider;
 import com.loneliness.server.server.Server;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class ClientWorkingThread implements Runnable{
+    private static final Logger logger = LogManager.getLogger();
     private ArrayBlockingQueue<ClientWorkingThread> serverList;
     private ObjectOutputStream outObject;
     private ObjectInputStream inObject;
@@ -23,6 +26,7 @@ public class ClientWorkingThread implements Runnable{
                 inObject = new ObjectInputStream(userSocket.getInputStream());
                 outObject = new ObjectOutputStream(userSocket.getOutputStream());
         } catch (IOException e) {
+            logger.catching(e);
             Server.getQuantity().decrementAndGet();
         }
     }
@@ -67,8 +71,12 @@ public class ClientWorkingThread implements Runnable{
                 outObject.reset();
             }
 
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException e) {
+            logger.catching(e);
+           // e.printStackTrace();
+        } catch (IOException e) {
             killOneClient();
+            logger.catching(e);
            // e.printStackTrace();
         }
     }
@@ -84,7 +92,7 @@ public class ClientWorkingThread implements Runnable{
                     serverList.remove(this);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
 
     }

@@ -34,8 +34,10 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
             preparedStatement.executeUpdate();
             return "Успешное создание";
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+            //e.printStackTrace();
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
         return "ERROR Такие данные уже существуют";
@@ -55,8 +57,10 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
                 return getDataFromResultSet(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+           // e.printStackTrace();
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return customerData;
         }
         return customerData;
@@ -87,8 +91,10 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
                 return "ERROR Нет таких данных";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.catching(e);
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
         return "ERROR Ошибка обновления";
@@ -105,8 +111,10 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
+            //e.printStackTrace();
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
         return "ERROR Ошибка удаления";
@@ -128,7 +136,8 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -149,7 +158,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }
@@ -185,7 +194,7 @@ public class SQLCustomerDataDAO implements CRUD<CustomerData, ConcurrentHashMap<
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }

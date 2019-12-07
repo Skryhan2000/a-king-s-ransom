@@ -52,8 +52,10 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             preparedStatement.executeUpdate();
             return "Пользователь успешно создан";
         } catch (SQLException e) {
+            logger.catching(e);
             return "ERROR Ошибка создания пользователя. Такой пользователь уже существует";
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
 
@@ -79,7 +81,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 return getDataFromResultSet(resultSet);
             }
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
 
         }
         return userData;
@@ -112,7 +114,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 return "ERROR Нет такого пользователя";
             }
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
             return "ERROR Ошибка обновления";
         }
     }
@@ -130,9 +132,10 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
             return "ERROR Ошибка удаления";
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
 
@@ -152,6 +155,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 return type.toString()+" "+type.getID();
             }
         } catch (SQLException | PropertyVetoException e) {
+            logger.catching(e);
             return UserData.Type.valueOf("NO_TYPE").getDeclaringClass().getName();
         }
         return UserData.Type.valueOf("NO_TYPE").getDeclaringClass().getName();
@@ -174,7 +178,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
         }
         return data;
     } catch (SQLException | PropertyVetoException e) {
-        e.printStackTrace();
+            logger.catching(e);
     }
         return data;
     }
@@ -194,7 +198,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -229,7 +233,7 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -270,8 +274,10 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                     return "Данные обновлен";
                 } else return "ERROR Такие данные уже существует";
         } catch (SQLException e) {
+            logger.catching(e);
             return "ERROR Ошибка обновления";
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
     }
@@ -284,8 +290,10 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
             }
 
         } catch (SQLException e) {
+            logger.catching(e);
             return "ERROR Ошибка удаления";
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
         return "ERROR Ошибка удаления";
@@ -303,9 +311,10 @@ public class SQLUserDAO implements CRUD<UserData,ConcurrentHashMap<Integer, User
                 return resultSet.getString("email");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.catching(e);
             return "ERROR Ошибка чтения данных";
         } catch (PropertyVetoException e) {
+            logger.catching(e);
             return "ERROR Ошибка подключения к данным";
         }
         return " ";

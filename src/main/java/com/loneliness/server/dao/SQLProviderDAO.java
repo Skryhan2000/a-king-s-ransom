@@ -83,7 +83,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
                 return "ERROR Нет таких данных";
             }
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
             return "ERROR Ошибка обновления";
         }
     }
@@ -98,7 +98,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             }
 
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return "ERROR Ошибка удаления";
     }
@@ -119,7 +119,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -140,7 +140,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -174,7 +174,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }
@@ -207,7 +207,7 @@ public class SQLProviderDAO implements CRUD<ProviderData,ConcurrentHashMap<Integ
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
         return data;
     }

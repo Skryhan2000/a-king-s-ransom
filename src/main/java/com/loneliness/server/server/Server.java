@@ -30,7 +30,7 @@ public class Server extends Thread {
             logger.info("Запуск сервера");
             quantity.set(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 
@@ -58,7 +58,6 @@ public class Server extends Thread {
             }
             catch(IOException e){
                 quantity.decrementAndGet();
-                e.printStackTrace();
                 logger.catching(e);
                 break;
             }
@@ -76,7 +75,7 @@ public class Server extends Thread {
             executorService.shutdown();
             logger.info("закрытие сервера");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.catching(e);
         }
     }
 

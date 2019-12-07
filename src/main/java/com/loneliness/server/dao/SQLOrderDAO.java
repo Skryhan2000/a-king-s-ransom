@@ -42,7 +42,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             preparedStatement.executeUpdate();
             return "Успешное создание";
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return "ERROR Такие данные уже существуют";
     }
@@ -61,7 +61,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             else  orderData.setId(-1);
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
             orderData.setId(-1);
         }
 
@@ -85,7 +85,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
                 return resultSet.getBigDecimal("price");
             }
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//  e.printStackTrace();
         }
         return new BigDecimal(0);
     }
@@ -119,7 +119,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
         }
         catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return "ERROR Ошибка обновления";
     }
@@ -134,7 +134,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
 
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return "ERROR Ошибка удаления";
     }
@@ -155,7 +155,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }
@@ -199,7 +199,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);// e.printStackTrace();
         }
         return data;
     }
@@ -219,7 +219,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }
@@ -255,7 +255,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }
@@ -276,7 +276,7 @@ public class SQLOrderDAO implements CRUD<OrderData,ConcurrentHashMap<Integer,Ord
             }
             return data;
         } catch (SQLException | PropertyVetoException e) {
-            e.printStackTrace();
+            logger.catching(e);//e.printStackTrace();
         }
         return data;
     }
